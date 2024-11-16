@@ -12,20 +12,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.TextUnit
-import com.example.mamfoods.ui.theme.Lato
-import com.example.mamfoods.ui.theme.RedGradient1
-import com.example.mamfoods.ui.theme.RedGradient2
-import com.example.mamfoods.ui.theme.RedPrimary
-import com.example.mamfoods.ui.theme.YeonSung
+import com.example.mamfoods.ui.theme.SubText
+import com.example.mamfoods.ui.theme.TitleText
 
 @Composable
 fun SplashScreen() {
@@ -41,20 +34,16 @@ fun SplashScreen() {
             contentDescription = "Logo Mam Foods",
             modifier = Modifier.size(200.dp)
         )
-        Spacer(modifier = Modifier.height(24.dp)) // Memberikan jarak antar elemen
+        Spacer(modifier = Modifier.height(24.dp))
         Text(
             text = "Mam Foods",
-            fontSize = 40.sp,
-            fontFamily = YeonSung,
-            color = RedPrimary
+            style = TitleText
         )
         Spacer(modifier = Modifier.height(24.dp))
         Text(
             text = "Deliver Favorite Food & Drink",
-            color = RedPrimary,
-            fontSize = 14.sp,
-            fontFamily = Lato,
-            fontWeight = FontWeight.Bold
+            style = SubText,
+            fontSize = 14.sp
         )
     }
 }
