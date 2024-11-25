@@ -34,9 +34,9 @@ import com.google.accompanist.pager.*
 
 @Composable
 fun HomeScreen(navController: NavHostController) {
-    Column (modifier = Modifier.fillMaxSize()){
-        // Bagian Search Bar
-       // SearchBar()
+    Column(modifier = Modifier.fillMaxSize()) {
+        // Search Bar (bisa ditambahkan nanti jika diperlukan)
+        // SearchBar()
 
         // Bagian Banner
         BannerSection()
@@ -49,20 +49,13 @@ fun HomeScreen(navController: NavHostController) {
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun BannerSection() {
-    // Simulasi data banner dari database
-    val banners = listOf("Banner 1", "Banner 2", "Banner 3")
-
-    // Initialize pagerState
+    val banners = listOf("Banner 1", "Banner 2", "Banner 3") // Simulasi data
     val pagerState = rememberPagerState(0)
 
-    // Mengatur auto-scroll setiap 3 detik
     LaunchedEffect(pagerState) {
         while (true) {
             delay(3000) // 3 detik
-            // Pindah ke halaman berikutnya
-            pagerState.animateScrollToPage(
-                page = (pagerState.currentPage + 1) % banners.size
-            )
+            pagerState.animateScrollToPage((pagerState.currentPage + 1) % banners.size)
         }
     }
 

@@ -1,7 +1,6 @@
 package com.example.mamfoods
 
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.runtime.Composable
+import android.os.Bundle
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -16,26 +15,60 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.mamfoods.ui.theme.Lato
-import com.example.mamfoods.ui.theme.LightGrayColor
-import com.example.mamfoods.ui.theme.RedPrimary
-import com.example.mamfoods.ui.theme.SubText
-import com.example.mamfoods.ui.theme.TitleText
-import com.example.mamfoods.ui.theme.YeonSung
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
+import com.example.mamfoods.ui.theme.*
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 
 @Composable
 fun LoginScreen(
-    onLoginClick: () -> Unit, // Event untuk login
-    onFacebookLoginClick: () -> Unit, // Event login Facebook
-    onGoogleLoginClick: () -> Unit,   // Event login Google
-    onSignUpClick: () -> Unit         // Event navigasi ke halaman Sign Up
+    onLoginClick: () -> Unit,           // Event when login is successful (Navigates to home)
+    onFacebookLoginClick: () -> Unit,    // Event for Facebook login
+    onGoogleLoginClick: () -> Unit,      // Event for Google login
+    onSignUpClick: () -> Unit            // Event for navigating to SignUp screen
 ) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    val auth = FirebaseAuth.getInstance()
+    var errorMessage by remember { mutableStateOf("") }
+
+    // Sign Up Logic
+    fun performSignUp() {
+        if (email.isEmpty() || password.isEmpty()) {
+            errorMessage = "Please fill in both fields"
+            return
+        }
+
+        auth.createUserWithEmailAndPassword(email, password)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    onLoginClick()  // Navigate to home after sign up
+                } else {
+                    errorMessage = task.exception?.message ?: "Sign Up failed"
+                }
+            }
+    }
+
+    // Login Logic
+    fun performLogin() {
+        if (email.isEmpty() || password.isEmpty()) {
+            errorMessage = "Please fill in both fields"
+            return
+        }
+
+        auth.signInWithEmailAndPassword(email, password)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    onLoginClick()  // Navigate to home after successful login
+                } else {
+                    errorMessage = task.exception?.message ?: "Login failed"
+                }
+            }
+    }
 
     Column(
         modifier = Modifier
@@ -99,7 +132,6 @@ fun LoginScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Password Input
         OutlinedTextField(
             value = password,
             onValueChange = { password = it },
@@ -126,68 +158,20 @@ fun LoginScreen(
         )
 
         Spacer(modifier = Modifier.height(16.dp))
-        Text(
-            text = "Or",
-            fontSize = 10.sp,
-            color = Color.Black,
-            fontFamily = YeonSung,
-            textAlign = TextAlign.Center,
-            letterSpacing = 1.5.sp
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-        Text(
-            text = "Continue With",
-            fontSize = 20.sp,
-            color = Color.Black,
-            fontFamily = YeonSung,
-            textAlign = TextAlign.Center,
-            letterSpacing = 1.5.sp
-        )
 
-        Spacer(modifier = Modifier.height(24.dp))
+        if (errorMessage.isNotEmpty()) {
+            Text(
+                text = errorMessage,
+                color = Color.Red,
+                fontSize = 12.sp,
+                modifier = Modifier.padding(8.dp)
+            )
+        }
 
-        Button(
-            onClick = { onFacebookLoginClick() },
-            modifier = Modifier.height(57.dp).width(157.dp),
-            shape = RoundedCornerShape(15.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = Color.White),
-            border = BorderStroke(1.dp, LightGrayColor)
-        ) {
-            Row (verticalAlignment = Alignment.CenterVertically){
-                Image(
-                    painter = painterResource(id = R.drawable.fb),
-                    contentDescription = "facebook",
-                    modifier = Modifier.size(25.dp).padding(end = 8.dp))
-                Text(
-                    text = "Facebook",
-                    color = Color.Black,
-                    fontFamily = Lato,
-                    fontSize = 14.sp)
-            }
-        }
-        Spacer(modifier = Modifier.height(16.dp))
-        Button(
-            onClick = { onGoogleLoginClick() },
-            modifier = Modifier.height(57.dp).width(157.dp),
-            shape = RoundedCornerShape(15.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = Color.White),
-            border = BorderStroke(1.dp, LightGrayColor)
-        ) {
-            Row (verticalAlignment = Alignment.CenterVertically){
-                Image(
-                    painter = painterResource(id = R.drawable.google),
-                    contentDescription = "google",
-                    modifier = Modifier.size(25.dp).padding(end = 8.dp))
-                Text(
-                    text = "Google",
-                    color = Color.Black,
-                    fontFamily = Lato,
-                    fontSize = 14.sp)
-            }
-        }
         Spacer(modifier = Modifier.height(32.dp))
+
         Button(
-            onClick = { onLoginClick() },
+            onClick = { performLogin() },  // Login action
             modifier = Modifier.height(57.dp).width(157.dp),
             shape = RoundedCornerShape(15.dp),
             colors = ButtonDefaults.buttonColors(containerColor = RedPrimary)
@@ -196,26 +180,16 @@ fun LoginScreen(
                 text = "Login",
                 color = Color.White,
                 fontFamily = YeonSung,
-                fontSize = 20.sp)
+                fontSize = 20.sp
+            )
         }
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Sign Up Link
         ClickableText(
             text = AnnotatedString("Don't Have Account?"),
-            onClick = { onSignUpClick() },
+            onClick = { onSignUpClick() },  // Navigate to sign up page
             style = SubText
         )
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun Preview() {
-    LoginScreen(onLoginClick = {}, // Event untuk login
-    onFacebookLoginClick = {}, // Event login Facebook
-    onGoogleLoginClick = {},   // Event login Google
-    onSignUpClick = {}         // Event navigasi ke halaman Sign Up
-    )
 }

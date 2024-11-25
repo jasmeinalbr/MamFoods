@@ -3,40 +3,50 @@ package com.example.mamfoods
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.runtime.*
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContent {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
+            MainApp()
         }
     }
 }
 
 @Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
+fun MainApp() {
+    val navController = rememberNavController()
 
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-
+    NavHost(
+        navController = navController,
+        startDestination = "splash"
+    ) {
+        composable("splash") {
+            SplashScreen(navController)
+        }
+        composable("signup") {
+            SignUpScreen(
+                onSignUpClick = { navController.navigate("home") },
+                onFacebookSignUpClick = { /* Facebook action */ },
+                onGoogleSignUpClick = { /* Google action */ },
+                onLoginClick = { navController.navigate("login") }
+            )
+        }
+        composable("login") {
+            // Provide the missing parameters for LoginScreen
+            LoginScreen(
+                onLoginClick = { navController.navigate("home") },  // Navigate to home on successful login
+                onFacebookLoginClick = { /* Facebook login action */ },
+                onGoogleLoginClick = { /* Google login action */ },
+                onSignUpClick = { navController.navigate("signup") } // Navigate to signup screen
+            )
+        }
+        composable("home") {
+            HomeScreen(navController)
+        }
+    }
 }

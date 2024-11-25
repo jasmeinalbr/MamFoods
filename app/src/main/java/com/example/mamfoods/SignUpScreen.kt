@@ -31,10 +31,10 @@ import com.example.mamfoods.ui.theme.YeonSung
 
 @Composable
 fun SignUpScreen(
-    onSignUpClick: () -> Unit, // Event untuk signup
-    onFacebookSignUpClick: () -> Unit, // Event login Facebook
-    onGoogleSignUpClick: () -> Unit,   // Event login Google
-    onLoginClick: () -> Unit         // Event navigasi ke halaman Login
+    onSignUpClick: () -> Unit, // Event for sign-up
+    onFacebookSignUpClick: () -> Unit, // Event for Facebook sign-up
+    onGoogleSignUpClick: () -> Unit,   // Event for Google sign-up
+    onLoginClick: () -> Unit           // Event to navigate to the Login screen
 ) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -75,6 +75,7 @@ fun SignUpScreen(
 
         Spacer(modifier = Modifier.height(32.dp))
 
+        // Name field
         OutlinedTextField(
             value = name,
             onValueChange = { name = it },
@@ -110,6 +111,7 @@ fun SignUpScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
+        // Email field
         OutlinedTextField(
             value = email,
             onValueChange = { email = it },
@@ -145,6 +147,7 @@ fun SignUpScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
+        // Password field
         OutlinedTextField(
             value = password,
             onValueChange = { password = it },
@@ -165,10 +168,9 @@ fun SignUpScreen(
                     modifier = Modifier.size(24.dp)
                 )
             },
-            trailingIcon = { // Ikon di sebelah kanan untuk toggle password visibility
+            trailingIcon = {
                 val icon = if (passwordVisible) R.drawable.eye else R.drawable.eyeoff
                 val description = if (passwordVisible) "Hide password" else "Show password"
-
                 IconButton(onClick = { passwordVisible = !passwordVisible }) {
                     Icon(
                         painter = painterResource(id = icon),
@@ -193,6 +195,8 @@ fun SignUpScreen(
         )
 
         Spacer(modifier = Modifier.height(16.dp))
+
+        // Or sign-up section
         Text(
             text = "Or",
             fontSize = 10.sp,
@@ -201,7 +205,9 @@ fun SignUpScreen(
             textAlign = TextAlign.Center,
             letterSpacing = 1.5.sp
         )
+
         Spacer(modifier = Modifier.height(8.dp))
+
         Text(
             text = "Sign Up With",
             fontSize = 20.sp,
@@ -213,52 +219,68 @@ fun SignUpScreen(
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        Row (verticalAlignment = Alignment.CenterVertically) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            // Facebook Sign Up Button
             Button(
                 onClick = { onFacebookSignUpClick() },
-                modifier = Modifier.height(57.dp).width(157.dp),
+                modifier = Modifier
+                    .height(57.dp)
+                    .width(157.dp),
                 shape = RoundedCornerShape(15.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = Color.White),
                 border = BorderStroke(1.dp, LightGrayColor)
             ) {
-                Row (verticalAlignment = Alignment.CenterVertically){
+                Row(verticalAlignment = Alignment.CenterVertically) {
                     Image(
                         painter = painterResource(id = R.drawable.fb),
-                        contentDescription = "facebook",
-                        modifier = Modifier.size(25.dp).padding(end = 8.dp))
+                        contentDescription = "Facebook",
+                        modifier = Modifier.size(25.dp).padding(end = 8.dp)
+                    )
                     Text(
                         text = "Facebook",
                         color = Color.Black,
                         fontFamily = Lato,
-                        fontSize = 14.sp)
+                        fontSize = 14.sp
+                    )
                 }
             }
+
             Spacer(modifier = Modifier.width(16.dp))
+
+            // Google Sign Up Button
             Button(
                 onClick = { onGoogleSignUpClick() },
-                modifier = Modifier.height(57.dp).width(157.dp),
+                modifier = Modifier
+                    .height(57.dp)
+                    .width(157.dp),
                 shape = RoundedCornerShape(15.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = Color.White),
                 border = BorderStroke(1.dp, LightGrayColor)
             ) {
-                Row (verticalAlignment = Alignment.CenterVertically){
+                Row(verticalAlignment = Alignment.CenterVertically) {
                     Image(
                         painter = painterResource(id = R.drawable.google),
-                        contentDescription = "google",
-                        modifier = Modifier.size(25.dp).padding(end = 8.dp))
+                        contentDescription = "Google",
+                        modifier = Modifier.size(25.dp).padding(end = 8.dp)
+                    )
                     Text(
                         text = "Google",
                         color = Color.Black,
                         fontFamily = Lato,
-                        fontSize = 14.sp)
+                        fontSize = 14.sp
+                    )
                 }
             }
         }
 
         Spacer(modifier = Modifier.height(32.dp))
+
+        // Sign Up Button
         Button(
             onClick = { onSignUpClick() },
-            modifier = Modifier.height(57.dp).width(180.dp),
+            modifier = Modifier
+                .height(57.dp)
+                .width(180.dp),
             shape = RoundedCornerShape(15.dp),
             colors = ButtonDefaults.buttonColors(containerColor = RedPrimary)
         ) {
@@ -266,7 +288,8 @@ fun SignUpScreen(
                 text = "Create Account",
                 color = Color.White,
                 fontFamily = YeonSung,
-                fontSize = 20.sp)
+                fontSize = 20.sp
+            )
         }
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -275,17 +298,7 @@ fun SignUpScreen(
         ClickableText(
             text = AnnotatedString("Already Have Account?"),
             onClick = { onLoginClick() },
-            style = SubText
+            style = SubText.copy(color = LightGrayColor)
         )
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun PreviewSignup() {
-    SignUpScreen(onSignUpClick = {}, // Event untuk SignUp
-        onFacebookSignUpClick = {}, // Event login Facebook
-        onGoogleSignUpClick = {},   // Event login Google
-        onLoginClick = {}         // Event navigasi ke halaman Login
-    )
 }
