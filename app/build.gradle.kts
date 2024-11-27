@@ -51,28 +51,43 @@ android {
 }
 
 dependencies {
+    // Firebase dependencies
+    implementation("com.google.firebase:firebase-auth-ktx:21.0.1") // Firebase Auth
+    implementation("com.google.firebase:firebase-core:21.0.0") // Firebase Core
 
+    // AndroidX dependencies
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
+
+    // Compose dependencies
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     implementation("androidx.compose.material:material:1.5.0")
-    implementation ("com.google.accompanist:accompanist-pager:0.30.1")
-    implementation ("com.google.accompanist:accompanist-pager-indicators:0.30.1")
+    implementation ("androidx.navigation:navigation-compose:2.6.0")
+
+    // Accompanist dependencies
+    implementation("com.google.accompanist:accompanist-pager:0.30.1")
+    implementation("com.google.accompanist:accompanist-pager-indicators:0.30.1")
+
+    // Navigation dependencies
     implementation(libs.androidx.navigation.runtime.ktx)
+
     implementation(libs.firebase.auth)
     implementation(libs.firebase.firestore.ktx)
     implementation(libs.firebase.database)
     implementation(libs.androidx.navigation.compose)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.ui.test.junit4)
+
+    // Debug dependencies
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 }

@@ -1,5 +1,6 @@
 package com.example.mamfoods
 
+
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.ClickableText
@@ -15,7 +16,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -32,6 +32,7 @@ fun LoginScreen(
     var password by remember { mutableStateOf("") }
     var isLoading by remember { mutableStateOf(false) }
     var errorMessage by remember { mutableStateOf<String?>(null) }
+
 
     Column(
         modifier = Modifier
@@ -86,11 +87,15 @@ fun LoginScreen(
             shape = RoundedCornerShape(15.dp),
             modifier = Modifier
                 .fillMaxWidth()
+
                 .height(57.dp),
         )
 
+
         Spacer(modifier = Modifier.height(32.dp))
+
         Button(
+
             onClick = {
                 isLoading = true
                 errorMessage = null
@@ -110,6 +115,7 @@ fun LoginScreen(
             modifier = Modifier
                 .height(57.dp)
                 .width(157.dp),
+
             shape = RoundedCornerShape(15.dp),
             colors = ButtonDefaults.buttonColors(containerColor = RedPrimary)
         ) {
@@ -132,12 +138,14 @@ fun LoginScreen(
         }
 
         Spacer(modifier = Modifier.height(16.dp))
+
         ClickableText(
             text = AnnotatedString("Don't Have Account?"),
-            onClick = { onSignUpClick() },
+            onClick = { onSignUpClick() },  // Navigate to sign up page
             style = SubText
         )
     }
+
 
 }
 
@@ -173,4 +181,5 @@ fun LoginScreenPreview() {
         }
     )
 }
+
 
