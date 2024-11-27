@@ -17,11 +17,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.rememberNavController
 import com.example.mamfoods.ui.theme.SubText
 import com.example.mamfoods.ui.theme.TitleText
 
 @Composable
-fun SplashScreen() {
+fun SplashScreen(onNavigateToOnboarding: () -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -46,11 +47,10 @@ fun SplashScreen() {
             fontSize = 14.sp
         )
     }
-}
+    androidx.compose.runtime.LaunchedEffect(Unit) {
+        kotlinx.coroutines.delay(3000) // Tunggu 3 detik
+        onNavigateToOnboarding()
+    }
 
-@Preview(showBackground = true)
-@Composable
-fun SplashScreenPreview() {
-    SplashScreen()
 }
 
