@@ -30,13 +30,27 @@ import com.example.mamfoods.ui.theme.PriceText
 import com.example.mamfoods.ui.theme.SubText
 import kotlinx.coroutines.delay
 import com.google.accompanist.pager.*
+import com.google.firebase.auth.FirebaseAuth
 
 
 @Composable
 fun HomeScreen(navController: NavHostController) {
-    Column(modifier = Modifier.fillMaxSize()) {
-        // Search Bar (bisa ditambahkan nanti jika diperlukan)
-        // SearchBar()
+
+    val auth = FirebaseAuth.getInstance()
+
+    LaunchedEffect(Unit) {
+        // Periksa apakah pengguna sudah login
+        if (auth.currentUser == null) {
+            // Arahkan ke layar login jika belum login
+            navController.navigate("login") {
+                popUpTo("home") { inclusive = true } // Menghapus stack sebelumnya
+            }
+        }
+    }
+    Column (modifier = Modifier.fillMaxSize()){
+        // Bagian Search Bar
+       // SearchBar()
+
 
         // Bagian Banner
         BannerSection()

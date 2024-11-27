@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1008431377503",
+    "project_id": "mamfoods-30204",
+    "storage_bucket": "mamfoods-30204.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1008431377503:android:63f72dcd7f4b3559767fea",
+        "android_client_info": {
+          "package_name": "com.example.mamfoods"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1008431377503-cis34ld5o2bpaicvp35490sl9eo96g8i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDOgLzpwO3_e3vUIDuyx603xnY1maKZyTc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1008431377503-cis34ld5o2bpaicvp35490sl9eo96g8i.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

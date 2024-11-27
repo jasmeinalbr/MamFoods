@@ -1,14 +1,15 @@
 package com.example.mamfoods
 
-import android.os.Bundle
+
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
-import androidx.compose.material.*
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Text
+import androidx.compose.material.TextFieldDefaults
+import androidx.compose.material.OutlinedTextField
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -18,57 +19,20 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.example.mamfoods.ui.theme.*
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
+import com.example.mamfoods.viewmodel.AuthViewModel
 
 @Composable
 fun LoginScreen(
-    onLoginClick: () -> Unit,           // Event when login is successful (Navigates to home)
-    onFacebookLoginClick: () -> Unit,    // Event for Facebook login
-    onGoogleLoginClick: () -> Unit,      // Event for Google login
-    onSignUpClick: () -> Unit            // Event for navigating to SignUp screen
+    viewModel: AuthViewModel,
+    onLoginSuccess: () -> Unit,
+    onSignUpClick: () -> Unit
 ) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
-    val auth = FirebaseAuth.getInstance()
-    var errorMessage by remember { mutableStateOf("") }
+    var isLoading by remember { mutableStateOf(false) }
+    var errorMessage by remember { mutableStateOf<String?>(null) }
 
-    // Sign Up Logic
-    fun performSignUp() {
-        if (email.isEmpty() || password.isEmpty()) {
-            errorMessage = "Please fill in both fields"
-            return
-        }
-
-        auth.createUserWithEmailAndPassword(email, password)
-            .addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    onLoginClick()  // Navigate to home after sign up
-                } else {
-                    errorMessage = task.exception?.message ?: "Sign Up failed"
-                }
-            }
-    }
-
-    // Login Logic
-    fun performLogin() {
-        if (email.isEmpty() || password.isEmpty()) {
-            errorMessage = "Please fill in both fields"
-            return
-        }
-
-        auth.signInWithEmailAndPassword(email, password)
-            .addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    onLoginClick()  // Navigate to home after successful login
-                } else {
-                    errorMessage = task.exception?.message ?: "Login failed"
-                }
-            }
-    }
 
     Column(
         modifier = Modifier
@@ -84,10 +48,7 @@ fun LoginScreen(
             modifier = Modifier.size(100.dp)
         )
         Spacer(modifier = Modifier.height(8.dp))
-        Text(
-            text = "Mam Foods",
-            style = TitleText
-        )
+        Text(text = "Mam Foods", style = TitleText)
         Spacer(modifier = Modifier.height(16.dp))
         Text(
             text = "Deliver Favorite Food & Drink",
@@ -97,32 +58,14 @@ fun LoginScreen(
         )
         Spacer(modifier = Modifier.height(32.dp))
 
-        Text(
-            text = "Login To Your Account",
-            fontSize = 20.sp,
-            style = SubText
-        )
-
-        Spacer(modifier = Modifier.height(32.dp))
-
         OutlinedTextField(
             value = email,
             onValueChange = { email = it },
-            label = {
-                Text(
-                    text = "Email or Phone Number",
-                    color = Color.LightGray,
-                    fontSize = 14.sp,
-                    fontFamily = Lato,
-                    letterSpacing = 1.5.sp,
-                )
-            },
+            label = { Text("Email or Phone Number", style = SubText) },
             colors = TextFieldDefaults.outlinedTextFieldColors(
                 textColor = Color.Black,
                 focusedBorderColor = LightGrayColor,
-                unfocusedBorderColor = LightGrayColor,
-                backgroundColor = Color.White,
-                cursorColor = Color.Black
+                unfocusedBorderColor = LightGrayColor
             ),
             shape = RoundedCornerShape(15.dp),
             modifier = Modifier
@@ -135,52 +78,62 @@ fun LoginScreen(
         OutlinedTextField(
             value = password,
             onValueChange = { password = it },
-            label = {
-                Text(
-                    text = "Password",
-                    color = Color.LightGray,
-                    fontSize = 14.sp,
-                    fontFamily = Lato,
-                    letterSpacing = 1.5.sp
-                )
-            },
+            label = { Text("Password", style = SubText) },
             colors = TextFieldDefaults.outlinedTextFieldColors(
                 textColor = Color.Black,
                 focusedBorderColor = LightGrayColor,
-                unfocusedBorderColor = LightGrayColor,
-                backgroundColor = Color.White,
-                cursorColor = Color.Black
+                unfocusedBorderColor = LightGrayColor
             ),
             shape = RoundedCornerShape(15.dp),
             modifier = Modifier
                 .fillMaxWidth()
-                .height(57.dp)
+
+                .height(57.dp),
         )
 
-        Spacer(modifier = Modifier.height(16.dp))
-
-        if (errorMessage.isNotEmpty()) {
-            Text(
-                text = errorMessage,
-                color = Color.Red,
-                fontSize = 12.sp,
-                modifier = Modifier.padding(8.dp)
-            )
-        }
 
         Spacer(modifier = Modifier.height(32.dp))
 
         Button(
-            onClick = { performLogin() },  // Login action
-            modifier = Modifier.height(57.dp).width(157.dp),
+
+            onClick = {
+                isLoading = true
+                errorMessage = null
+                viewModel.login(
+                    email = email,
+                    password = password,
+                    onSuccess = {
+                        isLoading = false
+                        onLoginSuccess()
+                    },
+                    onError = {
+                        isLoading = false
+                        errorMessage = it
+                    }
+                )
+            },
+            modifier = Modifier
+                .height(57.dp)
+                .width(157.dp),
+
             shape = RoundedCornerShape(15.dp),
             colors = ButtonDefaults.buttonColors(containerColor = RedPrimary)
         ) {
             Text(
-                text = "Login",
+                text = if (isLoading) "Loading..." else "Login",
                 color = Color.White,
                 fontFamily = YeonSung,
                 fontSize = 20.sp
+            )
+        }
+
+        if (errorMessage != null) {
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                text = errorMessage!!,
+                color = Color.Red,
+                fontSize = 14.sp,
+                textAlign = TextAlign.Center
             )
         }
 
@@ -192,4 +145,41 @@ fun LoginScreen(
             style = SubText
         )
     }
+
+
 }
+
+
+@Preview(showBackground = true)
+@Composable
+fun LoginScreenPreview() {
+    // Buat dummy ViewModel untuk kebutuhan Preview
+    val dummyViewModel = object : AuthViewModel() {
+        override fun login(
+            email: String,
+            password: String,
+            onSuccess: () -> Unit,
+            onError: (String) -> Unit
+        ) {
+            // Simulasi login berhasil atau gagal
+            if (email == "user@example.com" && password == "password") {
+                onSuccess()
+            } else {
+                onError("Invalid credentials")
+            }
+        }
+    }
+
+    // Preview UI
+    LoginScreen(
+        viewModel = dummyViewModel,
+        onLoginSuccess = {
+            // Simulasi sukses login
+        },
+        onSignUpClick = {
+            // Simulasi navigasi ke halaman registrasi
+        }
+    )
+}
+
+

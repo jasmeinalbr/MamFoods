@@ -28,18 +28,24 @@ import com.example.mamfoods.ui.theme.RedPrimary
 import com.example.mamfoods.ui.theme.SubText
 import com.example.mamfoods.ui.theme.TitleText
 import com.example.mamfoods.ui.theme.YeonSung
+import com.example.mamfoods.viewmodel.AuthViewModel
 
 @Composable
 fun SignUpScreen(
-    onSignUpClick: () -> Unit, // Event for sign-up
-    onFacebookSignUpClick: () -> Unit, // Event for Facebook sign-up
-    onGoogleSignUpClick: () -> Unit,   // Event for Google sign-up
-    onLoginClick: () -> Unit           // Event to navigate to the Login screen
+
+    onSignUpClick: () -> Unit,
+    onFacebookSignUpClick: () -> Unit,
+    onGoogleSignUpClick: () -> Unit,
+    onLoginClick: () -> Unit,
+    viewModel: AuthViewModel,
+    onSignUpSuccess: () -> Unit
+
 ) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var name by remember { mutableStateOf("") }
     var passwordVisible by remember { mutableStateOf(false) }
+    var errorMessage by remember { mutableStateOf<String?>(null) }
 
     Column(
         modifier = Modifier
@@ -233,9 +239,12 @@ fun SignUpScreen(
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Image(
                         painter = painterResource(id = R.drawable.fb),
-                        contentDescription = "Facebook",
-                        modifier = Modifier.size(25.dp).padding(end = 8.dp)
-                    )
+
+                        contentDescription = "facebook",
+                        modifier = Modifier
+                            .size(25.dp)
+                            .padding(end = 8.dp))
+
                     Text(
                         text = "Facebook",
                         color = Color.Black,
@@ -260,9 +269,12 @@ fun SignUpScreen(
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Image(
                         painter = painterResource(id = R.drawable.google),
-                        contentDescription = "Google",
-                        modifier = Modifier.size(25.dp).padding(end = 8.dp)
-                    )
+
+                        contentDescription = "google",
+                        modifier = Modifier
+                            .size(25.dp)
+                            .padding(end = 8.dp))
+
                     Text(
                         text = "Google",
                         color = Color.Black,
@@ -277,7 +289,21 @@ fun SignUpScreen(
 
         // Sign Up Button
         Button(
-            onClick = { onSignUpClick() },
+
+            onClick = {
+                viewModel.register(
+                    name = name,
+                    email = email,
+                    password = password,
+                    onSuccess = {
+                        onSignUpSuccess()
+                    },
+                    onError = { message ->
+                        errorMessage = message
+                    }
+                )
+            },
+
             modifier = Modifier
                 .height(57.dp)
                 .width(180.dp),
@@ -301,4 +327,21 @@ fun SignUpScreen(
             style = SubText.copy(color = LightGrayColor)
         )
     }
+
 }
+
+//@Preview(showBackground = true)
+//@Composable
+//fun PreviewSignup() {
+//    SignUpScreen(
+//        onSignUpClick = {}, // Event untuk SignUp
+//        onFacebookSignUpClick = {}, // Event login Facebook
+//        onGoogleSignUpClick = {},   // Event login Google
+//        onLoginClick = {},
+//        viewModel = AuthViewModel(),
+//        onSignUpSuccess = {
+//            navController.navigate("home")
+//        }         // Event navigasi ke halaman Login
+//    )
+//}
+

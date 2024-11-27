@@ -16,15 +16,16 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.navigation.NavHostController
+
 import androidx.navigation.compose.rememberNavController
 import com.example.mamfoods.ui.theme.SubText
 import com.example.mamfoods.ui.theme.TitleText
 import kotlinx.coroutines.delay
 
 @Composable
-fun SplashScreen(navController: NavHostController) {
-    // Displaying the splash screen with logo and text
+
+fun SplashScreen(onNavigateToOnboarding: () -> Unit) {
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -50,18 +51,11 @@ fun SplashScreen(navController: NavHostController) {
         )
     }
 
-    // Navigate to the next screen after a delay of 3 seconds
-    LaunchedEffect(Unit) {
-        delay(3000) // Wait for 3 seconds
-        navController.navigate("signup") {
-            popUpTo("splash") { inclusive = true }
-        }
+    androidx.compose.runtime.LaunchedEffect(Unit) {
+        kotlinx.coroutines.delay(3000) // Tunggu 3 detik
+        onNavigateToOnboarding()
     }
+
 }
 
-@Preview(showBackground = true)
-@Composable
-fun SplashScreenPreview() {
-    val navController = rememberNavController()
-    SplashScreen(navController)
-}
+
