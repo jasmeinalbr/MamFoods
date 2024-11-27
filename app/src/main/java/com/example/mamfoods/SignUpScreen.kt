@@ -28,18 +28,22 @@ import com.example.mamfoods.ui.theme.RedPrimary
 import com.example.mamfoods.ui.theme.SubText
 import com.example.mamfoods.ui.theme.TitleText
 import com.example.mamfoods.ui.theme.YeonSung
+import com.example.mamfoods.viewmodel.AuthViewModel
 
 @Composable
 fun SignUpScreen(
-    onSignUpClick: () -> Unit, // Event untuk signup
-    onFacebookSignUpClick: () -> Unit, // Event login Facebook
-    onGoogleSignUpClick: () -> Unit,   // Event login Google
-    onLoginClick: () -> Unit         // Event navigasi ke halaman Login
+    onSignUpClick: () -> Unit,
+    onFacebookSignUpClick: () -> Unit,
+    onGoogleSignUpClick: () -> Unit,
+    onLoginClick: () -> Unit,
+    viewModel: AuthViewModel,
+    onSignUpSuccess: () -> Unit
 ) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var name by remember { mutableStateOf("") }
     var passwordVisible by remember { mutableStateOf(false) }
+    var errorMessage by remember { mutableStateOf<String?>(null) }
 
     Column(
         modifier = Modifier
@@ -216,7 +220,9 @@ fun SignUpScreen(
         Row (verticalAlignment = Alignment.CenterVertically) {
             Button(
                 onClick = { onFacebookSignUpClick() },
-                modifier = Modifier.height(57.dp).width(157.dp),
+                modifier = Modifier
+                    .height(57.dp)
+                    .width(157.dp),
                 shape = RoundedCornerShape(15.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = Color.White),
                 border = BorderStroke(1.dp, LightGrayColor)
@@ -225,7 +231,9 @@ fun SignUpScreen(
                     Image(
                         painter = painterResource(id = R.drawable.fb),
                         contentDescription = "facebook",
-                        modifier = Modifier.size(25.dp).padding(end = 8.dp))
+                        modifier = Modifier
+                            .size(25.dp)
+                            .padding(end = 8.dp))
                     Text(
                         text = "Facebook",
                         color = Color.Black,
@@ -236,7 +244,9 @@ fun SignUpScreen(
             Spacer(modifier = Modifier.width(16.dp))
             Button(
                 onClick = { onGoogleSignUpClick() },
-                modifier = Modifier.height(57.dp).width(157.dp),
+                modifier = Modifier
+                    .height(57.dp)
+                    .width(157.dp),
                 shape = RoundedCornerShape(15.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = Color.White),
                 border = BorderStroke(1.dp, LightGrayColor)
@@ -245,7 +255,9 @@ fun SignUpScreen(
                     Image(
                         painter = painterResource(id = R.drawable.google),
                         contentDescription = "google",
-                        modifier = Modifier.size(25.dp).padding(end = 8.dp))
+                        modifier = Modifier
+                            .size(25.dp)
+                            .padding(end = 8.dp))
                     Text(
                         text = "Google",
                         color = Color.Black,
@@ -257,8 +269,22 @@ fun SignUpScreen(
 
         Spacer(modifier = Modifier.height(32.dp))
         Button(
-            onClick = { onSignUpClick() },
-            modifier = Modifier.height(57.dp).width(180.dp),
+            onClick = {
+                viewModel.register(
+                    name = name,
+                    email = email,
+                    password = password,
+                    onSuccess = {
+                        onSignUpSuccess()
+                    },
+                    onError = { message ->
+                        errorMessage = message
+                    }
+                )
+            },
+            modifier = Modifier
+                .height(57.dp)
+                .width(180.dp),
             shape = RoundedCornerShape(15.dp),
             colors = ButtonDefaults.buttonColors(containerColor = RedPrimary)
         ) {
@@ -280,12 +306,17 @@ fun SignUpScreen(
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun PreviewSignup() {
-    SignUpScreen(onSignUpClick = {}, // Event untuk SignUp
-        onFacebookSignUpClick = {}, // Event login Facebook
-        onGoogleSignUpClick = {},   // Event login Google
-        onLoginClick = {}         // Event navigasi ke halaman Login
-    )
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun PreviewSignup() {
+//    SignUpScreen(
+//        onSignUpClick = {}, // Event untuk SignUp
+//        onFacebookSignUpClick = {}, // Event login Facebook
+//        onGoogleSignUpClick = {},   // Event login Google
+//        onLoginClick = {},
+//        viewModel = AuthViewModel(),
+//        onSignUpSuccess = {
+//            navController.navigate("home")
+//        }         // Event navigasi ke halaman Login
+//    )
+//}
