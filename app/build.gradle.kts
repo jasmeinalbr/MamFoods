@@ -30,19 +30,24 @@ android {
             )
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
+
     kotlinOptions {
         jvmTarget = "1.8"
     }
+
     buildFeatures {
         compose = true
     }
+
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.1"
     }
+
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
@@ -52,8 +57,9 @@ android {
 
 dependencies {
     // Firebase dependencies
-    implementation("com.google.firebase:firebase-auth-ktx:21.0.1") // Firebase Auth
-    implementation("com.google.firebase:firebase-core:21.0.0") // Firebase Core
+    implementation(libs.firebase.auth) // Firebase Auth (already included via alias)
+    implementation(libs.firebase.firestore.ktx) // Firestore (already included via alias)
+    implementation(libs.firebase.database) // Firebase Database (already included via alias)
 
     // AndroidX dependencies
     implementation(libs.androidx.core.ktx)
@@ -75,12 +81,9 @@ dependencies {
 
     // Navigation dependencies
     implementation(libs.androidx.navigation.runtime.ktx)
-
-    implementation(libs.firebase.auth)
-    implementation(libs.firebase.firestore.ktx)
-    implementation(libs.firebase.database)
     implementation(libs.androidx.navigation.compose)
 
+    // Testing dependencies
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
