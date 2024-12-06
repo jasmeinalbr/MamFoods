@@ -6,7 +6,7 @@ plugins {
 
 android {
     namespace = "com.example.mamfoods"
-    compileSdk = 35  // Updated to SDK version 35
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.example.mamfoods"
@@ -57,9 +57,15 @@ android {
 
 dependencies {
     // Firebase dependencies
-    implementation(libs.firebase.auth) // Firebase Auth (already included via alias)
-    implementation(libs.firebase.firestore.ktx) // Firestore (already included via alias)
-    implementation(libs.firebase.database) // Firebase Database (already included via alias)
+    implementation(platform("com.google.firebase:firebase-bom:32.1.1")) // Firebase BOM for version management
+    implementation("com.google.firebase:firebase-auth-ktx") // Firebase Auth
+    implementation("com.google.firebase:firebase-firestore-ktx") // Firestore
+    implementation("com.google.firebase:firebase-database-ktx") // Firebase Realtime Database
+
+    // Networking libraries
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation("com.android.volley:volley:1.2.1")
 
     // AndroidX dependencies
     implementation(libs.androidx.core.ktx)
@@ -73,15 +79,13 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     implementation("androidx.compose.material:material:1.5.0")
-    implementation ("androidx.navigation:navigation-compose:2.6.0")
-
-    // Accompanist dependencies
-    implementation("com.google.accompanist:accompanist-pager:0.30.1")
-    implementation("com.google.accompanist:accompanist-pager-indicators:0.30.1")
 
     // Navigation dependencies
-    implementation(libs.androidx.navigation.runtime.ktx)
-    implementation(libs.androidx.navigation.compose)
+    implementation("androidx.navigation:navigation-compose:2.6.0")
+
+    // Accompanist dependencies for Pager and Indicators
+    implementation("com.google.accompanist:accompanist-pager:0.30.1")
+    implementation("com.google.accompanist:accompanist-pager-indicators:0.30.1")
 
     // Testing dependencies
     testImplementation(libs.junit)

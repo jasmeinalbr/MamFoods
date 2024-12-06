@@ -34,7 +34,7 @@ import com.google.firebase.auth.FirebaseAuth
 
 
 @Composable
-fun HomeScreen(navController: NavHostController) {
+fun UserHomeScreen(navController: NavHostController) {
 
     val auth = FirebaseAuth.getInstance()
 

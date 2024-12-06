@@ -22,6 +22,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.compose.rememberNavController
 import com.example.mamfoods.ui.theme.Lato
 import com.example.mamfoods.ui.theme.LightGrayColor
 import com.example.mamfoods.ui.theme.RedPrimary
@@ -333,6 +334,7 @@ fun SignUpScreen(
 //@Preview(showBackground = true)
 //@Composable
 //fun PreviewSignup() {
+//    val navController = rememberNavController() // Tambahkan ini untuk menginisialisasi navController
 //    SignUpScreen(
 //        onSignUpClick = {}, // Event untuk SignUp
 //        onFacebookSignUpClick = {}, // Event login Facebook
@@ -340,8 +342,9 @@ fun SignUpScreen(
 //        onLoginClick = {},
 //        viewModel = AuthViewModel(),
 //        onSignUpSuccess = {
-//            navController.navigate("home")
-//        }         // Event navigasi ke halaman Login
+//           navController.navigate("home") // Gunakan navController untuk navigasi
+//        }
 //    )
 //}
+
 
