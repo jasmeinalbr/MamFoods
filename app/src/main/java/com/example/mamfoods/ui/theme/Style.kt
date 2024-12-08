@@ -25,13 +25,13 @@ val BodyText = TextStyle(
     color = Color.Black,
     fontSize = 14.sp,
     fontFamily = YeonSung,
-    fontWeight = FontWeight.Normal
+    fontWeight = FontWeight.Bold
 )
 
 val PriceText = TextStyle(
-    color = RedPrimary,
-    fontSize = 20.sp,
-    fontFamily = Lato,
+    color = DarkRed,
+    fontSize = 16.sp,
+    fontFamily = Bevan,
     fontWeight = FontWeight.Bold
 )
 

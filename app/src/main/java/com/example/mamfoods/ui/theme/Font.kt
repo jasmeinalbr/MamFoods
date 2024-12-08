@@ -11,3 +11,7 @@ val YeonSung = FontFamily(
 val Lato = FontFamily(
     Font(R.font.latobold),
 )
+
+val Bevan = FontFamily(
+    Font(R.font.bevan)
+)
