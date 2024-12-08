@@ -1,6 +1,7 @@
 package com.example.mamfoods.userscreen
 
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.ClickableText
@@ -28,7 +29,9 @@ import com.example.mamfoods.viewmodel.AuthViewModel
 fun LoginScreen(
     viewModel: AuthViewModel,
     onLoginSuccess: () -> Unit,
-    onSignUpClick: () -> Unit
+    onSignUpClick: () -> Unit,
+    onFacebookLoginClick: () -> Unit,
+    onGoogleLoginClick:() -> Unit
 ) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -58,41 +61,147 @@ fun LoginScreen(
             style = SubText,
             letterSpacing = 1.5.sp
         )
+        Spacer(modifier = Modifier.height(28.dp))
+
+        Text(
+            text = "Login To Your Account",
+            fontSize = 24.sp,
+            style = SubText,
+            letterSpacing = 1.5.sp
+        )
         Spacer(modifier = Modifier.height(32.dp))
 
-        OutlinedTextField(
-            value = email,
-            onValueChange = { email = it },
-            label = { Text("Email or Phone Number", style = SubText) },
-            colors = TextFieldDefaults.outlinedTextFieldColors(
-                textColor = Color.Black,
-                focusedBorderColor = LightGrayColor,
-                unfocusedBorderColor = LightGrayColor
-            ),
-            shape = RoundedCornerShape(15.dp),
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(57.dp),
+            OutlinedTextField(
+                value = email,
+                onValueChange = { email = it },
+                label = {
+                    Text(
+                        "Email or Phone Number",
+                        style = SubText,
+                        color = Color.LightGray,
+                        letterSpacing = 1.5.sp
+                    ) },
+                colors = TextFieldDefaults.outlinedTextFieldColors(
+                    textColor = Color.Black,
+                    focusedBorderColor = LightGrayColor,
+                    unfocusedBorderColor = LightGrayColor,
+                    backgroundColor = Color.White,
+                    cursorColor = Color.Black
+                ),
+                shape = RoundedCornerShape(15.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(57.dp),
+            )
+
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+            OutlinedTextField(
+                value = password,
+                onValueChange = { password = it },
+                label = {
+                    Text(
+                        "Password",
+                        style = SubText,
+                        color = Color.LightGray,
+                        letterSpacing = 1.5.sp
+                    ) },
+                colors = TextFieldDefaults.outlinedTextFieldColors(
+                    textColor = Color.Black,
+                    focusedBorderColor = LightGrayColor,
+                    unfocusedBorderColor = LightGrayColor,
+                    backgroundColor = Color.White,
+                    cursorColor = Color.Black
+                ),
+                shape = RoundedCornerShape(15.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(57.dp),
+            )
+
+        Spacer(modifier = Modifier.height(24.dp))
+
+        // Or sign-up section
+        Text(
+            text = "Or",
+            fontSize = 12.sp,
+            color = Color.Black,
+            fontFamily = YeonSung,
+            textAlign = TextAlign.Center,
+            letterSpacing = 1.5.sp
+        )
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        Text(
+            text = "Continue With",
+            fontSize = 24.sp,
+            color = Color.Black,
+            fontFamily = YeonSung,
+            textAlign = TextAlign.Center,
+            letterSpacing = 1.5.sp
         )
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        OutlinedTextField(
-            value = password,
-            onValueChange = { password = it },
-            label = { Text("Password", style = SubText) },
-            colors = TextFieldDefaults.outlinedTextFieldColors(
-                textColor = Color.Black,
-                focusedBorderColor = LightGrayColor,
-                unfocusedBorderColor = LightGrayColor
-            ),
-            shape = RoundedCornerShape(15.dp),
+        // Facebook Login Button
+        Button(
+            onClick = { onFacebookLoginClick() },
             modifier = Modifier
-                .fillMaxWidth()
+                .height(57.dp)
+                .width(157.dp),
+            shape = RoundedCornerShape(15.dp),
+            colors = ButtonDefaults.buttonColors(containerColor = Color.White),
+            border = BorderStroke(1.dp, LightGrayColor)
+        ) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Image(
+                    painter = painterResource(id = R.drawable.fb),
 
-                .height(57.dp),
-        )
+                    contentDescription = "facebook",
+                    modifier = Modifier
+                        .size(25.dp)
+                        .padding(end = 8.dp))
 
+                androidx.compose.material3.Text(
+                    text = "Facebook",
+                    color = Color.Black,
+                    fontFamily = Lato,
+                    fontSize = 14.sp
+                )
+            }
+        }
+
+        Spacer(modifier = Modifier.height(12.dp))
+
+        // Google Login Button
+        Button(
+            onClick = { onGoogleLoginClick() },
+            modifier = Modifier
+                .height(57.dp)
+                .width(157.dp),
+            shape = RoundedCornerShape(15.dp),
+            colors = ButtonDefaults.buttonColors(containerColor = Color.White),
+            border = BorderStroke(1.dp, LightGrayColor)
+        ) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Image(
+                    painter = painterResource(id = R.drawable.google),
+
+                    contentDescription = "google",
+                    modifier = Modifier
+                        .size(25.dp)
+                        .padding(end = 8.dp))
+
+                androidx.compose.material3.Text(
+                    text = "Google",
+                    color = Color.Black,
+                    fontFamily = Lato,
+                    fontSize = 14.sp
+                )
+            }
+        }
 
         Spacer(modifier = Modifier.height(32.dp))
 
@@ -179,7 +288,9 @@ fun LoginScreenPreview() {
         },
         onSignUpClick = {
             // Simulasi navigasi ke halaman registrasi
-        }
+        },
+        onGoogleLoginClick = {},
+        onFacebookLoginClick = {}
     )
 }
 

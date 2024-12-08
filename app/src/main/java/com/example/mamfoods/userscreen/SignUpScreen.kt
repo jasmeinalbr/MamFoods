@@ -204,7 +204,7 @@ fun SignUpScreen(
         // Or sign-up section
         Text(
             text = "Or",
-            fontSize = 10.sp,
+            fontSize = 12.sp,
             color = Color.Black,
             fontFamily = YeonSung,
             textAlign = TextAlign.Center,
@@ -215,7 +215,7 @@ fun SignUpScreen(
 
         Text(
             text = "Sign Up With",
-            fontSize = 20.sp,
+            fontSize = 24.sp,
             color = Color.Black,
             fontFamily = YeonSung,
             textAlign = TextAlign.Center,
@@ -322,7 +322,7 @@ fun SignUpScreen(
         ClickableText(
             text = AnnotatedString("Already Have Account?"),
             onClick = { onLoginClick() },
-            style = SubText.copy(color = LightGrayColor)
+            style = SubText
         )
     }
 

@@ -32,8 +32,8 @@ fun AutoSlidingBanner(images: List<Painter>) {
 
     Box(
         modifier = Modifier
-            .fillMaxWidth()
-            .height(150.dp)
+            .wrapContentSize()
+            .height(200.dp)
     ) {
         // Pager for sliding images
         HorizontalPager(
@@ -43,9 +43,9 @@ fun AutoSlidingBanner(images: List<Painter>) {
         ) { page ->
             Box(
                 modifier = Modifier
-                    .fillMaxSize()
+                    .wrapContentSize()
                     .clip(RoundedCornerShape(12.dp))
-                    .background(Color.LightGray) // Placeholder for image
+                    .background(Color.Transparent) // Placeholder for image
             ) {
                 Image(
                     painter = images[page],

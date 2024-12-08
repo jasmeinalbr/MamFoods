@@ -1,8 +1,5 @@
 package com.example.mamfoods
 
-import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -16,8 +13,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.tooling.preview.Preview
-
-import androidx.navigation.compose.rememberNavController
 import com.example.mamfoods.ui.theme.SubText
 import com.example.mamfoods.ui.theme.TitleText
 import kotlinx.coroutines.delay
@@ -38,12 +33,12 @@ fun SplashScreen(onNavigateToOnboarding: () -> Unit) {
             contentDescription = "Logo Mam Foods",
             modifier = Modifier.size(200.dp)
         )
-        Spacer(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.height(32.dp))
         Text(
             text = "Mam Foods",
             style = TitleText
         )
-        Spacer(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.height(32.dp))
         Text(
             text = "Deliver Favorite Food & Drink",
             style = SubText,
@@ -51,11 +46,17 @@ fun SplashScreen(onNavigateToOnboarding: () -> Unit) {
         )
     }
 
-    androidx.compose.runtime.LaunchedEffect(Unit) {
-        kotlinx.coroutines.delay(3000) // Tunggu 3 detik
+    LaunchedEffect(Unit) {
+        delay(3000) // Tunggu 3 detik
         onNavigateToOnboarding()
     }
-
 }
+
+@Preview(showBackground = true)
+@Composable
+fun PreviewSplashScreen() {
+    SplashScreen(onNavigateToOnboarding = {})
+}
+
 
 
