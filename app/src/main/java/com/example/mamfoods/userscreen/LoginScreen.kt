@@ -27,7 +27,7 @@ import com.example.mamfoods.viewmodel.AuthViewModel
 
 @Composable
 fun LoginScreen(
-    viewModel: AuthViewModel,
+//    viewModel: AuthViewModel,
     onLoginSuccess: () -> Unit,
     onSignUpClick: () -> Unit,
     onFacebookLoginClick: () -> Unit,
@@ -38,38 +38,49 @@ fun LoginScreen(
     var isLoading by remember { mutableStateOf(false) }
     var errorMessage by remember { mutableStateOf<String?>(null) }
 
-
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+    BoxWithConstraints (
+        modifier = Modifier.fillMaxSize()
     ) {
-        Spacer(modifier = Modifier.height(60.dp))
+        val screenWidth = maxWidth
+        val screenHeight = maxHeight
 
-        Image(
-            painter = painterResource(id = R.drawable.logo),
-            contentDescription = "Logo Mam Foods",
-            modifier = Modifier.size(100.dp)
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-        Text(text = "Mam Foods", style = TitleText)
-        Spacer(modifier = Modifier.height(16.dp))
-        Text(
-            text = "Deliver Favorite Food & Drink",
-            fontSize = 14.sp,
-            style = SubText,
-            letterSpacing = 1.5.sp
-        )
-        Spacer(modifier = Modifier.height(28.dp))
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = screenWidth * 0.05f),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Spacer(modifier = Modifier.height(screenHeight * 0.05f))
 
-        Text(
-            text = "Login To Your Account",
-            fontSize = 24.sp,
-            style = SubText,
-            letterSpacing = 1.5.sp
-        )
-        Spacer(modifier = Modifier.height(32.dp))
+            Image(
+                painter = painterResource(id = R.drawable.logo),
+                contentDescription = "Logo Mam Foods",
+                modifier = Modifier.size(screenWidth * 0.3f)
+            )
+            Spacer(modifier = Modifier.height(screenHeight * 0.02f))
+            Text(
+                text = "Mam Foods",
+                style = TitleText,
+                fontSize = (screenWidth * 0.08f).value.sp
+            )
+            Spacer(modifier = Modifier.height(screenHeight * 0.01f))
+            Text(
+                text = "Deliver Favorite Food & Drink",
+                fontSize = (screenWidth * 0.03f).value.sp,
+                style = SubText,
+                letterSpacing = 1.5.sp
+            )
+
+            Spacer(modifier = Modifier.height(screenHeight * 0.03f))
+
+            Text(
+                text = "Login To Your Account",
+                fontSize = (screenWidth * 0.045f).value.sp,
+                style = SubText,
+                letterSpacing = 1.5.sp
+            )
+
+            Spacer(modifier = Modifier.height(screenHeight * 0.03f))
 
             OutlinedTextField(
                 value = email,
@@ -78,6 +89,7 @@ fun LoginScreen(
                     Text(
                         "Email or Phone Number",
                         style = SubText,
+                        fontSize = (screenWidth * 0.035f).value.sp,
                         color = Color.LightGray,
                         letterSpacing = 1.5.sp
                     ) },
@@ -91,11 +103,9 @@ fun LoginScreen(
                 shape = RoundedCornerShape(15.dp),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(57.dp),
+                    .height(screenHeight * 0.07f),
             )
-
-
-        Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(screenHeight * 0.02f))
 
             OutlinedTextField(
                 value = password,
@@ -104,6 +114,7 @@ fun LoginScreen(
                     Text(
                         "Password",
                         style = SubText,
+                        fontSize = (screenWidth * 0.035f).value.sp,
                         color = Color.LightGray,
                         letterSpacing = 1.5.sp
                     ) },
@@ -117,172 +128,173 @@ fun LoginScreen(
                 shape = RoundedCornerShape(15.dp),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(57.dp),
+                    .height(screenHeight * 0.07f),
             )
 
-        Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(screenHeight * 0.03f))
 
-        // Or sign-up section
-        Text(
-            text = "Or",
-            fontSize = 12.sp,
-            color = Color.Black,
-            fontFamily = YeonSung,
-            textAlign = TextAlign.Center,
-            letterSpacing = 1.5.sp
-        )
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        Text(
-            text = "Continue With",
-            fontSize = 24.sp,
-            color = Color.Black,
-            fontFamily = YeonSung,
-            textAlign = TextAlign.Center,
-            letterSpacing = 1.5.sp
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        // Facebook Login Button
-        Button(
-            onClick = { onFacebookLoginClick() },
-            modifier = Modifier
-                .height(57.dp)
-                .width(157.dp),
-            shape = RoundedCornerShape(15.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = Color.White),
-            border = BorderStroke(1.dp, LightGrayColor)
-        ) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Image(
-                    painter = painterResource(id = R.drawable.fb),
-
-                    contentDescription = "facebook",
-                    modifier = Modifier
-                        .size(25.dp)
-                        .padding(end = 8.dp))
-
-                androidx.compose.material3.Text(
-                    text = "Facebook",
-                    color = Color.Black,
-                    fontFamily = Lato,
-                    fontSize = 14.sp
-                )
-            }
-        }
-
-        Spacer(modifier = Modifier.height(12.dp))
-
-        // Google Login Button
-        Button(
-            onClick = { onGoogleLoginClick() },
-            modifier = Modifier
-                .height(57.dp)
-                .width(157.dp),
-            shape = RoundedCornerShape(15.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = Color.White),
-            border = BorderStroke(1.dp, LightGrayColor)
-        ) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Image(
-                    painter = painterResource(id = R.drawable.google),
-
-                    contentDescription = "google",
-                    modifier = Modifier
-                        .size(25.dp)
-                        .padding(end = 8.dp))
-
-                androidx.compose.material3.Text(
-                    text = "Google",
-                    color = Color.Black,
-                    fontFamily = Lato,
-                    fontSize = 14.sp
-                )
-            }
-        }
-
-        Spacer(modifier = Modifier.height(32.dp))
-
-        Button(
-            onClick = {
-                isLoading = true
-                errorMessage = null
-                viewModel.login(
-                    email = email,
-                    password = password,
-                    onSuccess = {
-                        isLoading = false
-                        onLoginSuccess()
-                    },
-                    onError = {
-                        isLoading = false
-                        errorMessage = it
-                    }
-                )
-            },
-            modifier = Modifier
-                .height(57.dp)
-                .width(157.dp),
-
-            shape = RoundedCornerShape(15.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = RedPrimary)
-        ) {
+            // Or sign-up section
             Text(
-                text = if (isLoading) "Loading..." else "Login",
-                color = Color.White,
+                text = "Or",
+                fontSize = (screenWidth * 0.03f).value.sp,
+                color = Color.Black,
                 fontFamily = YeonSung,
-                fontSize = 20.sp
+                textAlign = TextAlign.Center,
+                letterSpacing = 1.5.sp
             )
-        }
+            Spacer(modifier = Modifier.height(screenHeight * 0.003f))
 
-        if (errorMessage != null) {
-            Spacer(modifier = Modifier.height(8.dp))
             Text(
-                text = errorMessage!!,
-                color = Color.Red,
-                fontSize = 14.sp,
-                textAlign = TextAlign.Center
+                text = "Continue With",
+                fontSize = (screenWidth * 0.05f).value.sp,
+                color = Color.Black,
+                fontFamily = YeonSung,
+                textAlign = TextAlign.Center,
+                letterSpacing = 1.5.sp
+            )
+
+            Spacer(modifier = Modifier.height(screenHeight * 0.02f))
+
+            // Facebook Login Button
+            Button(
+                onClick = { onFacebookLoginClick() },
+//                modifier = Modifier
+//                    .height(57.dp)
+//                    .width(157.dp),
+                modifier = Modifier
+                    .fillMaxWidth(0.45f)
+                    .height(screenHeight * 0.07f),
+                shape = RoundedCornerShape(15.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = Color.White),
+                border = BorderStroke(1.dp, LightGrayColor)
+            ) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Image(
+                        painter = painterResource(id = R.drawable.fb),
+
+                        contentDescription = "facebook",
+                        modifier = Modifier
+                            .size(25.dp)
+                            .padding(end = 8.dp))
+
+                    androidx.compose.material3.Text(
+                        text = "Facebook",
+                        color = Color.Black,
+                        fontFamily = Lato,
+                        fontSize = (screenWidth * 0.035f).value.sp,
+                    )
+                }
+            }
+
+            Spacer(modifier = Modifier.height(screenHeight * 0.01f))
+
+            // Google Login Button
+            Button(
+                onClick = { onGoogleLoginClick() },
+                modifier = Modifier
+                    .fillMaxWidth(0.45f)
+                    .height(screenHeight * 0.07f),
+                shape = RoundedCornerShape(15.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = Color.White),
+                border = BorderStroke(1.dp, LightGrayColor)
+            ) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Image(
+                        painter = painterResource(id = R.drawable.google),
+
+                        contentDescription = "google",
+                        modifier = Modifier
+                            .size(25.dp)
+                            .padding(end = 8.dp))
+
+                    androidx.compose.material3.Text(
+                        text = "Google",
+                        color = Color.Black,
+                        fontFamily = Lato,
+                        fontSize = (screenWidth * 0.035f).value.sp,
+                    )
+                }
+            }
+
+            Spacer(modifier = Modifier.height(screenHeight * 0.03f))
+
+            Button(
+                onClick = {
+                    isLoading = true
+                    errorMessage = null
+//                viewModel.login(
+//                    email = email,
+//                    password = password,
+//                    onSuccess = {
+//                        isLoading = false
+//                        onLoginSuccess()
+//                    },
+//                    onError = {
+//                        isLoading = false
+//                        errorMessage = it
+//                    }
+//                )
+                },
+                modifier = Modifier
+                    .fillMaxWidth(0.45f)
+                    .height(screenHeight * 0.07f),
+
+                shape = RoundedCornerShape(15.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = RedPrimary)
+            ) {
+                Text(
+                    text = if (isLoading) "Loading..." else "Login",
+                    color = Color.White,
+                    fontFamily = YeonSung,
+                    fontSize = (screenWidth * 0.05f).value.sp,
+                )
+            }
+
+            if (errorMessage != null) {
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    text = errorMessage!!,
+                    color = Color.Red,
+                    fontSize = 14.sp,
+                    textAlign = TextAlign.Center
+                )
+            }
+
+            Spacer(modifier = Modifier.height(screenHeight * 0.01f))
+
+            ClickableText(
+                text = AnnotatedString("Don't Have Account?"),
+                onClick = { onSignUpClick() },  // Navigate to sign up page
+                style = SubText,
             )
         }
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        ClickableText(
-            text = AnnotatedString("Don't Have Account?"),
-            onClick = { onSignUpClick() },  // Navigate to sign up page
-            style = SubText
-        )
     }
-
-
 }
 
 
 @Preview(showBackground = true)
 @Composable
 fun LoginScreenPreview() {
-    // Buat dummy ViewModel untuk kebutuhan Preview
-    val dummyViewModel = object : AuthViewModel() {
-        override fun login(
-            email: String,
-            password: String,
-            onSuccess: () -> Unit,
-            onError: (String) -> Unit
-        ) {
-            // Simulasi login berhasil atau gagal
-            if (email == "user@example.com" && password == "password") {
-                onSuccess()
-            } else {
-                onError("Invalid credentials")
-            }
-        }
-    }
+//    // Buat dummy ViewModel untuk kebutuhan Preview
+//    val dummyViewModel = object : AuthViewModel() {
+//        override fun login(
+//            email: String,
+//            password: String,
+//            onSuccess: () -> Unit,
+//            onError: (String) -> Unit
+//        ) {
+//            // Simulasi login berhasil atau gagal
+//            if (email == "user@example.com" && password == "password") {
+//                onSuccess()
+//            } else {
+//                onError("Invalid credentials")
+//            }
+//        }
+//    }
 
     // Preview UI
     LoginScreen(
-        viewModel = dummyViewModel,
+//        viewModel = dummyViewModel,
         onLoginSuccess = {
             // Simulasi sukses login
         },
