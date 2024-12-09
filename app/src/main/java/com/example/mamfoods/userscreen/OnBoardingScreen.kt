@@ -1,4 +1,4 @@
-package com.example.mamfoods
+package com.example.mamfoods.userscreen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -22,6 +22,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.mamfoods.R
 import com.example.mamfoods.ui.theme.RedPrimary
 import com.example.mamfoods.ui.theme.YeonSung
 

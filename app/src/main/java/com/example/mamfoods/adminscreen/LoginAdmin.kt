@@ -1,4 +1,4 @@
-package com.example.mamfoods
+package com.example.mamfoods.adminscreen
 
 
 import androidx.compose.foundation.Image
@@ -8,6 +8,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.OutlinedTextField
+import androidx.compose.runtime.Composable
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.runtime.*
@@ -16,16 +17,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.mamfoods.R
 import com.example.mamfoods.ui.theme.*
-import com.example.mamfoods.viewmodel.AuthViewModel
 
 @Composable
-fun LoginScreen(
-    viewModel: AuthViewModel,
+fun LoginAdmin(
+  //  viewModel: AuthViewModel,
     onLoginSuccess: () -> Unit,
     onSignUpClick: () -> Unit
 ) {
@@ -52,10 +54,18 @@ fun LoginScreen(
         Text(text = "Mam Foods", style = TitleText)
         Spacer(modifier = Modifier.height(16.dp))
         Text(
-            text = "Deliver Favorite Food & Drink",
+            text = "Login To Your",
             fontSize = 14.sp,
             style = SubText,
-            letterSpacing = 1.5.sp
+            letterSpacing = 1.5.sp,
+            fontWeight = FontWeight.ExtraBold
+        )
+        Text(
+            text = "Admin Dasboard",
+            fontSize = 14.sp,
+            style = SubText,
+            letterSpacing = 1.5.sp,
+            fontWeight = FontWeight.Bold
         )
         Spacer(modifier = Modifier.height(32.dp))
 
@@ -98,20 +108,20 @@ fun LoginScreen(
         Button(
 
             onClick = {
-                isLoading = true
-                errorMessage = null
-                viewModel.login(
-                    email = email,
-                    password = password,
-                    onSuccess = {
-                        isLoading = false
-                        onLoginSuccess()
-                    },
-                    onError = {
-                        isLoading = false
-                        errorMessage = it
-                    }
-                )
+//                isLoading = true
+//                errorMessage = null
+//                viewModel.login(
+//                    email = email,
+//                    password = password,
+//                    onSuccess = {
+//                        isLoading = false
+//                        onLoginSuccess()
+//                    },
+//                    onError = {
+//                        isLoading = false
+//                        errorMessage = it
+//                    }
+             //   )
             },
             modifier = Modifier
                 .height(57.dp)
@@ -153,27 +163,27 @@ fun LoginScreen(
 
 @Preview(showBackground = true)
 @Composable
-fun LoginScreenPreview() {
+fun LoginAdminPreview() {
     // Buat dummy ViewModel untuk kebutuhan Preview
-    val dummyViewModel = object : AuthViewModel() {
-        override fun login(
-            email: String,
-            password: String,
-            onSuccess: () -> Unit,
-            onError: (String) -> Unit
-        ) {
-            // Simulasi login berhasil atau gagal
-            if (email == "user@example.com" && password == "password") {
-                onSuccess()
-            } else {
-                onError("Invalid credentials")
-            }
-        }
-    }
+//    val dummyViewModel = object : AuthViewModel() {
+//        override fun login(
+//            email: String,
+//            password: String,
+//            onSuccess: () -> Unit,
+//            onError: (String) -> Unit
+//        ) {
+//            // Simulasi login berhasil atau gagal
+//            if (email == "user@example.com" && password == "password") {
+//                onSuccess()
+//            } else {
+//                onError("Invalid credentials")
+//            }
+//        }
+//    }
 
     // Preview UI
-    LoginScreen(
-        viewModel = dummyViewModel,
+    LoginAdmin(
+      //  viewModel = dummyViewModel,
         onLoginSuccess = {
             // Simulasi sukses login
         },

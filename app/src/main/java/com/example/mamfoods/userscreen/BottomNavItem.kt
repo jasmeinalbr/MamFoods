@@ -1,4 +1,6 @@
-package com.example.mamfoods
+package com.example.mamfoods.userscreen
+
+import com.example.mamfoods.R
 
 sealed class BottomNavItem(val route: String, val label: String, val icon: Int) {
     object Home : BottomNavItem("home", "Home", R.drawable.iconhome)

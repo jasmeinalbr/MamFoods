@@ -16,7 +16,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import androidx.room.util.query
 import com.example.mamfoods.userscreen.ButtonNavComponent
 import com.example.mamfoods.userscreen.CartItem
 import com.example.mamfoods.userscreen.CartScreen
@@ -25,6 +24,7 @@ import com.example.mamfoods.userscreen.FoodDetailsScreen
 import com.example.mamfoods.userscreen.FoodItem
 import com.example.mamfoods.userscreen.HistoryScreen
 import com.example.mamfoods.userscreen.LoginScreen
+import com.example.mamfoods.userscreen.OnboardingScreen
 import com.example.mamfoods.userscreen.OrderScreen
 import com.example.mamfoods.userscreen.OrderSuccessScreen
 import com.example.mamfoods.userscreen.PopularScreen
@@ -32,10 +32,9 @@ import com.example.mamfoods.userscreen.ProfileData
 import com.example.mamfoods.userscreen.ProfileScreen
 import com.example.mamfoods.userscreen.RestaurantDetailsScreen
 import com.example.mamfoods.userscreen.SignUpScreen
-import com.example.mamfoods.userscreen.foodItems
+import com.example.mamfoods.userscreen.SplashScreen
 import com.example.mamfoods.userscreen.getFoodItemByName
 import com.example.mamfoods.userscreen.getRestaurantByName
-import com.example.mamfoods.userscreen.restaurants
 import com.example.mamfoods.viewmodel.AuthViewModel
 
 

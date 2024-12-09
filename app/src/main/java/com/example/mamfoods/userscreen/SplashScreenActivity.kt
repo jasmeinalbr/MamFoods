@@ -1,4 +1,4 @@
-package com.example.mamfoods
+package com.example.mamfoods.userscreen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -13,6 +13,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.mamfoods.R
 import com.example.mamfoods.ui.theme.SubText
 import com.example.mamfoods.ui.theme.TitleText
 import kotlinx.coroutines.delay
