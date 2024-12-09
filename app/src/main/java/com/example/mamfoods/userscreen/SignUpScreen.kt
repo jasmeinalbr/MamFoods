@@ -23,6 +23,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.mamfoods.R
+import com.example.mamfoods.model.SignUpRequest
 import com.example.mamfoods.ui.theme.Lato
 import com.example.mamfoods.ui.theme.LightGrayColor
 import com.example.mamfoods.ui.theme.RedPrimary
@@ -36,7 +37,7 @@ fun SignUpScreen(
     onFacebookSignUpClick: () -> Unit,
     onGoogleSignUpClick: () -> Unit,
     onLoginClick: () -> Unit,
-//    viewModel: AuthViewModel,
+    viewModel: AuthViewModel,
     onSignUpSuccess: () -> Unit
 
 ) {
@@ -294,21 +295,22 @@ fun SignUpScreen(
 
             Spacer(modifier = Modifier.height(screenHeight * 0.03f))
 
-            // Sign Up Button
-            Button(
-                onClick = {
-//                viewModel.register(
-//                    name = name,
-//                    email = email,
-//                    password = password,
-//                    onSuccess = {
-//                        onSignUpSuccess()
-//                    },
-//                    onError = { message ->
-//                        errorMessage = message
-//                    }
-//                )
-                },
+        // Sign Up Button
+        Button(
+            onClick = {
+                val signUpRequest = SignUpRequest(
+                   name,email,password
+                )
+                viewModel.register(
+                    request = signUpRequest,
+                    onSuccess = {
+                        onSignUpSuccess()
+                    },
+                    onError = { message ->
+                        errorMessage = message
+                    }
+                )
+            },
 
                 modifier = Modifier
                     .fillMaxWidth(0.5f)
@@ -334,6 +336,7 @@ fun SignUpScreen(
             )
         }
     }
+
 }
 
 @Preview(showBackground = true)
@@ -343,7 +346,7 @@ fun PreviewSignup() {
         onFacebookSignUpClick = {}, // Event login Facebook
         onGoogleSignUpClick = {},   // Event login Google
         onLoginClick = {},
-//        viewModel = AuthViewModel(),
+        viewModel = AuthViewModel(),
         onSignUpSuccess = {}
     )
 }

@@ -22,12 +22,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.mamfoods.R
+import com.example.mamfoods.model.LoginRequest
 import com.example.mamfoods.ui.theme.*
 import com.example.mamfoods.viewmodel.AuthViewModel
 
 @Composable
 fun LoginScreen(
-//    viewModel: AuthViewModel,
+    viewModel: AuthViewModel,
     onLoginSuccess: () -> Unit,
     onSignUpClick: () -> Unit,
     onFacebookLoginClick: () -> Unit,
@@ -128,7 +129,7 @@ fun LoginScreen(
                 shape = RoundedCornerShape(15.dp),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(screenHeight * 0.07f),
+                    .height(57.dp),
             )
 
             Spacer(modifier = Modifier.height(screenHeight * 0.03f))
@@ -218,26 +219,26 @@ fun LoginScreen(
 
             Spacer(modifier = Modifier.height(screenHeight * 0.03f))
 
-            Button(
-                onClick = {
-                    isLoading = true
-                    errorMessage = null
-//                viewModel.login(
-//                    email = email,
-//                    password = password,
-//                    onSuccess = {
-//                        isLoading = false
-//                        onLoginSuccess()
-//                    },
-//                    onError = {
-//                        isLoading = false
-//                        errorMessage = it
-//                    }
-//                )
-                },
-                modifier = Modifier
-                    .fillMaxWidth(0.45f)
-                    .height(screenHeight * 0.07f),
+        Button(
+            onClick = {
+                isLoading = true
+                errorMessage = null
+                val loginRequest = LoginRequest(email, password)
+                viewModel.login(
+                    request = loginRequest,
+                    onSuccess = {
+                        isLoading = false
+                        onLoginSuccess()
+                    },
+                    onError = {
+                        isLoading = false
+                        errorMessage = it
+                    }
+                )
+            },
+            modifier = Modifier
+                .height(57.dp)
+                .width(157.dp),
 
                 shape = RoundedCornerShape(15.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = RedPrimary)
@@ -269,41 +270,42 @@ fun LoginScreen(
             )
         }
     }
+
+
 }
 
-
-@Preview(showBackground = true)
-@Composable
-fun LoginScreenPreview() {
+//
+//@Preview(showBackground = true)
+//@Composable
+//fun LoginScreenPreview() {
 //    // Buat dummy ViewModel untuk kebutuhan Preview
 //    val dummyViewModel = object : AuthViewModel() {
 //        override fun login(
-//            email: String,
-//            password: String,
+//            request: LoginRequest,
 //            onSuccess: () -> Unit,
 //            onError: (String) -> Unit
 //        ) {
 //            // Simulasi login berhasil atau gagal
-//            if (email == "user@example.com" && password == "password") {
+//            if (request.email == "user@example.com" && request.password == "password") {
 //                onSuccess()
 //            } else {
 //                onError("Invalid credentials")
 //            }
 //        }
 //    }
-
-    // Preview UI
-    LoginScreen(
+//
+//    // Preview UI
+//    LoginScreen(
 //        viewModel = dummyViewModel,
-        onLoginSuccess = {
-            // Simulasi sukses login
-        },
-        onSignUpClick = {
-            // Simulasi navigasi ke halaman registrasi
-        },
-        onGoogleLoginClick = {},
-        onFacebookLoginClick = {}
-    )
-}
+//        onLoginSuccess = {
+//            // Simulasi sukses login
+//        },
+//        onSignUpClick = {
+//            // Simulasi navigasi ke halaman registrasi
+//        },
+//        onGoogleLoginClick = {},
+//        onFacebookLoginClick = {}
+//    )
+//}
 
 

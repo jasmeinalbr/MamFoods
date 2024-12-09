@@ -42,7 +42,6 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-
             AppNavigation()
 
         }
@@ -95,7 +94,7 @@ fun AppNavigation() {
             }
             composable("login") {
                 LoginScreen(
-//                    viewModel = AuthViewModel(),
+                    viewModel = AuthViewModel(),
                     onLoginSuccess = {
                         navController.navigate("home")
                     },
@@ -108,7 +107,7 @@ fun AppNavigation() {
             }
             composable("signup") {
                 SignUpScreen(
-//                    viewModel = AuthViewModel(),
+                    viewModel = AuthViewModel(),
                     onFacebookSignUpClick = { /* Implement Facebook login */ },
                     onGoogleSignUpClick = { /* Implement Google login */ },
                     onLoginClick = { navController.navigate("login") },
