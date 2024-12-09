@@ -6,7 +6,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 object ApiClient {
-    private const val BASE_URL = "https://resful-api-mamfoods-production-d43a.up.railway.app"
+    private const val BASE_URL = "https://resful-api-mamfoods-production-d43a.up.railway.app/api/"
 
     private val loggingInterceptor = HttpLoggingInterceptor().apply {
         level = HttpLoggingInterceptor.Level.BODY
@@ -16,6 +16,7 @@ object ApiClient {
         .addInterceptor(loggingInterceptor)
         .build()
 
+    // Using 'instance' to lazily initialize the ApiService
     val instance: ApiService by lazy {
         Retrofit.Builder()
             .baseUrl(BASE_URL)

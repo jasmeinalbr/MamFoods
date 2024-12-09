@@ -1,5 +1,6 @@
 package com.example.mamfoods.userscreen
 
+import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.runtime.Composable
 import androidx.compose.foundation.Image
@@ -298,16 +299,15 @@ fun SignUpScreen(
         // Sign Up Button
         Button(
             onClick = {
-                val signUpRequest = SignUpRequest(
-                   name,email,password
-                )
+                Log.d("SignUpScreen", "Sign Up Button Clicked")
+                val request = SignUpRequest(email = email, password = password, nama = name)
                 viewModel.register(
-                    request = signUpRequest,
+                    request = request,
                     onSuccess = {
                         onSignUpSuccess()
                     },
-                    onError = { message ->
-                        errorMessage = message
+                    onError = {
+                        errorMessage = it
                     }
                 )
             },
