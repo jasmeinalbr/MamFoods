@@ -20,6 +20,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.mamfoods.model.LoginRequest
 import com.example.mamfoods.ui.theme.*
 import com.example.mamfoods.viewmodel.AuthViewModel
 
@@ -100,9 +101,9 @@ fun LoginScreen(
             onClick = {
                 isLoading = true
                 errorMessage = null
+                val loginRequest = LoginRequest(email, password)
                 viewModel.login(
-                    email = email,
-                    password = password,
+                    request = loginRequest,
                     onSuccess = {
                         isLoading = false
                         onLoginSuccess()
@@ -157,13 +158,12 @@ fun LoginScreenPreview() {
     // Buat dummy ViewModel untuk kebutuhan Preview
     val dummyViewModel = object : AuthViewModel() {
         override fun login(
-            email: String,
-            password: String,
+            request: LoginRequest,
             onSuccess: () -> Unit,
             onError: (String) -> Unit
         ) {
             // Simulasi login berhasil atau gagal
-            if (email == "user@example.com" && password == "password") {
+            if (request.email == "user@example.com" && request.password == "password") {
                 onSuccess()
             } else {
                 onError("Invalid credentials")
