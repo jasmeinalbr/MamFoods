@@ -15,6 +15,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -23,22 +24,24 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.mamfoods.AuthResponse
+import com.example.mamfoods.AuthenticationManager
 import com.example.mamfoods.R
-import com.example.mamfoods.model.SignUpRequest
 import com.example.mamfoods.ui.theme.Lato
 import com.example.mamfoods.ui.theme.LightGrayColor
 import com.example.mamfoods.ui.theme.RedPrimary
 import com.example.mamfoods.ui.theme.SubText
 import com.example.mamfoods.ui.theme.TitleText
 import com.example.mamfoods.ui.theme.YeonSung
-import com.example.mamfoods.viewmodel.AuthViewModel
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 
 @Composable
 fun SignUpScreen(
     onFacebookSignUpClick: () -> Unit,
     onGoogleSignUpClick: () -> Unit,
     onLoginClick: () -> Unit,
-    viewModel: AuthViewModel,
+
     onSignUpSuccess: () -> Unit
 
 ) {
@@ -47,6 +50,12 @@ fun SignUpScreen(
     var name by remember { mutableStateOf("") }
     var passwordVisible by remember { mutableStateOf(false) }
     var errorMessage by remember { mutableStateOf<String?>(null) }
+
+    val context = LocalContext.current
+    val  authenticationManager = remember {
+        AuthenticationManager(context)
+    }
+    val coroutineScope = rememberCoroutineScope()
 
     BoxWithConstraints (
         modifier = Modifier.fillMaxSize()
@@ -267,7 +276,20 @@ fun SignUpScreen(
 
                 // Google Sign Up Button
                 Button(
-                    onClick = { onGoogleSignUpClick() },
+                    onClick = {
+                        authenticationManager.signInWithGoogle()
+                            .onEach { response ->
+                                when (response) {
+                                    is AuthResponse.Success -> {
+                                        onSignUpSuccess()
+                                    }
+                                    is AuthResponse.Error -> {
+                                        errorMessage = response.message
+                                    }
+                                }
+                            }
+                            .launchIn(coroutineScope)
+                    },
                     modifier = Modifier
                         .width(screenWidth * 0.4f)
                         .height(screenHeight * 0.07f),
@@ -299,17 +321,21 @@ fun SignUpScreen(
         // Sign Up Button
         Button(
             onClick = {
-                Log.d("SignUpScreen", "Sign Up Button Clicked")
-                val request = SignUpRequest(email = email, password = password, nama = name)
-                viewModel.register(
-                    request = request,
-                    onSuccess = {
-                        onSignUpSuccess()
-                    },
-                    onError = {
-                        errorMessage = it
+                AuthenticationManager(context).createAccountWithEmail(email, password)
+                    .onEach { response ->
+                        when (response) {
+                            is AuthResponse.Success -> {
+                                onSignUpSuccess()
+                            }
+                            is AuthResponse.Error -> {
+                                errorMessage = response.message
+                            }
+                        }
                     }
-                )
+                    .launchIn(coroutineScope)
+
+
+
             },
 
                 modifier = Modifier
@@ -346,7 +372,6 @@ fun PreviewSignup() {
         onFacebookSignUpClick = {}, // Event login Facebook
         onGoogleSignUpClick = {},   // Event login Google
         onLoginClick = {},
-        viewModel = AuthViewModel(),
         onSignUpSuccess = {}
     )
 }

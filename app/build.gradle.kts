@@ -1,7 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.google.gms.google.services)
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -60,8 +60,9 @@ dependencies {
     implementation(libs.firebase.auth) // Firebase Auth (already included via alias)
     implementation(libs.firebase.firestore.ktx) // Firestore (already included via alias)
     implementation(libs.firebase.database) // Firebase Database (already included via alias)
-    implementation ("com.google.android.gms:play-services-auth")
+    implementation("com.google.android.gms:play-services-auth:21.3.0")
     implementation("com.facebook.android:facebook-login:15.0.1")
+    implementation("com.google.firebase:firebase-analytics")
 
     // AndroidX dependencies
     implementation(libs.androidx.core.ktx)
@@ -85,6 +86,12 @@ dependencies {
     implementation(libs.androidx.navigation.runtime.ktx)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.room.ktx)
+    implementation(libs.googleid)
+    implementation(libs.androidx.appcompat)
+    implementation(libs.material)
+    implementation(libs.androidx.activity)
+    implementation(platform("com.google.firebase:firebase-bom:33.7.0"))
+    implementation("androidx.credentials:credentials-play-services-auth:1.0.0-alpha02");
 
     // Testing dependencies
     testImplementation(libs.junit)
@@ -97,20 +104,6 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
-
-    // Retrofit dependencies
-    implementation("com.squareup.retrofit2:retrofit:2.9.0")
-    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
-    implementation("io.coil-kt:coil-compose:2.4.0")
-    implementation("com.google.firebase:firebase-perf-ktx:20.4.1")
-    implementation("androidx.security:security-crypto:1.1.0-alpha06")
-
-    // OkHttp untuk logging dan interceptors
-    implementation ("com.squareup.okhttp3:okhttp:4.9.3")
-    implementation ("com.squareup.okhttp3:logging-interceptor:4.9.3")
-
-    // Gson untuk konversi JSON
-    implementation ("com.google.code.gson:gson:2.8.8")
 
 
 // Coroutine untuk operasi asinkron

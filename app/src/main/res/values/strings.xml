@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">MamFoods</string>
+    <string name="facebook_app_id">YOUR_FACEBOOK_APP_ID</string>
+    <string name="web_client_id">1008431377503-b377radkalrahd2bi77j971hbpvbpvqs.apps.googleusercontent.com</string>
+
 </resources>
