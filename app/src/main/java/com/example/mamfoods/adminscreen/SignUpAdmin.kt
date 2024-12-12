@@ -18,6 +18,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -26,6 +27,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.mamfoods.AuthResponse
+import com.example.mamfoods.AuthenticationManager
 import com.example.mamfoods.R
 import com.example.mamfoods.ui.theme.Lato
 import com.example.mamfoods.ui.theme.LightGrayColor
@@ -33,6 +36,8 @@ import com.example.mamfoods.ui.theme.RedPrimary
 import com.example.mamfoods.ui.theme.SubText
 import com.example.mamfoods.ui.theme.TitleText
 import com.example.mamfoods.ui.theme.YeonSung
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 
 @Composable
 fun SignUpAdmin(
@@ -41,13 +46,20 @@ fun SignUpAdmin(
     onGoogleSignUpClick: () -> Unit,
     onLoginClick: () -> Unit,
     // viewModel: AuthViewModel,
-    // onSignUpSuccess: () -> Unit
+     onSignUpSuccess: () -> Unit
 ) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var name by remember { mutableStateOf("") }
     var passwordVisible by remember { mutableStateOf(false) }
     var errorMessage by remember { mutableStateOf<String?>(null) }
+
+    val context = LocalContext.current
+    val  authenticationManager = remember {
+        AuthenticationManager(context)
+    }
+    val coroutineScope = rememberCoroutineScope()
+
 
     Column(
         modifier = Modifier
@@ -139,38 +151,38 @@ fun SignUpAdmin(
         Spacer(modifier = Modifier.height(8.dp))
 
         // Name field
-        OutlinedTextField(
-            value = name,
-            onValueChange = { name = it },
-            label = {
-                Text(
-                    text = "Name",
-                    color = Color.LightGray,
-                    fontSize = 14.sp,
-                    fontFamily = Lato,
-                    letterSpacing = 1.5.sp,
-                )
-            },
-            leadingIcon = {
-                Icon(
-                    painter = painterResource(id = R.drawable.user),
-                    contentDescription = "User Icon",
-                    tint = Color.Black,
-                    modifier = Modifier.size(24.dp)
-                )
-            },
-            colors = TextFieldDefaults.outlinedTextFieldColors(
-                textColor = Color.Black,
-                focusedBorderColor = LightGrayColor,
-                unfocusedBorderColor = LightGrayColor,
-                backgroundColor = Color.White,
-                cursorColor = Color.Black
-            ),
-            shape = RoundedCornerShape(15.dp),
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(57.dp),
-        )
+//        OutlinedTextField(
+//            value = name,
+//            onValueChange = { name = it },
+//            label = {
+//                Text(
+//                    text = "Name",
+//                    color = Color.LightGray,
+//                    fontSize = 14.sp,
+//                    fontFamily = Lato,
+//                    letterSpacing = 1.5.sp,
+//                )
+//            },
+//            leadingIcon = {
+//                Icon(
+//                    painter = painterResource(id = R.drawable.user),
+//                    contentDescription = "User Icon",
+//                    tint = Color.Black,
+//                    modifier = Modifier.size(24.dp)
+//                )
+//            },
+//            colors = TextFieldDefaults.outlinedTextFieldColors(
+//                textColor = Color.Black,
+//                focusedBorderColor = LightGrayColor,
+//                unfocusedBorderColor = LightGrayColor,
+//                backgroundColor = Color.White,
+//                cursorColor = Color.Black
+//            ),
+//            shape = RoundedCornerShape(15.dp),
+//            modifier = Modifier
+//                .fillMaxWidth()
+//                .height(57.dp),
+//        )
 
         Spacer(modifier = Modifier.height(8.dp))
 
@@ -298,18 +310,22 @@ fun SignUpAdmin(
         // Sign Up Button
         Button(
             onClick = {
-                // viewModel.register(
-                // name = name,
-                // email = email,
-                // password = password,
-                // onSuccess = {
-                // onSignUpSuccess()
-                // },
-                // onError = { message ->
-                // errorMessage = message
-                // }
-                // )
+                coroutineScope.launch {
+                    AuthenticationManager(context).createAccountAdmin(email, password, selectedLocation, name)
+                        .collect { response ->
+                            when (response) {
+                                is AuthResponse.Success -> {
+
+                                    onSignUpSuccess()
+                                }
+                                is AuthResponse.Error -> {
+                                    errorMessage = response.message
+                                }
+                            }
+                        }
+                }
             },
+
             modifier = Modifier
                 .height(57.dp)
                 .width(180.dp),
@@ -348,7 +364,8 @@ fun PreviewSignup() {
         onSignUpClick = {},
         onFacebookSignUpClick = {},
         onGoogleSignUpClick = {},
-        onLoginClick = {}
+        onLoginClick = {},
+        onSignUpSuccess = {}
     )
 }
 

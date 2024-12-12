@@ -1,5 +1,6 @@
 package com.example.mamfoods.userscreen
 
+import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.runtime.Composable
 import androidx.compose.foundation.Image
@@ -15,6 +16,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -23,23 +25,24 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.mamfoods.AuthResponse
+import com.example.mamfoods.AuthenticationManager
 import com.example.mamfoods.R
-import com.example.mamfoods.model.SignUpRequest
 import com.example.mamfoods.ui.theme.Lato
 import com.example.mamfoods.ui.theme.LightGrayColor
 import com.example.mamfoods.ui.theme.RedPrimary
 import com.example.mamfoods.ui.theme.SubText
 import com.example.mamfoods.ui.theme.TitleText
 import com.example.mamfoods.ui.theme.YeonSung
-import com.example.mamfoods.viewmodel.AuthViewModel
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 
 @Composable
 fun SignUpScreen(
     onGoogleSignUpClick: () -> Unit,
     onLoginClick: () -> Unit,
-//    viewModel: AuthViewModel,
-//    onSignUpSuccess: () -> Unit,
-    onSignUpDone: () -> Unit
+
+    onSignUpSuccess: () -> Unit
 
 ) {
     var email by remember { mutableStateOf("") }
@@ -47,6 +50,12 @@ fun SignUpScreen(
     var name by remember { mutableStateOf("") }
     var passwordVisible by remember { mutableStateOf(false) }
     var errorMessage by remember { mutableStateOf<String?>(null) }
+
+    val context = LocalContext.current
+    val  authenticationManager = remember {
+        AuthenticationManager(context)
+    }
+    val coroutineScope = rememberCoroutineScope()
 
     BoxWithConstraints (
         modifier = Modifier.fillMaxSize().background(Color.White)
@@ -232,19 +241,65 @@ fun SignUpScreen(
 
             Spacer(modifier = Modifier.height(screenHeight * 0.03f))
 
-            // Google Sign Up Button
-            Button(
-                onClick = { onGoogleSignUpClick() },
-                modifier = Modifier
-                    .width(screenWidth * 0.4f)
-                    .height(screenHeight * 0.07f),
-                shape = RoundedCornerShape(15.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = Color.White),
-                border = BorderStroke(1.dp, LightGrayColor)
+            Row(
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Image(
-                        painter = painterResource(id = R.drawable.google),
+                // Facebook Sign Up Button
+                Button(
+                    onClick = { onFacebookSignUpClick() },
+                    modifier = Modifier
+                        .width(screenWidth * 0.4f)
+                        .height(screenHeight * 0.07f),
+                    shape = RoundedCornerShape(15.dp),
+                    colors = ButtonDefaults.buttonColors(containerColor = Color.White),
+                    border = BorderStroke(1.dp, LightGrayColor)
+                ) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Image(
+                            painter = painterResource(id = R.drawable.fb),
+
+                            contentDescription = "facebook",
+                            modifier = Modifier
+                                .size(25.dp)
+                                .padding(end = 8.dp))
+
+                        Text(
+                            text = "Facebook",
+                            color = Color.Black,
+                            fontFamily = Lato,
+                            fontSize = (screenWidth * 0.035f).value.sp,
+                        )
+                    }
+                }
+
+                Spacer(modifier = Modifier.width(screenWidth * 0.02f))
+
+                // Google Sign Up Button
+                Button(
+                    onClick = {
+                        authenticationManager.signInWithGoogle()
+                            .onEach { response ->
+                                when (response) {
+                                    is AuthResponse.Success -> {
+                                        onSignUpSuccess()
+                                    }
+                                    is AuthResponse.Error -> {
+                                        errorMessage = response.message
+                                    }
+                                }
+                            }
+                            .launchIn(coroutineScope)
+                    },
+                    modifier = Modifier
+                        .width(screenWidth * 0.4f)
+                        .height(screenHeight * 0.07f),
+                    shape = RoundedCornerShape(15.dp),
+                    colors = ButtonDefaults.buttonColors(containerColor = Color.White),
+                    border = BorderStroke(1.dp, LightGrayColor)
+                ) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Image(
+                            painter = painterResource(id = R.drawable.google),
 
                         contentDescription = "google",
                         modifier = Modifier
@@ -265,20 +320,23 @@ fun SignUpScreen(
         // Sign Up Button
         Button(
             onClick = {
-//                val signUpRequest = SignUpRequest(
-//                   name,email,password
-//                )
-//                viewModel.register(
-//                    request = signUpRequest,
-//                    onSuccess = {
-//                        onSignUpSuccess()
-//                    },
-//                    onError = { message ->
-//                        errorMessage = message
-//                    }
-//                )
-                onSignUpDone()
+                AuthenticationManager(context).createAccountWithEmail(email, password,name)
+                    .onEach { response ->
+                        when (response) {
+                            is AuthResponse.Success -> {
+                                onSignUpSuccess()
+                            }
+                            is AuthResponse.Error -> {
+                                errorMessage = response.message
+                            }
+                        }
+                    }
+                    .launchIn(coroutineScope)
+
+
+
             },
+
                 modifier = Modifier
                     .fillMaxWidth(0.5f)
                     .height(screenHeight * 0.07f),
@@ -311,9 +369,7 @@ fun PreviewSignup() {
     SignUpScreen(
         onGoogleSignUpClick = {},   // Event login Google
         onLoginClick = {},
-//        viewModel = AuthViewModel(),
-//        onSignUpSuccess = {}
-        onSignUpDone = {}
+        onSignUpSuccess = {}
     )
 }
 

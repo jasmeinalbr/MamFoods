@@ -15,28 +15,36 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.mamfoods.AuthResponse
+import com.example.mamfoods.AuthenticationManager
 import com.example.mamfoods.R
-import com.example.mamfoods.model.LoginRequest
 import com.example.mamfoods.ui.theme.*
-import com.example.mamfoods.viewmodel.AuthViewModel
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 
 @Composable
 fun LoginScreen(
-//    viewModel: AuthViewModel,
     onLoginSuccess: () -> Unit,
     onSignUpClick: () -> Unit,
-    onGoogleLoginClick:() -> Unit
+    onFacebookLoginClick: () -> Unit,
 ) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var isLoading by remember { mutableStateOf(false) }
     var errorMessage by remember { mutableStateOf<String?>(null) }
+
+    val context = LocalContext.current
+    val  authenticationManager = remember {
+        AuthenticationManager(context)
+    }
+    val coroutineScope = rememberCoroutineScope()
 
     BoxWithConstraints (
         modifier = Modifier.fillMaxSize().background(Color.White)
@@ -157,7 +165,18 @@ fun LoginScreen(
 
             // Google Login Button
             Button(
-                onClick = { onGoogleLoginClick() },
+                onClick = {
+                    authenticationManager.signInWithGoogle()
+                        .onEach {response->
+                            if(response is AuthResponse.Success){
+                                onLoginSuccess()
+
+                            }else if(response is AuthResponse.Error){
+                                errorMessage = response.message
+                            }
+                        }
+                        .launchIn(coroutineScope)
+                },
                 modifier = Modifier
                     .fillMaxWidth(0.45f)
                     .height(screenHeight * 0.07f),
@@ -189,18 +208,13 @@ fun LoginScreen(
             onClick = {
                 isLoading = true
                 errorMessage = null
-                val loginRequest = LoginRequest(email, password)
-//                viewModel.login(
-//                    request = loginRequest,
-//                    onSuccess = {
-//                        isLoading = false
-//                        onLoginSuccess()
-//                    },
-//                    onError = {
-//                        isLoading = false
-//                        errorMessage = it
-//                    }
-//                )
+                authenticationManager.loginWithEmail(email, password)
+                    .onEach {response->
+                        if(response is AuthResponse.Success){
+                           onLoginSuccess()
+                        }
+                    }
+                    .launchIn(coroutineScope)
             },
             modifier = Modifier
                 .height(57.dp)
@@ -240,11 +254,11 @@ fun LoginScreen(
 
 }
 
-
-@Preview(showBackground = true)
-@Composable
-fun LoginScreenPreview() {
-    // Buat dummy ViewModel untuk kebutuhan Preview
+//
+//@Preview(showBackground = true)
+//@Composable
+//fun LoginScreenPreview() {
+//    // Buat dummy ViewModel untuk kebutuhan Preview
 //    val dummyViewModel = object : AuthViewModel() {
 //        override fun login(
 //            request: LoginRequest,
@@ -259,18 +273,19 @@ fun LoginScreenPreview() {
 //            }
 //        }
 //    }
-
-    // Preview UI
-    LoginScreen(
+//
+//    // Preview UI
+//    LoginScreen(
 //        viewModel = dummyViewModel,
-        onLoginSuccess = {
-            // Simulasi sukses login
-        },
-        onSignUpClick = {
-            // Simulasi navigasi ke halaman registrasi
-        },
-        onGoogleLoginClick = {},
-    )
-}
+//        onLoginSuccess = {
+//            // Simulasi sukses login
+//        },
+//        onSignUpClick = {
+//            // Simulasi navigasi ke halaman registrasi
+//        },
+//        onGoogleLoginClick = {},
+//        onFacebookLoginClick = {}
+//    )
+//}
 
 
