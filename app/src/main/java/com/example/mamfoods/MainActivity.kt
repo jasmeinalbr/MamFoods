@@ -38,15 +38,12 @@ import com.example.mamfoods.userscreen.SignUpScreen
 import com.example.mamfoods.userscreen.SplashScreen
 import com.example.mamfoods.userscreen.getFoodItemByName
 import com.example.mamfoods.userscreen.getRestaurantByName
-import com.example.mamfoods.viewmodel.AuthViewModel
-
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             AppNavigation()
-
         }
     }
 }
@@ -90,23 +87,18 @@ fun AppNavigation() {
         }
         composable("userlogin") {
             LoginScreen(
-//                viewModel = AuthViewModel(),
                 onLoginSuccess = {
-                    navController.navigate("home")
-                },
+                    navController.navigate("home") },
                 onSignUpClick = {
-                    navController.navigate("usersignup")
-                },
-                onGoogleLoginClick = {}
+                    navController.navigate("usersignup") },
+                onFacebookLoginClick = { }
             )
         }
         composable("usersignup") {
             SignUpScreen(
-//                    viewModel = AuthViewModel(),
                 onGoogleSignUpClick = { /* Implement Google login */ },
                 onLoginClick = { navController.navigate("userlogin") },
-//                    onSignUpSuccess = { navController.navigate("home") },
-                onSignUpDone = { navController.navigate("location") }
+                onSignUpSuccess = { navController.navigate("location") },
             )
         }
         composable("location") {
