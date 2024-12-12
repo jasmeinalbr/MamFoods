@@ -1,8 +1,10 @@
 package com.example.mamfoods.userscreen
 
+import android.icu.text.StringSearch
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -29,6 +31,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -49,13 +53,10 @@ import com.example.mamfoods.ui.theme.TitlePage
 @Composable
 fun FoodAppHomeScreen(
     navController: NavController,
-    onViewMoreClick: () -> Unit = { }
+    onViewMoreClick: () -> Unit = { },
 ) {
     val selectedRoute = remember { mutableStateOf("home") }
-
     val searchText = remember { mutableStateOf("") }
-
-    val cartItems = remember { mutableStateListOf<FoodItem>() }
 
     val bannerImages = listOf(
         painterResource(id = R.drawable.banner1),
@@ -68,105 +69,121 @@ fun FoodAppHomeScreen(
             ButtonNavComponent(navController = navController, selectedRoute)
         }
     ) { innerPadding ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(Color.White)
-                .padding(innerPadding) // Gunakan innerPadding di sini
-                .padding(horizontal = 20.dp) // Tambahan padding jika perlu
+        BoxWithConstraints (
+            modifier = Modifier.fillMaxSize().background(Color.White)
         ) {
-            Spacer(modifier = Modifier.height(20.dp))
+            val screenWidth = maxWidth
+            val screenHeight = maxHeight
 
-            // Header
-            Text(
-                text = "Explore Your Favorite Food",
-                style = TitlePage,
-                color = RedPrimary,
-                modifier = Modifier.padding(vertical = 24.dp)
-            )
-
-            // Search Bar
-            Card (
-                elevation = 2.dp, // Ketinggian bayangan
-                shape = RoundedCornerShape(15.dp), // Bentuk sudut
+            Column(
                 modifier = Modifier
-                    .fillMaxWidth()
-
+                    .fillMaxSize()
+                    .background(Color.White)
+                    .padding(innerPadding) // Gunakan innerPadding di sini
+                    .padding(screenWidth * 0.05f)
             ) {
-                OutlinedTextField(
-                    value = searchText.value,
-                    onValueChange = { searchText.value = it },
+                Spacer(modifier = Modifier.height(screenHeight * 0.02f))
+
+                // Header
+                Text(
+                    text = "Explore Your Favorite Food",
+                    style = TitlePage,
+                    color = RedPrimary,
+                    fontSize = (screenWidth * 0.06f).value.sp,
+                )
+
+                Spacer(modifier = Modifier.height(screenHeight * 0.02f))
+
+                // Search Bar
+                Card (
+                    elevation = 2.dp, // Ketinggian bayangan
+                    shape = RoundedCornerShape(15.dp), // Bentuk sudut
                     modifier = Modifier
                         .fillMaxWidth()
-                        .background(color = OffRed, shape = RoundedCornerShape(15.dp)),
-                    colors = TextFieldDefaults.outlinedTextFieldColors(
-                        textColor = OffRed2,
-                        focusedBorderColor = Color.DarkGray,
-                        unfocusedBorderColor = LightGrayColor
-                    ),
-                    placeholder = {
-                        Text(
-                            "What do you want to order?",
-                            color = OffRed2,
-                            fontSize = 12.sp,
-                            fontFamily = Lato
-                        ) },
-                    leadingIcon = {
-                        Image(
-                            painter = painterResource(id = R.drawable.search),
-                            contentDescription = "Search Icon",
-                            modifier = Modifier.size(24.dp)
+                ) {
+                    OutlinedTextField(
+                        value = searchText.value,
+                        onValueChange = { searchText.value = it },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .background(color = OffRed, shape = RoundedCornerShape(15.dp)),
+                        colors = TextFieldDefaults.outlinedTextFieldColors(
+                            textColor = OffRed2,
+                            focusedBorderColor = Color.DarkGray,
+                            unfocusedBorderColor = LightGrayColor
+                        ),
+                        textStyle = TextStyle(
+                            fontFamily = Lato,
+                            color = Color.Black,
+                            fontWeight = FontWeight.Bold,
+                            fontSize = (screenWidth * 0.035f).value.sp,
+                        ),
+                        placeholder = {
+                            Text(
+                                "What do you want to order?",
+                                color = OffRed2,
+                                fontSize = (screenWidth * 0.035f).value.sp,
+                                fontFamily = Lato
+                            ) },
+                        leadingIcon = {
+                            Image(
+                                painter = painterResource(id = R.drawable.search),
+                                contentDescription = "Search Icon",
+                                modifier = Modifier.size(screenWidth * 0.06f)
+                            )
+                        },
+                        shape = RoundedCornerShape(15.dp),
+                        singleLine = true,
+                        keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Search),
+                        // Di dalam OutlinedTextField KeyboardActions
+                        keyboardActions = KeyboardActions(
+                            onSearch = {
+                                navController.navigate("search/${searchText.value}")
+                            }
                         )
-                    },
-                    shape = RoundedCornerShape(15.dp),
-                    singleLine = true,
-                    keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Search),
-                    // Di dalam OutlinedTextField KeyboardActions
-                    keyboardActions = KeyboardActions(
-                        onSearch = {
-                            navController.navigate("search/${searchText.value}")
-                        }
                     )
+                }
+
+                Spacer(modifier = Modifier.height(screenHeight * 0.02f))
+
+                // Banner
+                AutoSlidingBanner(
+                    images = bannerImages,
                 )
-            }
 
-            Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(screenHeight * 0.03f))
 
-            // Banner
-            AutoSlidingBanner(images = bannerImages)
-
-            Spacer(modifier = Modifier.height(24.dp))
-
-            // Popular Section
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = "Popular",
-                    style = BodyText,
-                    color = RedPrimary,
-                    fontSize = 24.sp
-                )
-                ClickableText(
-                    text = AnnotatedString("View More"),
-                    onClick = { onViewMoreClick() },
-                    style = SubText
-                )
-            }
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            // Popular Items - Only show 3 items
-            Column {
-                foodItems.take(3).forEach { item ->
-                    FoodItemCard(
-                        item = item,
-                        onFoodCardClick = { selectedFoodItem ->
-                            navController.navigate("fooddetails/${selectedFoodItem.name}") // Pass item to the next screen
-                        }
+                // Popular Section
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = "Popular",
+                        style = BodyText,
+                        color = RedPrimary,
+                        fontSize = (screenWidth * 0.06f).value.sp,
                     )
+                    ClickableText(
+                        text = AnnotatedString("View More"),
+                        onClick = { onViewMoreClick() },
+                        style = SubText
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(screenHeight * 0.01f))
+
+                // Popular Items - Only show 3 items
+                Column {
+                    foodItems.take(3).forEach { item ->
+                        FoodItemCard(
+                            item = item,
+                            onFoodCardClick = { selectedFoodItem ->
+                                navController.navigate("fooddetails/${selectedFoodItem.name}") // Pass item to the next screen
+                            }
+                        )
+                    }
                 }
             }
         }

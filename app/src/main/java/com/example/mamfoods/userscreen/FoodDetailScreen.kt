@@ -4,6 +4,7 @@ import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -60,113 +61,134 @@ fun FoodDetailsScreen(
     // Create CartItem
     val cartItem = CartItem(foodItem = foodItem, quantity = quantity)
 
-
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.White)
-            .padding(28.dp)
+    BoxWithConstraints (
+        modifier = Modifier.fillMaxSize().background(Color.White)
     ) {
-        // Back button
-        IconButton(onClick = { navController.popBackStack() }) {
-            Image(
-                painter = painterResource(id = R.drawable.backbutton),
-                contentDescription = "Back",
-                modifier = Modifier.size(24.dp) // Ukuran ikon
-            )
-        }
+        val screenWidth = maxWidth
+        val screenHeight = maxHeight
 
-        // Title
-        Text(
-            text = foodItem.name,
-            style = TitlePage,
-            fontSize = 32.sp,
-            modifier = Modifier.align(Alignment.CenterHorizontally)
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        // Image
-        Image(
-            painter = painterResource(id = foodItem.img),
-            contentDescription = "Pancake Image",
+        Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .height(200.dp)
-                .clip(RoundedCornerShape(10.dp))
-                .align(Alignment.CenterHorizontally),
-            contentScale = ContentScale.FillWidth
-        )
-
-        Spacer(modifier = Modifier.height(24.dp))
-
-        // Restaurant Name
-        Text(
-            text = foodItem.restaurant,
-            style = TitlePage,
-            modifier = Modifier
-                .clickable {
-                    navController.navigate("restaurantdetails/${foodItem.restaurant}")
-                }
-        )
-
-        Text(
-            text = "Restaurant",
-            style = SubText,
-            color = Color.Black
-        )
-
-        Spacer(modifier = Modifier.height(24.dp))
-
-        // Description
-        Text(
-            text = "Description",
-            style = TitlePage,
-            color = Color.Black
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Text(
-            text = foodItem.description,
-            style = SubText,
-            color = Color.Black
-        )
-
-        Spacer(modifier = Modifier.height(24.dp))
-
-        // Ingredients
-        Text(
-            text = "Ingredients",
-            style = TitlePage,
-            color = Color.Black
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Column {
-            foodItem.ingredients.forEach {
-                Text(text = "• $it", style = SubText, color = Color.Black, modifier = Modifier.padding(4.dp))
-            }
-        }
-
-        Spacer(modifier = Modifier.height(55.dp))
-
-        Button(
-            onClick = {
-                // Create CartItem with MutableState for quantity
-                quantity.value += 1
-                addToCart(cartItem) // Add CartItem to cart
-                Toast.makeText(context, "Your order has been added to the cart", Toast.LENGTH_SHORT).show()
-                navController.navigate("cart")
-            },
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(57.dp)
-                .clip(RoundedCornerShape(15.dp)),
-            colors = ButtonDefaults.buttonColors(backgroundColor = RedPrimary)
+                .fillMaxSize()
+                .background(Color.White)
+                .padding(screenWidth * 0.08f),
         ) {
-            Text(text = "Add To Cart", style = TitlePage, color = Color.White, fontSize = 18.sp)
+            // Back button
+            IconButton(onClick = { navController.popBackStack() }) {
+                Image(
+                    painter = painterResource(id = R.drawable.backbutton),
+                    contentDescription = "Back",
+                    modifier = Modifier.size(screenWidth * 0.07f)
+                )
+            }
+
+            // Title
+            Text(
+                text = foodItem.name,
+                style = TitlePage,
+                fontSize = (screenWidth * 0.08f).value.sp,
+                modifier = Modifier.align(Alignment.CenterHorizontally)
+            )
+
+            Spacer(modifier = Modifier.height(screenHeight * 0.02f))
+
+            // Image
+            Image(
+                painter = painterResource(id = foodItem.img),
+                contentDescription = "Pancake Image",
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(screenHeight * 0.2f)
+                    .clip(RoundedCornerShape(10.dp))
+                    .align(Alignment.CenterHorizontally),
+                contentScale = ContentScale.FillWidth
+            )
+
+            Spacer(modifier = Modifier.height(screenHeight * 0.02f))
+
+            // Restaurant Name
+            Text(
+                text = foodItem.restaurant,
+                style = TitlePage,
+                fontSize = (screenWidth * 0.06f).value.sp,
+                modifier = Modifier
+                    .clickable {
+                        navController.navigate("restaurantdetails/${foodItem.restaurant}")
+                    }
+            )
+
+            Text(
+                text = "Restaurant",
+                style = SubText,
+                color = Color.Black,
+                fontSize = (screenWidth * 0.035f).value.sp,
+            )
+
+            Spacer(modifier = Modifier.height(screenHeight * 0.03f))
+
+            // Description
+            Text(
+                text = "Description",
+                style = TitlePage,
+                color = Color.Black,
+                fontSize = (screenWidth * 0.06f).value.sp,
+            )
+
+            Spacer(modifier = Modifier.height(screenHeight * 0.02f))
+
+            Text(
+                text = foodItem.description,
+                style = SubText,
+                color = Color.Black,
+                fontSize = (screenWidth * 0.035f).value.sp,
+            )
+
+            Spacer(modifier = Modifier.height(screenHeight * 0.03f))
+
+            // Ingredients
+            Text(
+                text = "Ingredients",
+                style = TitlePage,
+                color = Color.Black,
+                fontSize = (screenWidth * 0.06f).value.sp,
+            )
+
+            Spacer(modifier = Modifier.height(screenHeight * 0.02f))
+
+            Column {
+                foodItem.ingredients.forEach {
+                    Text(
+                        text = "• $it",
+                        style = SubText,
+                        color = Color.Black,
+                        fontSize = (screenWidth * 0.035f).value.sp,
+                        modifier = Modifier.padding(4.dp))
+                }
+            }
+
+            Spacer(modifier = Modifier.weight(3f))
+
+            Button(
+                onClick = {
+                    // Create CartItem with MutableState for quantity
+                    quantity.value += 1
+                    addToCart(cartItem) // Add CartItem to cart
+                    Toast.makeText(context, "Your order has been added to the cart", Toast.LENGTH_SHORT).show()
+                    navController.navigate("cart")
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(screenHeight * 0.07f)
+                    .clip(RoundedCornerShape(15.dp)),
+                colors = ButtonDefaults.buttonColors(backgroundColor = RedPrimary)
+            ) {
+                Text(
+                    text = "Add To Cart",
+                    style = TitlePage,
+                    color = Color.White,
+                    fontSize = (screenWidth * 0.05f).value.sp,
+                    )
+            }
         }
     }
 }

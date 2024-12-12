@@ -1,7 +1,9 @@
 package com.example.mamfoods.userscreen
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -45,58 +47,74 @@ fun OrderScreen(navController: NavController, profileData: ProfileData) {
     var name by remember { mutableStateOf(profileData.name) }
     var address by remember { mutableStateOf(profileData.address) }
     var phone by remember { mutableStateOf(profileData.phone) }
+    // State untuk mengatur apakah sedang dalam mode edit
+    var isEditing by remember { mutableStateOf(false) }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp)
+    BoxWithConstraints (
+        modifier = Modifier.fillMaxSize().background(Color.White)
     ) {
-        Spacer(modifier = Modifier.height(16.dp))
+        val screenWidth = maxWidth
+        val screenHeight = maxHeight
 
-        // Back button
-        IconButton(onClick = { navController.popBackStack() }) {
-            Image(
-                painter = painterResource(id = R.drawable.backbutton),
-                contentDescription = "Back",
-                modifier = Modifier.size(24.dp) // Ukuran ikon
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(screenWidth * 0.05f),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            // Back button
+            IconButton(onClick = { navController.popBackStack() }) {
+                Image(
+                    painter = painterResource(id = R.drawable.backbutton),
+                    contentDescription = "Back",
+                    modifier = Modifier.size(24.dp) // Ukuran ikon
+                )
+            }
+            Spacer(modifier = Modifier.height(screenHeight * 0.02f))
+
+            // Title
+            Text(
+                text = "Your Order",
+                style = TitlePage,
+                fontSize = (screenWidth * 0.08f).value.sp,
+                modifier = Modifier.align(Alignment.CenterHorizontally)
             )
-        }
 
-        // Title
-        Text(
-            text = "Your Order",
-            style = TitlePage,
-            fontSize = 32.sp,
-            modifier = Modifier.align(Alignment.CenterHorizontally)
-        )
+            Spacer(modifier = Modifier.height(screenHeight * 0.02f))
 
-        Spacer(modifier = Modifier.height(8.dp))
-
-        // Row untuk Name
-        ProfileField(
-            label = "Name",
-            value = name,
-            onValueChange = { name = it },
-            placeholder = "Enter Your Name"
-        )
-
-        // Address
-        ProfileField(
-            label = "Address",
-            value = address,
-            onValueChange = { address = it },
-            placeholder = "Add street information and home number"
-        )
-
-        // Row untuk Phone Number
-        ProfileField(
-            label = "Phone",
-            value = phone,
-            onValueChange = { phone = it },
-            placeholder = "Enter Your Phone"
-        )
-
+            // Row untuk Name
+            ProfileInfoField(
+                label = "Name",
+                value = name,
+                onValueChange = { name = it },
+                placeholder = "Enter Your Name",
+                isEditing = isEditing,
+                onEditingChange = { isEditing = it },  // Pass the callback here
+                isPassword = false
+            )
+            Spacer(modifier = Modifier.height(screenHeight * 0.01f))
+            // Address
+            ProfileInfoField(
+                label = "Address",
+                value = address,
+                onValueChange = { address = it },
+                placeholder = "Add street information and home number",
+                isEditing = isEditing,
+                onEditingChange = { isEditing = it },  // Pass the callback here
+                isPassword = false
+            )
+            Spacer(modifier = Modifier.height(screenHeight * 0.01f))
+            // Row untuk Phone Number
+            ProfileInfoField(
+                label = "Phone",
+                value = phone,
+                onValueChange = { phone = it },
+                placeholder = "Enter Your Phone",
+                isEditing = isEditing,
+                onEditingChange = { isEditing = it },  // Pass the callback here
+                isPassword = false
+            )
+            Spacer(modifier = Modifier.height(screenHeight * 0.01f))
             // payment
             Card(
                 elevation = 2.dp, // Ketinggian bayangan
@@ -108,7 +126,7 @@ fun OrderScreen(navController: NavController, profileData: ProfileData) {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(100.dp)
+                        .height(screenHeight * 0.13f)
                         .padding(16.dp),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween
@@ -116,7 +134,7 @@ fun OrderScreen(navController: NavController, profileData: ProfileData) {
                     Text(
                         text = "Payment Method",
                         style = TitlePage,
-                        fontSize = 20.sp,
+                        fontSize = (screenWidth * 0.05f).value.sp,
                         color = Color.Black
                     )
                     Image(
@@ -130,114 +148,35 @@ fun OrderScreen(navController: NavController, profileData: ProfileData) {
                 }
             }
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.weight(1f))
 
-        Card(
-            elevation = 2.dp, // Ketinggian bayangan
-            shape = RoundedCornerShape(15.dp), // Bentuk sudut
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 8.dp),
-        ) {
-            // Button to place order
-            Button(
+            Card(
+                elevation = 2.dp, // Ketinggian bayangan
+                shape = RoundedCornerShape(15.dp), // Bentuk sudut
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(65.dp)
-                    .padding(vertical = 8.dp)
-                    .clip(RoundedCornerShape(15.dp)),
-                colors = ButtonDefaults.buttonColors(backgroundColor = Color.White),
-                onClick = {
-                    navController.navigate("ordersuccess")
-                },
-                ) {
-                Text("Place My Order", color = RedPrimary, style = TitlePage, fontSize = 16.sp)
-            }
-        }
-    }
-}
-
-
-@Composable
-fun ProfileField(
-    label: String,
-    value: String,
-    onValueChange: (String) -> Unit,
-    placeholder: String
-) {
-    // State untuk menangani nilai sementara yang diubah oleh pengguna
-    var temporaryValue by remember { mutableStateOf(value) } // Nilai sementara yang diubah oleh pengguna
-    var isEditing by remember { mutableStateOf(false) } // Menentukan apakah TextField dalam mode edit atau tidak
-
-    Card(
-        elevation = 2.dp, // Ketinggian bayangan
-        shape = RoundedCornerShape(15.dp), // Bentuk sudut
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 8.dp),
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(80.dp)
-                .padding(16.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Start // Mengatur agar elemen mulai dari kiri
-        ) {
-            // Label (Text)
-            Text(
-                text = label,
-                style = TitlePage,
-                color = Color.Black,
-                fontSize = 20.sp
-            )
-
-            // Input Field (TextField)
-            OutlinedTextField(
-                value = temporaryValue, // Menggunakan nilai sementara
-                onValueChange = { newValue ->
-                    if (isEditing) {
-                        temporaryValue = newValue // Update nilai sementara jika dalam mode edit
-                    }
-                },
-                enabled = isEditing, // Hanya bisa diubah jika mode edit
-                modifier = Modifier
-                    .weight(1f)
-                    .align(Alignment.CenterVertically),
-                placeholder = {
-                    Text(
-                        text = placeholder,
-                        style = SubText,
-                        color = Color.Gray,
-                        fontSize = 20.sp
-                    )
-                },
-                colors = TextFieldDefaults.outlinedTextFieldColors(
-                    textColor = Color.Black,
-                    focusedBorderColor = Color.White,
-                    unfocusedBorderColor = Color.White
-                ),
-                //contentPadding = PaddingValues(0.dp) // Menghilangkan padding default TextField
-            )
-            // Icon Edit
-            IconButton(
-                onClick = {
-                    // Toggle status mode edit
-                    isEditing = !isEditing
-
-                    // Jika selesai mengedit, kita bisa melakukan sesuatu (misalnya simpan data sementara)
-                    if (!isEditing) {
-                        // Simpan data sementara ke data profil atau lanjutkan transaksi
-                        onValueChange(temporaryValue) // Menyimpan nilai yang sudah diedit ke profil atau data transaksi
-                        }
-                }
+                    .padding(vertical = 8.dp),
             ) {
-                Image(
-                    painter = painterResource(id = R.drawable.edit),
-                    contentDescription = "Edit",
-                    modifier = Modifier.size(24.dp)
-                )
+                // Button to place order
+                Button(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(screenHeight * 0.07f)
+                        .clip(RoundedCornerShape(15.dp)),
+                    colors = ButtonDefaults.buttonColors(backgroundColor = Color.White),
+                    onClick = {
+                        navController.navigate("ordersuccess")
+                    },
+                ) {
+                    Text(
+                        "Place My Order",
+                        color = RedPrimary,
+                        style = TitlePage,
+                        fontSize = (screenWidth * 0.05f).value.sp,
+                    )
+                }
             }
+            Spacer(modifier = Modifier.height(screenHeight * 0.01f))
         }
     }
 }

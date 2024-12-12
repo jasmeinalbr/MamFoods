@@ -3,6 +3,7 @@ package com.example.mamfoods.userscreen
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.runtime.Composable
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
@@ -34,11 +35,11 @@ import com.example.mamfoods.viewmodel.AuthViewModel
 
 @Composable
 fun SignUpScreen(
-    onFacebookSignUpClick: () -> Unit,
     onGoogleSignUpClick: () -> Unit,
     onLoginClick: () -> Unit,
-    viewModel: AuthViewModel,
-    onSignUpSuccess: () -> Unit
+//    viewModel: AuthViewModel,
+//    onSignUpSuccess: () -> Unit,
+    onSignUpDone: () -> Unit
 
 ) {
     var email by remember { mutableStateOf("") }
@@ -48,7 +49,7 @@ fun SignUpScreen(
     var errorMessage by remember { mutableStateOf<String?>(null) }
 
     BoxWithConstraints (
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier.fillMaxSize().background(Color.White)
     ) {
         val screenWidth = maxWidth
         val screenHeight = maxHeight
@@ -56,7 +57,7 @@ fun SignUpScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(horizontal = screenWidth * 0.05f),
+                .padding(screenWidth * 0.05f),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Spacer(modifier = Modifier.height(screenHeight * 0.05f))
@@ -206,7 +207,7 @@ fun SignUpScreen(
                     .height(screenHeight * 0.07f),
             )
 
-            Spacer(modifier = Modifier.height(screenHeight * 0.02f))
+            Spacer(modifier = Modifier.height(screenHeight * 0.04f))
 
             // Or sign-up section
             Text(
@@ -231,87 +232,53 @@ fun SignUpScreen(
 
             Spacer(modifier = Modifier.height(screenHeight * 0.03f))
 
-            Row(
-                verticalAlignment = Alignment.CenterVertically
+            // Google Sign Up Button
+            Button(
+                onClick = { onGoogleSignUpClick() },
+                modifier = Modifier
+                    .width(screenWidth * 0.4f)
+                    .height(screenHeight * 0.07f),
+                shape = RoundedCornerShape(15.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = Color.White),
+                border = BorderStroke(1.dp, LightGrayColor)
             ) {
-                // Facebook Sign Up Button
-                Button(
-                    onClick = { onFacebookSignUpClick() },
-                    modifier = Modifier
-                        .width(screenWidth * 0.4f)
-                        .height(screenHeight * 0.07f),
-                    shape = RoundedCornerShape(15.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = Color.White),
-                    border = BorderStroke(1.dp, LightGrayColor)
-                ) {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Image(
-                            painter = painterResource(id = R.drawable.fb),
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Image(
+                        painter = painterResource(id = R.drawable.google),
 
-                            contentDescription = "facebook",
-                            modifier = Modifier
-                                .size(25.dp)
-                                .padding(end = 8.dp))
+                        contentDescription = "google",
+                        modifier = Modifier
+                            .size(25.dp)
+                            .padding(end = 8.dp))
 
-                        Text(
-                            text = "Facebook",
-                            color = Color.Black,
-                            fontFamily = Lato,
-                            fontSize = (screenWidth * 0.035f).value.sp,
-                        )
-                    }
-                }
-
-                Spacer(modifier = Modifier.width(screenWidth * 0.02f))
-
-                // Google Sign Up Button
-                Button(
-                    onClick = { onGoogleSignUpClick() },
-                    modifier = Modifier
-                        .width(screenWidth * 0.4f)
-                        .height(screenHeight * 0.07f),
-                    shape = RoundedCornerShape(15.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = Color.White),
-                    border = BorderStroke(1.dp, LightGrayColor)
-                ) {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Image(
-                            painter = painterResource(id = R.drawable.google),
-
-                            contentDescription = "google",
-                            modifier = Modifier
-                                .size(25.dp)
-                                .padding(end = 8.dp))
-
-                        Text(
-                            text = "Google",
-                            color = Color.Black,
-                            fontFamily = Lato,
-                            fontSize = (screenWidth * 0.035f).value.sp,
-                        )
-                    }
+                    Text(
+                        text = "Google",
+                        color = Color.Black,
+                        fontFamily = Lato,
+                        fontSize = (screenWidth * 0.035f).value.sp,
+                    )
                 }
             }
 
-            Spacer(modifier = Modifier.height(screenHeight * 0.03f))
+            Spacer(modifier = Modifier.height(screenHeight * 0.04f))
 
         // Sign Up Button
         Button(
             onClick = {
-                val signUpRequest = SignUpRequest(
-                   name,email,password
-                )
-                viewModel.register(
-                    request = signUpRequest,
-                    onSuccess = {
-                        onSignUpSuccess()
-                    },
-                    onError = { message ->
-                        errorMessage = message
-                    }
-                )
+//                val signUpRequest = SignUpRequest(
+//                   name,email,password
+//                )
+//                viewModel.register(
+//                    request = signUpRequest,
+//                    onSuccess = {
+//                        onSignUpSuccess()
+//                    },
+//                    onError = { message ->
+//                        errorMessage = message
+//                    }
+//                )
+                onSignUpDone()
             },
-
                 modifier = Modifier
                     .fillMaxWidth(0.5f)
                     .height(screenHeight * 0.07f),
@@ -336,18 +303,17 @@ fun SignUpScreen(
             )
         }
     }
-
 }
 
 @Preview(showBackground = true)
 @Composable
 fun PreviewSignup() {
     SignUpScreen(
-        onFacebookSignUpClick = {}, // Event login Facebook
         onGoogleSignUpClick = {},   // Event login Google
         onLoginClick = {},
-        viewModel = AuthViewModel(),
-        onSignUpSuccess = {}
+//        viewModel = AuthViewModel(),
+//        onSignUpSuccess = {}
+        onSignUpDone = {}
     )
 }
 

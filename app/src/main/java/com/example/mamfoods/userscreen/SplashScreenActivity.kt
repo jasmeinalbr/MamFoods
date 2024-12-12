@@ -10,7 +10,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.mamfoods.R
@@ -22,29 +21,38 @@ import kotlinx.coroutines.delay
 
 fun SplashScreen(onNavigateToOnboarding: () -> Unit) {
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.White),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+    BoxWithConstraints (
+        modifier = Modifier.fillMaxSize().background(Color.White)
     ) {
-        Image(
-            painter = painterResource(R.drawable.logo),
-            contentDescription = "Logo Mam Foods",
-            modifier = Modifier.size(200.dp)
-        )
-        Spacer(modifier = Modifier.height(32.dp))
-        Text(
-            text = "Mam Foods",
-            style = TitleText
-        )
-        Spacer(modifier = Modifier.height(32.dp))
-        Text(
-            text = "Deliver Favorite Food & Drink",
-            style = SubText,
-            fontSize = 14.sp
-        )
+        val screenWidth = maxWidth
+        val screenHeight = maxHeight
+
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(screenWidth * 0.05f)
+                .background(Color.White),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Image(
+                painter = painterResource(R.drawable.logo),
+                contentDescription = "Logo Mam Foods",
+                modifier = Modifier.size(screenWidth * 0.6f)
+            )
+            Spacer(modifier = Modifier.height(screenHeight * 0.03f))
+            Text(
+                text = "Mam Foods",
+                style = TitleText,
+                fontSize = (screenWidth * 0.1f).value.sp
+            )
+            Spacer(modifier = Modifier.height(screenHeight * 0.04f))
+            Text(
+                text = "Deliver Favorite Food & Drink",
+                style = SubText,
+                fontSize = (screenWidth * 0.04f).value.sp
+            )
+        }
     }
 
     LaunchedEffect(Unit) {

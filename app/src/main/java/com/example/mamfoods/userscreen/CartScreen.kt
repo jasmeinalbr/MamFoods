@@ -4,6 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -47,7 +48,6 @@ fun CartScreen(navController: NavController, cartItems: MutableList<CartItem>) {
     // State untuk mengelola total harga
     val totalPrice = remember { mutableStateOf(0) }
     val deliveryCharge = remember { mutableStateOf(10000) } // Example: Fixed delivery charge
-    val discount = remember { mutableStateOf(0) } // Example: Discount can be dynamic
 
     // Menghitung subtotal
     fun calculateSubtotal(): Int {
@@ -57,7 +57,7 @@ fun CartScreen(navController: NavController, cartItems: MutableList<CartItem>) {
     // Menghitung total harga
     fun calculateTotal() {
         val subtotal = calculateSubtotal()
-        totalPrice.value = subtotal + deliveryCharge.value - discount.value
+        totalPrice.value = subtotal + deliveryCharge.value
     }
 
     // Kalkulasi total saat memulai
@@ -68,158 +68,180 @@ fun CartScreen(navController: NavController, cartItems: MutableList<CartItem>) {
             ButtonNavComponent(navController, selectedRoute)
         }
     ) { innerPadding ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(Color.White)
-                .padding(innerPadding) // Gunakan innerPadding di sini
-                .padding(horizontal = 20.dp) // Tambahan padding jika perlu
+        BoxWithConstraints (
+            modifier = Modifier.fillMaxSize().background(Color.White)
         ) {
-            Spacer(modifier = Modifier.height(20.dp))
+            val screenWidth = maxWidth
+            val screenHeight = maxHeight
 
-            // Header
-            Text(
-                text = "Explore Your Favorite Food",
-                style = TitlePage,
-                color = RedPrimary,
-                modifier = Modifier.padding(vertical = 24.dp)
-            )
-
-            Spacer(modifier = Modifier.height(18.dp))
-
-            Text(
-                text = "Your Cart",
-                style = TitlePage,
-                color = RedPrimary,
+            Column(
                 modifier = Modifier
-                    .fillMaxWidth()  // Make sure it takes up the full width
-                    .align(Alignment.CenterHorizontally),
-                textAlign = TextAlign.Center,
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            if (cartItems.isEmpty()) {
+                    .fillMaxSize()
+                    .background(Color.White)
+                    .padding(innerPadding) // Gunakan innerPadding di sini
+                    .padding(screenWidth * 0.05f),
+            ) {
+                Spacer(modifier = Modifier.height(screenHeight * 0.03f))
+                // Header
                 Text(
-                    text = "Your cart is empty.",
+                    text = "Explore Your Favorite Food",
                     style = TitlePage,
                     color = RedPrimary,
-                    modifier = Modifier.fillMaxWidth().align(Alignment.CenterHorizontally),
+                    fontSize = (screenWidth * 0.06f).value.sp
+                )
+                Spacer(modifier = Modifier.height(screenHeight * 0.03f))
+
+                Text(
+                    text = "Your Cart",
+                    style = TitlePage,
+                    color = RedPrimary,
+                    fontSize = (screenWidth * 0.07f).value.sp,
+                    modifier = Modifier
+                        .fillMaxWidth()  // Make sure it takes up the full width
+                        .align(Alignment.CenterHorizontally),
                     textAlign = TextAlign.Center,
                 )
-            } else {
-                // Daftar item di keranjang
-                LazyColumn(
-                    modifier = Modifier.weight(1f) // Agar daftar menyesuaikan ruang
-                ) {
-                    items(cartItems) { cartItem -> // Menggunakan cartItem sebagai nama parameter
-                        CartItemRow(
-                            cartItem = cartItem,
-                            onRemoveClick = {
-                                cartItems.remove(cartItem)
-                                calculateTotal()
-                            },
-                            onQuantityChange = { newQuantity ->
-                                cartItem.quantity.value = newQuantity
-                                calculateTotal()
-                            }
-                        )
+
+                Spacer(modifier = Modifier.height(screenHeight * 0.02f))
+
+                if (cartItems.isEmpty()) {
+                    if (cartItems.isEmpty()) {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize(), // Mengisi seluruh area
+                            contentAlignment = Alignment.Center // Pusatkan konten di tengah
+                        ) {
+                            Text(
+                                text = "Your cart is empty.",
+                                style = TitlePage,
+                                color = RedPrimary,
+                                fontSize = (screenWidth * 0.06f).value.sp,
+                                textAlign = TextAlign.Center
+                            )
+                        }
+                    }
+                } else {
+                    // Daftar item di keranjang
+                    LazyColumn(
+                        modifier = Modifier.weight(1f) // Agar daftar menyesuaikan ruang
+                    ) {
+                        items(cartItems) { cartItem -> // Menggunakan cartItem sebagai nama parameter
+                            CartItemRow(
+                                cartItem = cartItem,
+                                onRemoveClick = {
+                                    cartItems.remove(cartItem)
+                                    calculateTotal()
+                                },
+                                onQuantityChange = { newQuantity ->
+                                    cartItem.quantity.value = newQuantity
+                                    calculateTotal()
+                                }
+                            )
+                        }
                     }
                 }
-            }
+                Spacer(modifier = Modifier.height(screenHeight * 0.01f))
 
-            // Bagian Proceed
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(210.dp)
-                    .background(
-                        color = DarkRed, // Warna latar belakang
-                        shape = RoundedCornerShape(24.dp)
-                    )
-            ) {
-                // Gambar latar belakang
-                Image(
-                    painter = painterResource(id = R.drawable.pattern), // Ganti dengan resource gambar lokal
-                    contentDescription = "Background Image",
-                    modifier = Modifier.fillMaxSize(),
-                    contentScale = ContentScale.Crop // Mengatur gambar untuk menutupi seluruh area
-                )
-
-                // Kolom dengan konten di atas gambar
-                Column(
+                // Bagian Proceed
+                Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(12.dp)
+                        .height(210.dp)
+                        .background(
+                            color = DarkRed, // Warna latar belakang
+                            shape = RoundedCornerShape(24.dp)
+                        )
                 ) {
-                    Spacer(modifier = Modifier.height(8.dp))
+                    // Gambar latar belakang
+                    Image(
+                        painter = painterResource(id = R.drawable.pattern), // Ganti dengan resource gambar lokal
+                        contentDescription = "Background Image",
+                        modifier = Modifier.fillMaxSize(),
+                        contentScale = ContentScale.Crop // Mengatur gambar untuk menutupi seluruh area
+                    )
 
-                    // Baris dengan teks
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-                        Text("Sub-Total", style = DetailText, color = Color.White)
-                        Text(
-                            "Rp. ${calculateSubtotal()}",
-                            style = DetailText,
-                            color = Color.White,
-                            textAlign = TextAlign.End
-                        )
-                    }
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-                        Text("Delivery Charge", style = DetailText, color = Color.White)
-                        Text(
-                            "Rp. ${deliveryCharge.value}",
-                            style = DetailText,
-                            color = Color.White,
-                            textAlign = TextAlign.End
-                        )
-                    }
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-                        Text("Discount", style = DetailText, color = Color.White)
-                        Text(
-                            "Rp. ${discount.value}",
-                            style = DetailText,
-                            color = Color.White,
-                            textAlign = TextAlign.End
-                        )
-                    }
-                    Spacer(modifier = Modifier.weight(1f))
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-                        Text("Total", style = SubText, fontSize = 18.sp, color = Color.White)
-                        Text(
-                            "Rp. ${totalPrice.value}",
-                            style = SubText,
-                            fontSize = 18.sp,
-                            color = Color.White,
-                            textAlign = TextAlign.End
-                        )
-                    }
-
-                    // Spacer untuk mendorong tombol ke bawah
-                    Spacer(modifier = Modifier.weight(1f))
-
-                    Button(
-                        onClick = { navController.navigate("order") },
+                    // Kolom dengan konten di atas gambar
+                    Column(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(57.dp)
-                            .clip(RoundedCornerShape(15.dp)),
-                        colors = ButtonDefaults.buttonColors(backgroundColor = Color.White)
+                            .padding(12.dp)
                     ) {
-                        Text(text = "Proceed", style = TitlePage, fontSize = 18.sp)
+                        Spacer(modifier = Modifier.height(screenHeight * 0.01f))
+
+                        // Baris dengan teks
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
+                            Text(
+                                "Sub-Total",
+                                style = DetailText,
+                                color = Color.White,
+                                fontSize = (screenWidth * 0.04f).value.sp
+                            )
+                            Text(
+                                "Rp. ${calculateSubtotal()}",
+                                style = DetailText,
+                                color = Color.White,
+                                textAlign = TextAlign.End,
+                                fontSize = (screenWidth * 0.04f).value.sp
+                            )
+                        }
+                        Spacer(modifier = Modifier.height(screenHeight * 0.01f))
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
+                            Text(
+                                "Delivery Charge",
+                                style = DetailText,
+                                color = Color.White,
+                                fontSize = (screenWidth * 0.04f).value.sp
+                            )
+                            Text(
+                                "Rp. ${deliveryCharge.value}",
+                                style = DetailText,
+                                color = Color.White,
+                                textAlign = TextAlign.End,
+                                fontSize = (screenWidth * 0.04f).value.sp
+                            )
+                        }
+                        Spacer(modifier = Modifier.weight(1f))
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
+                            Text(
+                                "Total",
+                                style = SubText,
+                                fontSize = (screenWidth * 0.045f).value.sp,
+                                color = Color.White)
+                            Text(
+                                "Rp. ${totalPrice.value}",
+                                style = SubText,
+                                fontSize = (screenWidth * 0.045f).value.sp,
+                                color = Color.White,
+                                textAlign = TextAlign.End
+                            )
+                        }
+
+                        // Spacer untuk mendorong tombol ke bawah
+                        Spacer(modifier = Modifier.weight(1f))
+
+                        Button(
+                            onClick = { navController.navigate("order") },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(57.dp)
+                                .clip(RoundedCornerShape(15.dp)),
+                            colors = ButtonDefaults.buttonColors(backgroundColor = Color.White)
+                        ) {
+                            Text(
+                                text = "Proceed",
+                                style = TitlePage,
+                                fontSize = (screenWidth * 0.05f).value.sp,
+                            )
+                        }
                     }
                 }
             }

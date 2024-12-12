@@ -34,6 +34,7 @@ fun AutoSlidingBanner(images: List<Painter>) {
         modifier = Modifier
             .wrapContentSize()
             .height(200.dp)
+            .aspectRatio(16 / 9f)
     ) {
         // Pager for sliding images
         HorizontalPager(

@@ -2,6 +2,7 @@ package com.example.mamfoods.userscreen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -27,6 +28,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -60,91 +63,105 @@ fun PopularScreen(navController: NavController,query: String) {
             ButtonNavComponent(navController, selectedRoute)
         }
     ) { innerPadding ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(Color.White)
-                .padding(innerPadding) // Gunakan innerPadding di sini
-                .padding(horizontal = 20.dp) // Tambahan padding jika perlu
+        BoxWithConstraints (
+            modifier = Modifier.fillMaxSize().background(Color.White)
         ) {
-            Spacer(modifier = Modifier.height(20.dp))
+            val screenWidth = maxWidth
+            val screenHeight = maxHeight
 
-            // Header
-            Text(
-                text = "Explore Your Favorite Food",
-                style = TitlePage,
-                color = RedPrimary,
-                modifier = Modifier.padding(vertical = 24.dp)
-            )
-
-            // Search Bar
-            Card (
-                elevation = 2.dp, // Ketinggian bayangan
-                shape = RoundedCornerShape(15.dp), // Bentuk sudut
+            Column(
                 modifier = Modifier
-                    .fillMaxWidth()
-
+                    .fillMaxSize()
+                    .background(Color.White)
+                    .padding(innerPadding) // Gunakan innerPadding di sini
+                    .padding(horizontal = 20.dp)
             ) {
-                OutlinedTextField(
-                    value = searchText.value,
-                    onValueChange = { searchText.value = it },
+                Spacer(modifier = Modifier.height(screenHeight * 0.05f))
+
+                // Header
+                Text(
+                    text = "Explore Your Favorite Food",
+                    style = TitlePage,
+                    color = RedPrimary,
+                    fontSize = (screenWidth * 0.06f).value.sp,
+                )
+                Spacer(modifier = Modifier.height(screenHeight * 0.02f))
+
+                // Search Bar
+                Card (
+                    elevation = 2.dp, // Ketinggian bayangan
+                    shape = RoundedCornerShape(15.dp), // Bentuk sudut
                     modifier = Modifier
                         .fillMaxWidth()
-                        .background(color = OffRed, shape = RoundedCornerShape(15.dp)),
-                    colors = TextFieldDefaults.outlinedTextFieldColors(
-                        textColor = OffRed2,
-                        focusedBorderColor = Color.DarkGray,
-                        unfocusedBorderColor = LightGrayColor
-                    ),
-                    placeholder = {
-                        Text(
-                            "What do you want to order?",
-                            color = OffRed2,
-                            fontSize = 12.sp,
-                            fontFamily = Lato
-                        ) },
-                    leadingIcon = {
-                        Image(
-                            painter = painterResource(id = R.drawable.search),
-                            contentDescription = "Search Icon",
-                            modifier = Modifier.size(24.dp)
+                ) {
+                    OutlinedTextField(
+                        value = searchText.value,
+                        onValueChange = { searchText.value = it },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .background(color = OffRed, shape = RoundedCornerShape(15.dp)),
+                        colors = TextFieldDefaults.outlinedTextFieldColors(
+                            textColor = OffRed2,
+                            focusedBorderColor = Color.DarkGray,
+                            unfocusedBorderColor = LightGrayColor
+                        ),
+                        textStyle = TextStyle(
+                            fontFamily = Lato,
+                            color = Color.Black,
+                            fontWeight = FontWeight.Bold,
+                            fontSize = (screenWidth * 0.035f).value.sp,
+                        ),
+                        placeholder = {
+                            Text(
+                                "What do you want to order?",
+                                color = OffRed2,
+                                fontSize = (screenWidth * 0.035f).value.sp,
+                                fontFamily = Lato
+                            ) },
+                        leadingIcon = {
+                            Image(
+                                painter = painterResource(id = R.drawable.search),
+                                contentDescription = "Search Icon",
+                                modifier = Modifier.size(24.dp)
+                            )
+                        },
+                        shape = RoundedCornerShape(15.dp),
+                        singleLine = true,
+                        keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Search),
+                        // Di dalam OutlinedTextField KeyboardActions
+                        keyboardActions = KeyboardActions(
+                            onSearch = {
+                                navController.navigate("search/${searchText.value}")
+                            }
                         )
-                    },
-                    shape = RoundedCornerShape(15.dp),
-                    singleLine = true,
-                    keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Search),
-                    // Di dalam OutlinedTextField KeyboardActions
-                    keyboardActions = KeyboardActions(
-                        onSearch = {
-                            navController.navigate("search/${searchText.value}")
-                        }
                     )
+                }
+
+                Spacer(modifier = Modifier.height(screenHeight * 0.02f))
+
+                Text(
+                    text = "Popular",
+                    style = TitlePage,
+                    color = RedPrimary,
+                    fontSize = (screenWidth * 0.055f).value.sp,
+                    modifier = Modifier
+                        .fillMaxWidth()  // Make sure it takes up the full width
+                        .align(Alignment.CenterHorizontally),
+                    textAlign = TextAlign.Center,
                 )
-            }
 
-            Spacer(modifier = Modifier.height(18.dp))
+                Spacer(modifier = Modifier.height(screenHeight * 0.02f))
 
-            Text(
-                text = "Popular",
-                style = TitlePage,
-                color = RedPrimary,
-                modifier = Modifier
-                    .fillMaxWidth()  // Make sure it takes up the full width
-                    .align(Alignment.CenterHorizontally),
-                textAlign = TextAlign.Center,
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            // LazyColumn for filtered items
-            LazyColumn {
-                items(filteredItems) { item -> // Corrected this part
-                    FoodItemCard(
-                        item = item,
-                        onFoodCardClick = { selectedFoodItem ->
-                            navController.navigate("foodDetailScreen/${selectedFoodItem.name}") // Pass item to the next screen
-                        }
-                    )
+                // LazyColumn for filtered items
+                LazyColumn {
+                    items(filteredItems) { item -> // Corrected this part
+                        FoodItemCard(
+                            item = item,
+                            onFoodCardClick = { selectedFoodItem ->
+                                navController.navigate("foodDetailScreen/${selectedFoodItem.name}") // Pass item to the next screen
+                            }
+                        )
+                    }
                 }
             }
         }

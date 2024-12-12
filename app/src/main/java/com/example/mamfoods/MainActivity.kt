@@ -16,9 +16,12 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.mamfoods.adminscreen.LoginAdmin
+import com.example.mamfoods.adminscreen.TampilanAdminActivity
 import com.example.mamfoods.userscreen.ButtonNavComponent
 import com.example.mamfoods.userscreen.CartItem
 import com.example.mamfoods.userscreen.CartScreen
+import com.example.mamfoods.userscreen.ChooseLocationScreen
 import com.example.mamfoods.userscreen.FoodAppHomeScreen
 import com.example.mamfoods.userscreen.FoodDetailsScreen
 import com.example.mamfoods.userscreen.FoodItem
@@ -64,107 +67,110 @@ fun AppNavigation() {
         }.toMutableList()
     }
 
-    Scaffold(
-        bottomBar = {
-            // Tampilkan Bottom Navigation hanya di layar yang mendukungnya
-            val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
-            if (currentRoute in listOf("home", "cart", "search", "profile", "history")) {
-                selectedRoute.value = currentRoute ?: "home" // Update selectedRoute when route changes
-                ButtonNavComponent(navController = navController, selectedRoute = selectedRoute)
-            }
+    NavHost(
+        navController = navController,
+        startDestination = "splash",
+    ) {
+        composable("splash") {
+            SplashScreen(
+                onNavigateToOnboarding = {
+                    navController.navigate("onboarding")
+                }
+            )
         }
-    ) { innerPadding ->
-        NavHost(
-            navController = navController,
-            startDestination = "splash",
-            modifier = Modifier.padding(innerPadding)
-        ) {
-            composable("splash") {
-                SplashScreen(
-                    onNavigateToOnboarding = {
-                        navController.navigate("onboarding")
-                    }
-                )
-            }
-            composable("onboarding") {
-                OnboardingScreen(
-                    onNextClick = {
-                        navController.navigate("login")
-                    })
-            }
-            composable("login") {
-                LoginScreen(
-                    viewModel = AuthViewModel(),
-                    onLoginSuccess = {
-                        navController.navigate("home")
-                    },
-                    onSignUpClick = {
-                        navController.navigate("signup")
-                    },
-                    onFacebookLoginClick = {},
-                    onGoogleLoginClick = {}
-                )
-            }
-            composable("signup") {
-                SignUpScreen(
-                    viewModel = AuthViewModel(),
-                    onFacebookSignUpClick = { /* Implement Facebook login */ },
-                    onGoogleSignUpClick = { /* Implement Google login */ },
-                    onLoginClick = { navController.navigate("login") },
-                    onSignUpSuccess = { navController.navigate("home") }
-                )
-            }
-            composable("home") {
-                FoodAppHomeScreen(
-                    navController = navController,
-                    onViewMoreClick = { navController.navigate("search") }
-                )
-            }
-            composable("fooddetails/{foodName}") { backStackEntry ->
-                val foodName = backStackEntry.arguments?.getString("foodName") ?: ""
-                val foodItem = getFoodItemByName(name = foodName)
-                FoodDetailsScreen(
-                    navController = navController,
-                    foodItem = foodItem,
-                    addToCart = { cartItems.add(it) } // Tambahkan item ke keranjang
-                )
-            }
-            composable("restaurantdetails/{storeName}") { backStackEntry ->
-                val storeName = backStackEntry.arguments?.getString("storeName") ?: ""
-                val restaurant = getRestaurantByName(name = storeName) // Ambil restaurant berdasarkan nama
-                RestaurantDetailsScreen(navController = navController, restaurant = restaurant)
-            }
-            composable("cart") {
-                // Ensure foodItems is available, whether from a ViewModel, state, or passed from another composable
-                val foodItems = remember { mutableStateListOf<FoodItem>() } // Example: Replace with your actual list of food items
-                val cartItems = convertToCartItems(foodItems) // Pass the list of food items here
-                CartScreen(navController = navController, cartItems = cartItems)
-            }
-            composable("order") {
-                val profileData = remember {
-                    ProfileData("Default Name", "Default Address", "123456789", "email@mail.com", "password")
+        composable("onboarding") {
+            OnboardingScreen(
+                onAdminClick = {
+                    navController.navigate("adminsplash")
+                },
+                onUserClick = {
+                    navController.navigate(("userlogin"))
                 }
-                OrderScreen(navController = navController, profileData = profileData)
+            )
+        }
+        composable("userlogin") {
+            LoginScreen(
+//                viewModel = AuthViewModel(),
+                onLoginSuccess = {
+                    navController.navigate("home")
+                },
+                onSignUpClick = {
+                    navController.navigate("usersignup")
+                },
+                onGoogleLoginClick = {}
+            )
+        }
+        composable("usersignup") {
+            SignUpScreen(
+//                    viewModel = AuthViewModel(),
+                onGoogleSignUpClick = { /* Implement Google login */ },
+                onLoginClick = { navController.navigate("userlogin") },
+//                    onSignUpSuccess = { navController.navigate("home") },
+                onSignUpDone = { navController.navigate("location") }
+            )
+        }
+        composable("location") {
+            ChooseLocationScreen(
+                onNextHomeClick = { navController.navigate("home") }
+            )
+        }
+        composable("home") {
+            FoodAppHomeScreen(
+                navController = navController,
+                onViewMoreClick = { navController.navigate("search/{query}") }
+            )
+        }
+        composable("fooddetails/{foodName}") { backStackEntry ->
+            val foodName = backStackEntry.arguments?.getString("foodName") ?: ""
+            val foodItem = getFoodItemByName(name = foodName)
+            FoodDetailsScreen(
+                navController = navController,
+                foodItem = foodItem,
+                addToCart = { cartItems.add(it) } // Tambahkan item ke keranjang
+            )
+        }
+        composable("restaurantdetails/{storeName}") { backStackEntry ->
+            val storeName = backStackEntry.arguments?.getString("storeName") ?: ""
+            val restaurant = getRestaurantByName(name = storeName) // Ambil restaurant berdasarkan nama
+            RestaurantDetailsScreen(navController = navController, restaurant = restaurant)
+        }
+        composable("cart") {
+            // Ensure foodItems is available, whether from a ViewModel, state, or passed from another composable
+            val foodItems = remember { mutableStateListOf<FoodItem>() } // Example: Replace with your actual list of food items
+            val cartItems = convertToCartItems(foodItems) // Pass the list of food items here
+            CartScreen(navController = navController, cartItems = cartItems)
+        }
+        composable("order") {
+            val profileData = remember {
+                ProfileData("Default Name", "Default Address", "123456789", "email@mail.com", "password")
             }
-            composable("ordersuccess") {
-                OrderSuccessScreen(navController)
+            OrderScreen(navController = navController, profileData = profileData)
+        }
+        composable("ordersuccess") {
+            OrderSuccessScreen(navController)
+        }
+        composable("search/{query}") { backStackEntry ->
+            val query = backStackEntry.arguments?.getString("query") ?: ""
+            PopularScreen(navController, query = query)
+        }
+        composable("search/{query}") {
+            PopularScreen(navController, query = "")
+        }
+        composable("profile") {
+            val profileData = remember {
+                ProfileData("Default Name", "Default Address", "123456789", "email@mail.com", "password")
             }
-            composable("search/{query}") { backStackEntry ->
-                val query = backStackEntry.arguments?.getString("query") ?: ""
-                PopularScreen(navController, query = query)
-            }
-            composable("search/{query}") {
-                PopularScreen(navController, query = "")
-            }
-            composable("profile") {
-                val profileData = remember {
-                    ProfileData("Default Name", "Default Address", "123456789", "email@mail.com", "password")
+            ProfileScreen(navController = navController, profileData = profileData)
+        }
+        composable("history") {
+            HistoryScreen(navController)
+        }
+        composable("adminsplash") {
+            TampilanAdminActivity (
+                onNavigateToLoginAdmin = {
+                    navController.navigate("adminlogin")
                 }
-                ProfileScreen(navController = navController, profileData = profileData)
-            }
-            composable("history") {
-                HistoryScreen(navController)
-            }
+            )
         }
     }
 }

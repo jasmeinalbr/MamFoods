@@ -4,14 +4,10 @@ import androidx.compose.runtime.MutableState
 import com.example.mamfoods.R
 
 data class OrderStatus(
-    val driverName: String,
-    val estimatedTime: String,
     val isOrderInProgress: Boolean
 )
 
 val dummyOrderStatus = OrderStatus(
-    driverName = "Mr Kemplas",
-    estimatedTime = "20 minutes on the way",
     isOrderInProgress = true
 )
 

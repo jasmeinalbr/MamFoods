@@ -19,7 +19,7 @@ import com.example.mamfoods.ui.theme.TitleText
 
 @Composable
 
-fun TampilanAdminActivity(onNavigateToOnboarding: () -> Unit) {
+fun TampilanAdminActivity(onNavigateToLoginAdmin: () -> Unit) {
 
     Column(
         modifier = Modifier
@@ -42,13 +42,13 @@ fun TampilanAdminActivity(onNavigateToOnboarding: () -> Unit) {
         Text(
             text = "Admin Dasboard",
             style = SubText,
-            fontSize = 14.sp
+            fontSize = 18.sp
         )
     }
 
     androidx.compose.runtime.LaunchedEffect(Unit) {
         kotlinx.coroutines.delay(3000) // Tunggu 3 detik
-        onNavigateToOnboarding()
+        onNavigateToLoginAdmin()
     }
 
 }
@@ -56,5 +56,5 @@ fun TampilanAdminActivity(onNavigateToOnboarding: () -> Unit) {
 @Preview(showBackground = true)
 @Composable
 fun AdminActivityPreview() {
-    TampilanAdminActivity (onNavigateToOnboarding= {})
+    TampilanAdminActivity (onNavigateToLoginAdmin= {})
 }

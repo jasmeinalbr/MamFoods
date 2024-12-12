@@ -3,6 +3,7 @@ package com.example.mamfoods.userscreen
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -35,61 +36,69 @@ fun FoodItemCard(
     item: FoodItem,
     onFoodCardClick: (FoodItem) -> Unit = { }
 ) {
-    Card(
-        elevation = 2.dp, // Ketinggian bayangan
-        shape = RoundedCornerShape(24.dp), // Bentuk sudut
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 8.dp)
-            .clickable { onFoodCardClick(item) } // Pass item to onClick callback
+    BoxWithConstraints (
+        modifier = Modifier.fillMaxWidth().background(Color.White)
     ) {
-        Row(
+        val screenWidth = maxWidth
+        val screenHeight = maxHeight
+
+        Card(
+            elevation = 2.dp, // Ketinggian bayangan
+            shape = RoundedCornerShape(24.dp), // Bentuk sudut
             modifier = Modifier
                 .fillMaxWidth()
-                .height(100.dp)
-                .background(White) // Background warna putih
-                .padding(12.dp),
-            verticalAlignment = Alignment.CenterVertically,
+                .padding(vertical = 8.dp)
+                .clickable { onFoodCardClick(item) } // Pass item to onClick callback
         ) {
-            // Image
-            Box(
+            Row(
                 modifier = Modifier
-                    .size(70.dp)
-                    .clip(RoundedCornerShape(16.dp))
+                    .fillMaxWidth()
+                    .height(100.dp)
+                    .background(White) // Background warna putih
+                    .padding(12.dp),
+                verticalAlignment = Alignment.CenterVertically,
             ) {
-                val imagePainter = painterResource(id = item.img)
-                androidx.compose.foundation.Image(
-                    painter = imagePainter,
-                    contentDescription = item.name,
-                    modifier = Modifier.fillMaxSize()
+                // Image
+                Box(
+                    modifier = Modifier
+                        .size(70.dp)
+                        .clip(RoundedCornerShape(16.dp))
+                ) {
+                    val imagePainter = painterResource(id = item.img)
+                    androidx.compose.foundation.Image(
+                        painter = imagePainter,
+                        contentDescription = item.name,
+                        modifier = Modifier.fillMaxSize()
+                    )
+                }
+
+                Spacer(modifier = Modifier.width(16.dp))
+
+                // Texts
+                Column(modifier = Modifier.weight(1f)) {
+                    Text(
+                        text = item.name,
+                        style = BodyText,
+                        fontSize = 18.sp
+                    )
+                    Spacer(modifier = Modifier.height(12.dp))
+                    Text(
+                        text = item.restaurant,
+                        style = DetailText,
+                        color = Color.Gray,
+                        fontSize = 12.sp
+                    )
+                }
+
+                // Price
+                Text(
+                    text = "Rp. ${item.price}",
+                    style = PriceText,
                 )
             }
-
-            Spacer(modifier = Modifier.width(16.dp))
-
-            // Texts
-            Column(modifier = Modifier.weight(1f)) {
-                Text(
-                    text = item.name,
-                    style = BodyText,
-                    fontSize = 18.sp
-                )
-                Spacer(modifier = Modifier.height(12.dp))
-                Text(
-                    text = item.restaurant,
-                    style = DetailText,
-                    color = Color.Gray,
-                    fontSize = 12.sp
-                )
-            }
-
-            // Price
-            Text(
-                text = "Rp. ${item.price}",
-                style = PriceText,
-            )
         }
     }
+
 }
 
 @Composable

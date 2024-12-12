@@ -3,6 +3,7 @@ package com.example.mamfoods.userscreen
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -28,10 +29,9 @@ import com.example.mamfoods.viewmodel.AuthViewModel
 
 @Composable
 fun LoginScreen(
-    viewModel: AuthViewModel,
+//    viewModel: AuthViewModel,
     onLoginSuccess: () -> Unit,
     onSignUpClick: () -> Unit,
-    onFacebookLoginClick: () -> Unit,
     onGoogleLoginClick:() -> Unit
 ) {
     var email by remember { mutableStateOf("") }
@@ -40,7 +40,7 @@ fun LoginScreen(
     var errorMessage by remember { mutableStateOf<String?>(null) }
 
     BoxWithConstraints (
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier.fillMaxSize().background(Color.White)
     ) {
         val screenWidth = maxWidth
         val screenHeight = maxHeight
@@ -48,7 +48,7 @@ fun LoginScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(horizontal = screenWidth * 0.05f),
+                .padding(screenWidth * 0.05f),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Spacer(modifier = Modifier.height(screenHeight * 0.05f))
@@ -132,7 +132,7 @@ fun LoginScreen(
                     .height(57.dp),
             )
 
-            Spacer(modifier = Modifier.height(screenHeight * 0.03f))
+            Spacer(modifier = Modifier.height(screenHeight * 0.04f))
 
             // Or sign-up section
             Text(
@@ -155,39 +155,6 @@ fun LoginScreen(
             )
 
             Spacer(modifier = Modifier.height(screenHeight * 0.02f))
-
-            // Facebook Login Button
-            Button(
-                onClick = { onFacebookLoginClick() },
-//                modifier = Modifier
-//                    .height(57.dp)
-//                    .width(157.dp),
-                modifier = Modifier
-                    .fillMaxWidth(0.45f)
-                    .height(screenHeight * 0.07f),
-                shape = RoundedCornerShape(15.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = Color.White),
-                border = BorderStroke(1.dp, LightGrayColor)
-            ) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Image(
-                        painter = painterResource(id = R.drawable.fb),
-
-                        contentDescription = "facebook",
-                        modifier = Modifier
-                            .size(25.dp)
-                            .padding(end = 8.dp))
-
-                    androidx.compose.material3.Text(
-                        text = "Facebook",
-                        color = Color.Black,
-                        fontFamily = Lato,
-                        fontSize = (screenWidth * 0.035f).value.sp,
-                    )
-                }
-            }
-
-            Spacer(modifier = Modifier.height(screenHeight * 0.01f))
 
             // Google Login Button
             Button(
@@ -217,24 +184,24 @@ fun LoginScreen(
                 }
             }
 
-            Spacer(modifier = Modifier.height(screenHeight * 0.03f))
+            Spacer(modifier = Modifier.height(screenHeight * 0.04f))
 
         Button(
             onClick = {
                 isLoading = true
                 errorMessage = null
                 val loginRequest = LoginRequest(email, password)
-                viewModel.login(
-                    request = loginRequest,
-                    onSuccess = {
-                        isLoading = false
-                        onLoginSuccess()
-                    },
-                    onError = {
-                        isLoading = false
-                        errorMessage = it
-                    }
-                )
+//                viewModel.login(
+//                    request = loginRequest,
+//                    onSuccess = {
+//                        isLoading = false
+//                        onLoginSuccess()
+//                    },
+//                    onError = {
+//                        isLoading = false
+//                        errorMessage = it
+//                    }
+//                )
             },
             modifier = Modifier
                 .height(57.dp)
@@ -274,11 +241,11 @@ fun LoginScreen(
 
 }
 
-//
-//@Preview(showBackground = true)
-//@Composable
-//fun LoginScreenPreview() {
-//    // Buat dummy ViewModel untuk kebutuhan Preview
+
+@Preview(showBackground = true)
+@Composable
+fun LoginScreenPreview() {
+    // Buat dummy ViewModel untuk kebutuhan Preview
 //    val dummyViewModel = object : AuthViewModel() {
 //        override fun login(
 //            request: LoginRequest,
@@ -293,19 +260,18 @@ fun LoginScreen(
 //            }
 //        }
 //    }
-//
-//    // Preview UI
-//    LoginScreen(
+
+    // Preview UI
+    LoginScreen(
 //        viewModel = dummyViewModel,
-//        onLoginSuccess = {
-//            // Simulasi sukses login
-//        },
-//        onSignUpClick = {
-//            // Simulasi navigasi ke halaman registrasi
-//        },
-//        onGoogleLoginClick = {},
-//        onFacebookLoginClick = {}
-//    )
-//}
+        onLoginSuccess = {
+            // Simulasi sukses login
+        },
+        onSignUpClick = {
+            // Simulasi navigasi ke halaman registrasi
+        },
+        onGoogleLoginClick = {},
+    )
+}
 
 
