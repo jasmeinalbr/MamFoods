@@ -1,5 +1,6 @@
 package com.example.mamfoods.adminscreen
 
+import android.graphics.Bitmap
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -18,7 +19,7 @@ import com.example.mamfoods.ui.theme.TitleText
 val RedGradient1 = Color(0xFFE85353)
 
 @Composable
-fun AddItemScreen(onBackClick: () -> Unit, onAddItemClick: () -> Unit) {
+fun AddItemScreen(onBackClick: () -> Unit) {
     // Remember state for the input fields
     val itemName = remember { mutableStateOf("") }
     val itemPrice = remember { mutableStateOf("") }
@@ -114,3 +115,9 @@ fun AddItemScreen(onBackClick: () -> Unit, onAddItemClick: () -> Unit) {
         }
     }
 }
+
+
+fun onAddItemClick() {
+
+}
+
