@@ -18,9 +18,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.mamfoods.adminscreen.AddItemScreen
 import com.example.mamfoods.adminscreen.LoginAdmin
 import com.example.mamfoods.adminscreen.SignUpAdmin
+import com.example.mamfoods.screens.AddItemScreen
+import com.example.mamfoods.screens.AdminProfileScreen
 import com.example.mamfoods.userscreen.ButtonNavComponent
 import com.example.mamfoods.userscreen.CartItem
 import com.example.mamfoods.userscreen.CartScreen
@@ -178,7 +179,7 @@ fun AppNavigation() {
                         navController.navigate("additem")
                     },
                     onSignUpClick = {
-                        navController.navigate("signupadmin")
+                        navController.navigate("adminprofile")
                     }
                 )
             }
@@ -201,7 +202,13 @@ fun AppNavigation() {
             composable("additem") {
                 AddItemScreen(
                     onBackClick = { navController.popBackStack() },
-                    onAddItemClick = { navController.navigate("home") }
+
+                )
+            }
+
+            composable("adminprofile") {
+                AdminProfileScreen (
+                    onBackClick = { navController.popBackStack() },
                 )
             }
 
