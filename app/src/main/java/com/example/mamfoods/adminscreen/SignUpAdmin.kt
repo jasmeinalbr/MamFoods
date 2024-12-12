@@ -41,7 +41,7 @@ fun SignUpAdmin(
     onGoogleSignUpClick: () -> Unit,
     onLoginClick: () -> Unit,
     // viewModel: AuthViewModel,
-    // onSignUpSuccess: () -> Unit
+     onSignUpSuccess: () -> Unit
 ) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -348,7 +348,8 @@ fun PreviewSignup() {
         onSignUpClick = {},
         onFacebookSignUpClick = {},
         onGoogleSignUpClick = {},
-        onLoginClick = {}
+        onLoginClick = {},
+        onSignUpSuccess = {}
     )
 }
 

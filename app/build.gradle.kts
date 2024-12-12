@@ -77,6 +77,9 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation("androidx.compose.material:material:1.5.0")
     implementation ("androidx.navigation:navigation-compose:2.6.0")
+    implementation ("androidx.compose.material:material-icons-extended:1.5.0")
+    implementation ("io.coil-kt:coil-compose:2.2.2")
+
 
     // Accompanist dependencies
     implementation("com.google.accompanist:accompanist-pager:0.30.1")
@@ -92,6 +95,10 @@ dependencies {
     implementation(libs.androidx.activity)
     implementation(platform("com.google.firebase:firebase-bom:33.7.0"))
     implementation("androidx.credentials:credentials-play-services-auth:1.0.0-alpha02");
+
+    implementation ("org.jetbrains.kotlin:kotlin-stdlib:1.8.20")
+    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
+    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
 
     // Testing dependencies
     testImplementation(libs.junit)

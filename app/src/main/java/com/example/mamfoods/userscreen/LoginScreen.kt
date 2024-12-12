@@ -199,7 +199,7 @@ fun LoginScreen(
             // Google Login Button
             Button(
                 onClick = {
-                    authenticationManager.loginInWithGoogle()
+                    authenticationManager.signInWithGoogle()
                         .onEach {response->
                             if(response is AuthResponse.Success){
                                 onLoginSuccess()
