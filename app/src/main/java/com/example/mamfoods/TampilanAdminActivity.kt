@@ -13,49 +13,54 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-
 import com.example.mamfoods.ui.theme.SubText
 import com.example.mamfoods.ui.theme.TitleText
 import kotlinx.coroutines.delay
 
 @Composable
-
 fun TampilanAdminActivity(onNavigateToOnboarding: () -> Unit) {
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.White),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+    BoxWithConstraints(
+        modifier = Modifier.fillMaxSize()
     ) {
-        Image(
-            painter = painterResource(R.drawable.logo),
-            contentDescription = "Logo Mam Foods",
-            modifier = Modifier.size(200.dp)
-        )
-        Spacer(modifier = Modifier.height(24.dp))
-        Text(
-            text = "Mam Foods",
-            style = TitleText
-        )
-        Spacer(modifier = Modifier.height(24.dp))
-        Text(
-            text = "Admin Dasboard",
-            style = SubText,
-            fontSize = 14.sp
-        )
-    }
+        val screenWidth = maxWidth
+        val screenHeight = maxHeight
 
-    androidx.compose.runtime.LaunchedEffect(Unit) {
-        kotlinx.coroutines.delay(3000) // Tunggu 3 detik
-        onNavigateToOnboarding()
-    }
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = screenWidth * 0.05f)
+                .background(Color.White),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Image(
+                painter = painterResource(R.drawable.logo),
+                contentDescription = "Logo Mam Foods",
+                modifier = Modifier.size(screenWidth * 0.50f)
+            )
+            Spacer(modifier = Modifier.height(screenHeight * 0.03f))
+            Text(
+                text = "Mam Foods",
+                style = TitleText
+            )
+            Spacer(modifier = Modifier.height(24.dp))
+            Text(
+                text = "Admin Dasboard",
+                style = SubText,
+                fontSize = (screenWidth * 0.040f).value.sp
+            )
+        }
 
+        LaunchedEffect(Unit) {
+            delay(3000) // Tunggu 3 detik
+            onNavigateToOnboarding()
+        }
+    }
 }
 
 @Preview(showBackground = true)
 @Composable
 fun AdminActivityPreview() {
-    TampilanAdminActivity (onNavigateToOnboarding= {})
+    TampilanAdminActivity(onNavigateToOnboarding = {})
 }
