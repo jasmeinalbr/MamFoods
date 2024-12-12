@@ -321,7 +321,7 @@ fun SignUpScreen(
         // Sign Up Button
         Button(
             onClick = {
-                AuthenticationManager(context).createAccountWithEmail(email, password)
+                AuthenticationManager(context).createAccountWithEmail(email, password,name)
                     .onEach { response ->
                         when (response) {
                             is AuthResponse.Success -> {

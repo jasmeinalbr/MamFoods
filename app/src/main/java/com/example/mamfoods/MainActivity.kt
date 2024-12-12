@@ -1,13 +1,10 @@
 package com.example.mamfoods
 
-import android.content.ContentValues.TAG
-import android.content.Context
+
 import android.os.Bundle
-import android.util.Log
+
 import androidx.activity.ComponentActivity
-import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
 
@@ -16,14 +13,14 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.credentials.CredentialManager
-import androidx.credentials.CustomCredential
-import androidx.credentials.GetCredentialRequest
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.mamfoods.adminscreen.AddItemScreen
+import com.example.mamfoods.adminscreen.LoginAdmin
+import com.example.mamfoods.adminscreen.SignUpAdmin
 import com.example.mamfoods.userscreen.ButtonNavComponent
 import com.example.mamfoods.userscreen.CartItem
 import com.example.mamfoods.userscreen.CartScreen
@@ -43,17 +40,6 @@ import com.example.mamfoods.userscreen.SignUpScreen
 import com.example.mamfoods.userscreen.SplashScreen
 import com.example.mamfoods.userscreen.getFoodItemByName
 import com.example.mamfoods.userscreen.getRestaurantByName
-import com.google.android.libraries.identity.googleid.GetGoogleIdOption
-import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
-import com.google.firebase.Firebase
-import com.google.firebase.auth.GoogleAuthCredential
-import com.google.firebase.auth.GoogleAuthProvider
-import com.google.firebase.auth.auth
-import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.callbackFlow
-import java.security.MessageDigest
-import java.util.UUID
 
 
 class MainActivity : ComponentActivity() {
@@ -183,7 +169,44 @@ fun AppNavigation() {
             composable("history") {
                 HistoryScreen(navController)
             }
+
+
+            //Admin Screen
+            composable("loginadmin") {
+                LoginAdmin(
+                    onLoginSuccess = {
+                        navController.navigate("additem")
+                    },
+                    onSignUpClick = {
+                        navController.navigate("signupadmin")
+                    }
+                )
+            }
+
+            composable("signupadmin") {
+                SignUpAdmin(
+                    onSignUpSuccess = {
+                        navController.navigate("additem")
+                    },
+                    onLoginClick = {
+                        navController.navigate("loginadmin")
+                    },
+                    onFacebookSignUpClick = { /* Implement Facebook login */ },
+                    onGoogleSignUpClick = { /* Implement Google login */ },
+                    onSignUpClick = { navController.navigate("loginadmin") }
+
+                )
+            }
+
+            composable("additem") {
+                AddItemScreen(
+                    onBackClick = { navController.popBackStack() },
+                    onAddItemClick = { navController.navigate("home") }
+                )
+            }
+
         }
+
     }
 }
 
