@@ -39,11 +39,14 @@ import com.example.mamfoods.userscreen.SplashScreen
 import com.example.mamfoods.userscreen.getFoodItemByName
 import com.example.mamfoods.userscreen.getRestaurantByName
 
+
 class MainActivity : ComponentActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             AppNavigation()
+
         }
     }
 }
