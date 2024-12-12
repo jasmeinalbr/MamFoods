@@ -94,7 +94,7 @@ fun AppNavigation() {
             composable("onboarding") {
                 OnboardingScreen(
                     onNextClick = {
-                        navController.navigate("login")
+                        navController.navigate("loginadmin")
                     })
             }
             composable("login") {
