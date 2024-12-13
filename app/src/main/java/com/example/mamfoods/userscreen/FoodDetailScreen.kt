@@ -193,27 +193,27 @@ fun FoodDetailsScreen(
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun PreviewPancakeDetailsScreen() {
-    // Buat FoodItem contoh untuk preview
-    val sampleFoodItem = FoodItem(
-        name = "Pancake",
-        restaurant = "Best Pancake House",
-        price = 25,
-        img = R.drawable.menu,  // Gantilah dengan ID drawable yang valid
-        description = "Delicious pancake with syrup and butter.",
-        ingredients = listOf("Flour", "Egg", "Milk", "Syrup", "Butter")
-    )
-
-    // State untuk menyimpan item keranjang
-    val cartItems = remember { mutableStateListOf<CartItem>() }
-
-    // Pass FoodItem ke FoodDetailsScreen
-    FoodDetailsScreen(
-        navController = rememberNavController(),
-        foodItem = sampleFoodItem,
-        addToCart = { cartItem -> cartItems.add(cartItem) } // Menambahkan CartItem ke keranjang
-    )
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun PreviewPancakeDetailsScreen() {
+//    // Buat FoodItem contoh untuk preview
+//    val sampleFoodItem = FoodItem(
+//        name = "Pancake",
+//        restaurant = "Best Pancake House",
+//        price = 25,
+//        img = R.drawable.menu,  // Gantilah dengan ID drawable yang valid
+//        description = "Delicious pancake with syrup and butter.",
+//        ingredients = listOf("Flour", "Egg", "Milk", "Syrup", "Butter")
+//    )
+//
+//    // State untuk menyimpan item keranjang
+//    val cartItems = remember { mutableStateListOf<CartItem>() }
+//
+//    // Pass FoodItem ke FoodDetailsScreen
+//    FoodDetailsScreen(
+//        navController = rememberNavController(),
+//        foodItem = sampleFoodItem,
+//        addToCart = { cartItem -> cartItems.add(cartItem) } // Menambahkan CartItem ke keranjang
+//    )
+//}
 

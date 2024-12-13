@@ -332,13 +332,13 @@ fun SignUpScreen(
     }
 }
 
-//@Preview(showBackground = true)
-//@Composable
-//fun PreviewSignup() {
-//    SignUpScreen(
-//        onGoogleSignUpClick = {},   // Event login Google
-//        onLoginClick = {},
-//        onSignUpSuccess = {}
-//    )
-//}
+@Preview(showBackground = true)
+@Composable
+fun PreviewSignup() {
+    SignUpScreen(
+        onGoogleSignUpClick = {},   // Event login Google
+        onLoginClick = {},
+        onSignUpSuccess = {}
+    )
+}
 

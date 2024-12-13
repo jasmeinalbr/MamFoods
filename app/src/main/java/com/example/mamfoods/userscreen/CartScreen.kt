@@ -250,41 +250,41 @@ fun CartScreen(navController: NavController, cartItems: MutableList<CartItem>) {
 }
 
 
-@Composable
-@Preview(showBackground = true)
-fun PreviewCartScreen() {
-    val navController = rememberNavController()
-
-    // Use remember to avoid recreating the state on recomposition
-    val sampleCartItems = remember {
-        mutableListOf(
-            CartItem(
-                foodItem = FoodItem(
-                    name = "Pancake",
-                    restaurant = "Cake Castle",
-                    price = 20000,
-                    img = R.drawable.menu,
-                    description = "Soft and fluffy pancakes topped with fresh fruit and whipped cream.",
-                    ingredients = listOf("Flour", "Eggs", "Milk", "Strawberries", "Whipped Cream")
-                ),
-                quantity = mutableStateOf(2) // Ensure it's a MutableState
-            ),
-            CartItem(
-                foodItem = FoodItem(
-                    name = "Burger",
-                    restaurant = "Burger Town",
-                    price = 50000,
-                    img = R.drawable.menu,
-                    description = "Juicy beef burger with fresh vegetables.",
-                    ingredients = listOf("Beef", "Lettuce", "Tomato", "Cheese", "Bun")
-                ),
-                quantity = mutableStateOf(1) // Ensure it's a MutableState
-            )
-        )
-    }
-
-    CartScreen(navController = navController, cartItems = sampleCartItems)
-}
+//@Composable
+//@Preview(showBackground = true)
+//fun PreviewCartScreen() {
+//    val navController = rememberNavController()
+//
+//    // Use remember to avoid recreating the state on recomposition
+//    val sampleCartItems = remember {
+//        mutableListOf(
+//            CartItem(
+//                foodItem = FoodItem(
+//                    name = "Pancake",
+//                    restaurant = "Cake Castle",
+//                    price = 20000,
+//                    img = R.drawable.menu,
+//                    description = "Soft and fluffy pancakes topped with fresh fruit and whipped cream.",
+//                    ingredients = listOf("Flour", "Eggs", "Milk", "Strawberries", "Whipped Cream")
+//                ),
+//                quantity = mutableStateOf(2) // Ensure it's a MutableState
+//            ),
+//            CartItem(
+//                foodItem = FoodItem(
+//                    name = "Burger",
+//                    restaurant = "Burger Town",
+//                    price = 50000,
+//                    img = R.drawable.menu,
+//                    description = "Juicy beef burger with fresh vegetables.",
+//                    ingredients = listOf("Beef", "Lettuce", "Tomato", "Cheese", "Bun")
+//                ),
+//                quantity = mutableStateOf(1) // Ensure it's a MutableState
+//            )
+//        )
+//    }
+//
+//    CartScreen(navController = navController, cartItems = sampleCartItems)
+//}
 
 
 

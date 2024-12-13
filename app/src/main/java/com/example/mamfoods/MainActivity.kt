@@ -36,8 +36,8 @@ import com.example.mamfoods.userscreen.ProfileScreen
 import com.example.mamfoods.userscreen.RestaurantDetailsScreen
 import com.example.mamfoods.userscreen.SignUpScreen
 import com.example.mamfoods.userscreen.SplashScreen
-import com.example.mamfoods.userscreen.getFoodItemByName
-import com.example.mamfoods.userscreen.getRestaurantByName
+//import com.example.mamfoods.userscreen.getFoodItemByName
+//import com.example.mamfoods.userscreen.getRestaurantByName
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -63,11 +63,16 @@ fun AppNavigation() {
             CartItem(foodItem = foodItem, quantity = mutableStateOf(1))
         }.toMutableList()
     }
+    val productId = "6nmp3UDoxzW726UaHfwh" // ID dokumen di Firestore
+
 
     NavHost(
         navController = navController,
-        startDestination = "splash",
+        startDestination = "test",
     ) {
+        composable("test") {
+            FetchProductData(productId = productId)
+        }
         composable("splash") {
             SplashScreen(
                 onNavigateToOnboarding = {
@@ -113,18 +118,18 @@ fun AppNavigation() {
             )
         }
         composable("fooddetails/{foodName}") { backStackEntry ->
-            val foodName = backStackEntry.arguments?.getString("foodName") ?: ""
-            val foodItem = getFoodItemByName(name = foodName)
-            FoodDetailsScreen(
-                navController = navController,
-                foodItem = foodItem,
-                addToCart = { cartItems.add(it) } // Tambahkan item ke keranjang
-            )
+//            val foodName = backStackEntry.arguments?.getString("foodName") ?: ""
+////            val foodItem = getFoodItemByName(name = foodName)
+//            FoodDetailsScreen(
+//                navController = navController,
+////                foodItem = foodItem,
+//                addToCart = { cartItems.add(it) } // Tambahkan item ke keranjang
+//            )
         }
         composable("restaurantdetails/{storeName}") { backStackEntry ->
             val storeName = backStackEntry.arguments?.getString("storeName") ?: ""
-            val restaurant = getRestaurantByName(name = storeName) // Ambil restaurant berdasarkan nama
-            RestaurantDetailsScreen(navController = navController, restaurant = restaurant)
+//            val restaurant = getRestaurantByName(name = storeName) // Ambil restaurant berdasarkan nama
+//            RestaurantDetailsScreen(navController = navController, restaurant = restaurant)
         }
         composable("cart") {
             // Ensure foodItems is available, whether from a ViewModel, state, or passed from another composable

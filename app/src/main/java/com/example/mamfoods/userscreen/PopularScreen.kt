@@ -50,11 +50,11 @@ fun PopularScreen(navController: NavController,query: String) {
     val selectedRoute = remember { mutableStateOf("search/{query}") }
     val searchText = remember { mutableStateOf(query) } // Manage search query as state
 
-    val filteredItems = if (query.isEmpty()) {
-        foodItems
-    } else {
-        foodItems.filter { it.name.contains(query, ignoreCase = true) }
-    }
+//    val filteredItems = if (query.isEmpty()) {
+//        foodItems
+//    } else {
+//        foodItems.filter { it.name.contains(query, ignoreCase = true) }
+//    }
 
     val cartItems = remember { mutableStateListOf<FoodItem>() }
 
@@ -153,16 +153,16 @@ fun PopularScreen(navController: NavController,query: String) {
                 Spacer(modifier = Modifier.height(screenHeight * 0.02f))
 
                 // LazyColumn for filtered items
-                LazyColumn {
-                    items(filteredItems) { item -> // Corrected this part
-                        FoodItemCard(
-                            item = item,
-                            onFoodCardClick = { selectedFoodItem ->
-                                navController.navigate("foodDetailScreen/${selectedFoodItem.name}") // Pass item to the next screen
-                            }
-                        )
-                    }
-                }
+//                LazyColumn {
+//                    items(filteredItems) { item -> // Corrected this part
+//                        FoodItemCard(
+//                            item = item,
+//                            onFoodCardClick = { selectedFoodItem ->
+//                                navController.navigate("foodDetailScreen/${selectedFoodItem.name}") // Pass item to the next screen
+//                            }
+//                        )
+//                    }
+//                }
             }
         }
     }

@@ -150,36 +150,36 @@ fun CartItemRow(
 }
 
 
-@Preview(showBackground = true)
-@Composable
-fun PreviewCartItemRow() {
-    // Membuat FoodItem sample
-    val sampleItem = FoodItem(
-        name = "Pizza",
-        restaurant = "Restaurant A",
-        price = 120,
-        img = R.drawable.menu, // Ganti dengan gambar yang sesuai di folder drawable
-        description = "Soft and fluffy pancakes topped with fresh fruit and whipped cream.",
-        ingredients = listOf("Flour", "Eggs", "Milk", "Strawberries", "Whipped Cream")
-    )
+//@Preview(showBackground = true)
+//@Composable
+//fun PreviewCartItemRow() {
+//    // Membuat FoodItem sample
+//    val sampleItem = FoodItem(
+//        name = "Pizza",
+//        restaurant = "Restaurant A",
+//        price = 120,
+//        img = R.drawable.menu, // Ganti dengan gambar yang sesuai di folder drawable
+//        description = "Soft and fluffy pancakes topped with fresh fruit and whipped cream.",
+//        ingredients = listOf("Flour", "Eggs", "Milk", "Strawberries", "Whipped Cream")
+//    )
 
     // Membuat CartItem dengan quantity 2 sebagai contoh
-    val cartItem = CartItem(foodItem = sampleItem, quantity = mutableStateOf(2)) // Using mutableStateOf for quantity
-
-    // Menampilkan CartItemRow dengan cartItem yang sudah disiapkan
-    CartItemRow(
-        cartItem = cartItem, // Pass the entire CartItem
-        onRemoveClick = {
-            // Implementasikan jika diperlukan
-            println("Item removed: ${cartItem.foodItem.name}")
-        },
-        onQuantityChange = { updatedQuantity ->
-            // Handle perubahan quantity
-            cartItem.quantity.value = updatedQuantity // Update quantity (with .value since it's a mutableState)
-            println("Quantity updated: ${cartItem.quantity.value}")
-        }
-    )
-}
+//    val cartItem = CartItem(foodItem = sampleItem, quantity = mutableStateOf(2)) // Using mutableStateOf for quantity
+//
+//    // Menampilkan CartItemRow dengan cartItem yang sudah disiapkan
+//    CartItemRow(
+//        cartItem = cartItem, // Pass the entire CartItem
+//        onRemoveClick = {
+//            // Implementasikan jika diperlukan
+//            println("Item removed: ${cartItem.foodItem.name}")
+//        },
+//        onQuantityChange = { updatedQuantity ->
+//            // Handle perubahan quantity
+//            cartItem.quantity.value = updatedQuantity // Update quantity (with .value since it's a mutableState)
+//            println("Quantity updated: ${cartItem.quantity.value}")
+//        }
+//    )
+//}
 
 
 

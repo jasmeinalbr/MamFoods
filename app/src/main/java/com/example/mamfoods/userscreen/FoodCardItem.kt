@@ -1,5 +1,6 @@
 package com.example.mamfoods.userscreen
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -30,6 +31,7 @@ import com.example.mamfoods.ui.theme.BodyText
 import com.example.mamfoods.ui.theme.DetailText
 import com.example.mamfoods.ui.theme.PriceText
 import com.example.mamfoods.ui.theme.White
+import coil.compose.rememberAsyncImagePainter
 
 @Composable
 fun FoodItemCard(
@@ -64,9 +66,14 @@ fun FoodItemCard(
                         .size(70.dp)
                         .clip(RoundedCornerShape(16.dp))
                 ) {
-                    val imagePainter = painterResource(id = item.img)
-                    androidx.compose.foundation.Image(
-                        painter = imagePainter,
+//                    val imagePainter = painterResource(id = item.img)
+//                    androidx.compose.foundation.Image(
+//                        painter = imagePainter,
+//                        contentDescription = item.name,
+//                        modifier = Modifier.fillMaxSize()
+//                    )
+                    Image(
+                        painter = rememberAsyncImagePainter(model = item.img),
                         contentDescription = item.name,
                         modifier = Modifier.fillMaxSize()
                     )
@@ -82,12 +89,12 @@ fun FoodItemCard(
                         fontSize = 18.sp
                     )
                     Spacer(modifier = Modifier.height(12.dp))
-                    Text(
-                        text = item.restaurant,
-                        style = DetailText,
-                        color = Color.Gray,
-                        fontSize = 12.sp
-                    )
+//                    Text(
+//                        text = item.restaurant,
+//                        style = DetailText,
+//                        color = Color.Gray,
+//                        fontSize = 12.sp
+//                    )
                 }
 
                 // Price
@@ -101,18 +108,18 @@ fun FoodItemCard(
 
 }
 
-@Composable
-@Preview(showBackground = true)
-fun PreviewFoodItemCard() {
-    FoodItemCard(
-        item = FoodItem(
-            name = "Margherita Pizza",
-            restaurant = "Pizza Palace",
-            price = 45000,
-            img = R.drawable.menu,
-            description = "Classic Italian pizza with fresh tomatoes, mozzarella, and basil.",
-            ingredients = listOf("Pizza Dough", "Tomato Sauce", "Mozzarella", "Basil")
-        ),
-        onFoodCardClick = { }
-    )
-}
+//@Composable
+//@Preview(showBackground = true)
+//fun PreviewFoodItemCard() {
+//    FoodItemCard(
+//        item = FoodItem(
+//            name = "Margherita Pizza",
+//            restaurant = "Pizza Palace",
+//            price = 45000,
+//            img = R.drawable.menu,
+//            description = "Classic Italian pizza with fresh tomatoes, mozzarella, and basil.",
+//            ingredients = listOf("Pizza Dough", "Tomato Sauce", "Mozzarella", "Basil")
+//        ),
+//        onFoodCardClick = { }
+//    )
+//}

@@ -173,16 +173,16 @@ fun FoodAppHomeScreen(
                 Spacer(modifier = Modifier.height(screenHeight * 0.01f))
 
                 // Popular Items - Only show 3 items
-                Column {
-                    foodItems.take(3).forEach { item ->
-                        FoodItemCard(
-                            item = item,
-                            onFoodCardClick = { selectedFoodItem ->
-                                navController.navigate("fooddetails/${selectedFoodItem.name}") // Pass item to the next screen
-                            }
-                        )
-                    }
-                }
+//                Column {
+//                    foodItems.take(3).forEach { item ->
+//                        FoodItemCard(
+//                            item = item,
+//                            onFoodCardClick = { selectedFoodItem ->
+//                                navController.navigate("fooddetails/${selectedFoodItem.name}") // Pass item to the next screen
+//                            }
+//                        )
+//                    }
+//                }
             }
         }
     }

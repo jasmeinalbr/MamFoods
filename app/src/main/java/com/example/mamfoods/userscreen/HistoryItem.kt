@@ -96,23 +96,23 @@ fun HistoryItem(
 }
 
 
-@Preview(showBackground = true)
-@Composable
-fun PreviewHistoryItem() {
-    val dummyFood = FoodItem(
-        name = "Spicy Crab",
-        restaurant = "Seafood Corner",
-        price = 35000,
-        img = R.drawable.menu, // Ganti dengan gambar Anda
-        description = "Fresh crab with spicy seasoning.",
-        ingredients = listOf("Crab", "Chili", "Garlic", "Onion")
-    )
-
-    HistoryItem(
-        foodItem = dummyFood,
-        onBuyAgainClick = { /* Aksi saat tombol Buy Again ditekan */ }
-    )
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun PreviewHistoryItem() {
+//    val dummyFood = FoodItem(
+//        name = "Spicy Crab",
+//        restaurant = "Seafood Corner",
+//        price = 35000,
+//        img = R.drawable.menu, // Ganti dengan gambar Anda
+//        description = "Fresh crab with spicy seasoning.",
+//        ingredients = listOf("Crab", "Chili", "Garlic", "Onion")
+//    )
+//
+//    HistoryItem(
+//        foodItem = dummyFood,
+//        onBuyAgainClick = { /* Aksi saat tombol Buy Again ditekan */ }
+//    )
+//}
 
 
 

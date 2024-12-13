@@ -154,35 +154,35 @@ fun RestaurantDetailsScreen(navController: NavController, restaurant: Restaurant
 }
 
 
-@Preview(showBackground = true)
-@Composable
-fun PreviewRestaurantDetailsScreen() {
-    // Create a sample Restaurant and FoodItems for the preview
-    val sampleRestaurant = Restaurant(
-        name = "Best Pancake House",
-        description = "A cozy place to enjoy delicious pancakes with syrup and butter.",
-        img = R.drawable.toko,  // Replace with an actual drawable resource ID
-        menu = listOf(
-            FoodItem(
-                name = "Pancake",
-                restaurant = "Best Pancake House",
-                price = 25,
-                img = R.drawable.menu,  // Replace with an actual drawable resource ID
-                description = "Delicious pancake with syrup and butter.",
-                ingredients = listOf("Flour", "Egg", "Milk", "Syrup", "Butter")
-            ),
-            FoodItem(
-                name = "Waffles",
-                restaurant = "Best Pancake House",
-                price = 30,
-                img = R.drawable.menu,  // Replace with an actual drawable resource ID
-                description = "Crispy waffles served with fresh fruits and syrup.",
-                ingredients = listOf("Flour", "Egg", "Milk", "Syrup", "Fruits")
-            )
-        )
-    )
-
-    // Pass the sample Restaurant to the RestaurantDetailsScreen
-    RestaurantDetailsScreen(navController = rememberNavController(), restaurant = sampleRestaurant)
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun PreviewRestaurantDetailsScreen() {
+//    // Create a sample Restaurant and FoodItems for the preview
+//    val sampleRestaurant = Restaurant(
+//        name = "Best Pancake House",
+//        description = "A cozy place to enjoy delicious pancakes with syrup and butter.",
+//        img = R.drawable.toko,  // Replace with an actual drawable resource ID
+//        menu = listOf(
+//            FoodItem(
+//                name = "Pancake",
+//                restaurant = "Best Pancake House",
+//                price = 25,
+//                img = R.drawable.menu,  // Replace with an actual drawable resource ID
+//                description = "Delicious pancake with syrup and butter.",
+//                ingredients = listOf("Flour", "Egg", "Milk", "Syrup", "Butter")
+//            ),
+//            FoodItem(
+//                name = "Waffles",
+//                restaurant = "Best Pancake House",
+//                price = 30,
+//                img = R.drawable.menu,  // Replace with an actual drawable resource ID
+//                description = "Crispy waffles served with fresh fruits and syrup.",
+//                ingredients = listOf("Flour", "Egg", "Milk", "Syrup", "Fruits")
+//            )
+//        )
+//    )
+//
+//    // Pass the sample Restaurant to the RestaurantDetailsScreen
+//    RestaurantDetailsScreen(navController = rememberNavController(), restaurant = sampleRestaurant)
+//}
 
