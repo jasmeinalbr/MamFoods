@@ -24,9 +24,10 @@ import com.example.mamfoods.userscreen.fetchFoodItems
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 
 @Composable
-fun FetchProductData(productId: String) {
+fun FetchProductData() {
     // State untuk menyimpan data produk
     val productState = remember { mutableStateOf<FoodItem?>(null) }
     val context = LocalContext.current
@@ -34,28 +35,19 @@ fun FetchProductData(productId: String) {
     // Ambil data dari Firestore
     LaunchedEffect(Unit) {
         val db = Firebase.firestore
-        val ref = db.collection("products").document(productId)
+        val ref = db.collection("products").get().await()
+        val products = ref.toObjects(FoodItem::class.java)
 
-        ref.get()
-            .addOnSuccessListener { document ->
-                if (document != null && document.exists()) {
-                    // Parse data ke dalam FoodItem
-                    val item = document.toObject(FoodItem::class.java)
-                    productState.value = item
-                } else {
-                    Toast.makeText(context, "Document not found!", Toast.LENGTH_SHORT).show()
-                }
-            }
-            .addOnFailureListener {
-                Toast.makeText(context, "Error fetching data: ${it.message}", Toast.LENGTH_SHORT).show()
-            }
+        Log.d("FetchData", "Products: $products")
+
+
     }
 
     // Tampilkan produk jika datanya sudah tersedia
     productState.value?.let { item ->
         FoodItemCard(item = item)
     } ?: run {
-        Log.d("FetchData", "Product ID: $productId")
+       // Log.d("FetchData", "Product ID: $productId")
 
         // Loading State
         Box(
@@ -66,5 +58,7 @@ fun FetchProductData(productId: String) {
         }
     }
 }
+
+
 
 

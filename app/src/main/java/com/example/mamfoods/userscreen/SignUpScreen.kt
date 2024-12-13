@@ -292,11 +292,14 @@ fun SignUpScreen(
                     AuthenticationManager(context).createAccountWithEmail(email, password, name)
                         .onEach { response ->
                             when (response) {
+
                                 is AuthResponse.Success -> {
+                                    Log.d("SignUpScreen", "Response: $response")
                                     onSignUpSuccess()
                                 }
 
                                 is AuthResponse.Error -> {
+                                    Log.d("SignUpScreen", "Response: $response")
                                     errorMessage = response.message
                                 }
                             }

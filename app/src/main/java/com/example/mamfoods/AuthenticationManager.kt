@@ -46,6 +46,7 @@ class AuthenticationManager(val context: Context) {
                     val user = auth.currentUser // Mendapatkan user yang baru terdaftar
                     val uid = user?.uid // Mendapatkan UID pengguna
 
+                    Log.d(TAG, "createAccountWithEmail: User UID: $uid")
                     if (uid != null) {
                         // Membuat data pengguna untuk disimpan ke Firestore
                         val userData = hashMapOf(

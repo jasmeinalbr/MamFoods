@@ -106,16 +106,16 @@ fun FoodDetailsScreen(
             Spacer(modifier = Modifier.height(screenHeight * 0.02f))
 
             // Image
-            Image(
-                painter = painterResource(id = foodItem.img),
-                contentDescription = "Pancake Image",
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(screenHeight * 0.2f)
-                    .clip(RoundedCornerShape(10.dp))
-                    .align(Alignment.CenterHorizontally),
-                contentScale = ContentScale.FillWidth
-            )
+//            Image(
+//                painter = painterResource(id = foodItem.img),
+//                contentDescription = "Pancake Image",
+//                modifier = Modifier
+//                    .fillMaxWidth()
+//                    .height(screenHeight * 0.2f)
+//                    .clip(RoundedCornerShape(10.dp))
+//                    .align(Alignment.CenterHorizontally),
+//                contentScale = ContentScale.FillWidth
+//            )
 
             Spacer(modifier = Modifier.height(screenHeight * 0.02f))
 

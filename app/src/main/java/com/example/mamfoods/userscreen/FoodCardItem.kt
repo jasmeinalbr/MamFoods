@@ -1,5 +1,6 @@
 package com.example.mamfoods.userscreen
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -33,11 +34,15 @@ import com.example.mamfoods.ui.theme.PriceText
 import com.example.mamfoods.ui.theme.White
 import coil.compose.rememberAsyncImagePainter
 
+
+//name image resto hargga
 @Composable
 fun FoodItemCard(
     item: FoodItem,
     onFoodCardClick: (FoodItem) -> Unit = { }
 ) {
+
+    Log.d("FoodItemCard", "Item: $item")
     BoxWithConstraints (
         modifier = Modifier.fillMaxWidth().background(Color.White)
     ) {
@@ -89,12 +94,12 @@ fun FoodItemCard(
                         fontSize = 18.sp
                     )
                     Spacer(modifier = Modifier.height(12.dp))
-//                    Text(
-//                        text = item.restaurant,
-//                        style = DetailText,
-//                        color = Color.Gray,
-//                        fontSize = 12.sp
-//                    )
+                    Text(
+                        text = item.restaurant,
+                        style = DetailText,
+                        color = Color.Gray,
+                        fontSize = 12.sp
+                    )
                 }
 
                 // Price

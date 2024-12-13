@@ -12,6 +12,7 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -40,6 +41,7 @@ import com.example.mamfoods.userscreen.SignUpScreen
 import com.example.mamfoods.userscreen.SplashScreen
 //import com.example.mamfoods.userscreen.getFoodItemByName
 //import com.example.mamfoods.userscreen.getRestaurantByName
+import kotlinx.coroutines.launch
 
 
 class MainActivity : ComponentActivity() {
@@ -68,15 +70,15 @@ fun AppNavigation() {
             CartItem(foodItem = foodItem, quantity = mutableStateOf(1))
         }.toMutableList()
     }
-    val productId = "6nmp3UDoxzW726UaHfwh" // ID dokumen di Firestore
+    //val productId = "6nmp3UDoxzW726UaHfwh" // ID dokumen di Firestore
 
 
     NavHost(
         navController = navController,
-        startDestination = "test",
+        startDestination = "home",
     ) {
         composable("test") {
-            FetchProductData(productId = productId)
+            FetchProductData()
         }
         composable("splash") {
             SplashScreen(

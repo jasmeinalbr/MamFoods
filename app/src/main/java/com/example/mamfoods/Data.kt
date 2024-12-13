@@ -4,7 +4,10 @@ package com.example.mamfoods
 data class Product(
     val name: String,         // Nama produk
     val restaurant: String,   // Restoran asal produk
-    val price: Int            // Harga produk dalam integer (misalnya dalam ribuan)
+    val price: Int,            // Harga produk dalam integer (misalnya dalam ribuan)
+    val description: String,
+    val image: String,
+    val ingredients: List<String>
 )
 
 // Data class untuk banner

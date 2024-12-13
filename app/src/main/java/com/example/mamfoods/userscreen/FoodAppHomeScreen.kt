@@ -12,6 +12,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardActions
@@ -22,8 +24,11 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -47,6 +52,9 @@ import com.example.mamfoods.ui.theme.OffRed2
 import com.example.mamfoods.ui.theme.RedPrimary
 import com.example.mamfoods.ui.theme.SubText
 import com.example.mamfoods.ui.theme.TitlePage
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.tasks.await
 
 @Composable
 fun FoodAppHomeScreen(
@@ -55,6 +63,15 @@ fun FoodAppHomeScreen(
 ) {
     val selectedRoute = remember { mutableStateOf("home") }
     val searchText = remember { mutableStateOf("") }
+    var foodItems by remember { mutableStateOf<List<FoodItem>>(emptyList()) }
+
+    LaunchedEffect(Unit){
+        val db = Firebase.firestore
+        val ref = db.collection("products").get().await()
+        foodItems = ref.toObjects(FoodItem::class.java)
+
+    }
+
 
     val bannerImages = listOf(
         painterResource(id = R.drawable.banner1),
@@ -173,16 +190,17 @@ fun FoodAppHomeScreen(
                 Spacer(modifier = Modifier.height(screenHeight * 0.01f))
 
                 // Popular Items - Only show 3 items
-//                Column {
-//                    foodItems.take(3).forEach { item ->
-//                        FoodItemCard(
-//                            item = item,
-//                            onFoodCardClick = { selectedFoodItem ->
-//                                navController.navigate("fooddetails/${selectedFoodItem.name}") // Pass item to the next screen
-//                            }
-//                        )
-//                    }
-//                }
+                LazyColumn {
+                    items(foodItems) { item ->
+                        FoodItemCard(
+                            item = item,
+                            onFoodCardClick = { selectedFoodItem ->
+                                // Navigasi ke detail produk
+                                navController.navigate("fooddetails/${selectedFoodItem.name}")
+                            }
+                        )
+                    }
+                }
             }
         }
     }

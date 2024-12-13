@@ -10,7 +10,7 @@ data class FoodItem(
     val name: String = "",
     val restaurant: String = "",
     val price: Int = 0,
-    val img: Int = 0,
+    val img: String = "",
     val description: String = "",
     val ingredients: String = ""
 )

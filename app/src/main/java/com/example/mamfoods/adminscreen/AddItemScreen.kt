@@ -66,7 +66,8 @@ fun AddItemScreen(onBackClick: () -> Unit, onAddItemClick:()->Unit) {
             price = price,
             image = "",
             description = description,
-            ingredients = ingredientList.split(",").map { it.trim() }.toString()
+            ingredients = ingredientList.split(",").map { it.trim() }.toString(),
+            restaurant = "Mamfoods"
         )
 
         try {
