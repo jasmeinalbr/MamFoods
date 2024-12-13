@@ -38,18 +38,17 @@ class AuthenticationManager(val context: Context) {
     private val userRef = database.getReference("users") // Referensi untuk node users
 
 
-    fun createAccountWithEmail(email: String, password: String,name: String): Flow<AuthResponse> = callbackFlow {
+    // Method untuk membuat akun dengan email dan password
+    fun createAccountWithEmail(email: String, password: String, name: String): Flow<AuthResponse> = callbackFlow {
         auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     val user = auth.currentUser // Mendapatkan user yang baru terdaftar
                     val uid = user?.uid // Mendapatkan UID pengguna
 
-
-                    // Membuat data pengguna di Realtime Database
                     if (uid != null) {
-                        // Membuat data pengguna baru di node "users" dengan UID sebagai key
-                        val userData = mapOf(
+                        // Membuat data pengguna untuk disimpan ke Firestore
+                        val userData = hashMapOf(
                             "email" to email,
                             "uid" to uid,
                             "name" to name,
@@ -57,12 +56,16 @@ class AuthenticationManager(val context: Context) {
                             "phone" to null
                         )
 
-                        userRef.child(uid).setValue(userData)
+                        // Menyimpan data pengguna ke Firestore
+                        val firestore = FirebaseFirestore.getInstance()
+                        firestore.collection("users")  // Mengakses koleksi 'users' di Firestore
+                            .document(uid)  // Menyimpan data dengan UID sebagai ID dokumen
+                            .set(userData)  // Menyimpan data pengguna
                             .addOnCompleteListener { dbTask ->
                                 if (dbTask.isSuccessful) {
                                     trySend(AuthResponse.Success)
                                 } else {
-                                    trySend(AuthResponse.Error(dbTask.exception?.message ?: "Error saving user data to database"))
+                                    trySend(AuthResponse.Error(dbTask.exception?.message ?: "Error saving user data to Firestore"))
                                 }
                             }
                     } else {
@@ -74,6 +77,7 @@ class AuthenticationManager(val context: Context) {
             }
         awaitClose()
     }
+
     // Method untuk login dengan email dan password
     fun loginWithEmail(email: String, password: String): Flow<AuthResponse> = callbackFlow {
         auth.signInWithEmailAndPassword(email, password)
@@ -181,6 +185,7 @@ class AuthenticationManager(val context: Context) {
 
 
 
+
     // Method untuk logout
     fun logout() {
         auth.signOut()
@@ -241,10 +246,9 @@ class AuthenticationManager(val context: Context) {
                             "location" to location,
                             "restorant" to restorant
                         )
-
-                        var adminRef = database.getReference("admin")
-                         adminRef.child(userId)
-                            .setValue(userData)
+                        val firestore = FirebaseFirestore.getInstance()
+                        firestore.collection("admin").document(userId)
+                            .set(userData)
                             .addOnSuccessListener {
                                 Log.d(TAG, "User data saved to Firestore")
                                 trySend(AuthResponse.Success).isSuccess
