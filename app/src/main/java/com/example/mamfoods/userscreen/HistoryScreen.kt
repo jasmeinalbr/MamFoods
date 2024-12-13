@@ -67,15 +67,15 @@ fun HistoryScreen(navController: NavController) {
                     Spacer(modifier = Modifier.height(screenHeight * 0.02f))
                 }
 
-//                // List History Item
-//                LazyColumn(modifier = Modifier.fillMaxSize()) {
-//                    items(foodItems) { foodItem ->
-//                        HistoryItem(
-//                            foodItem = foodItem,
-//                            onBuyAgainClick = { navController.navigate("cart") }
-//                        )
-//                    }
-//                }
+                // List History Item
+                LazyColumn(modifier = Modifier.fillMaxSize()) {
+                    items(foodItems) { foodItem ->
+                        HistoryItem(
+                            foodItem = foodItem,
+                            onBuyAgainClick = { navController.navigate("cart") }
+                        )
+                    }
+                }
             }
         }
     }

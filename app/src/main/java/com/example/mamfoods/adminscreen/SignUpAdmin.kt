@@ -1,6 +1,5 @@
 package com.example.mamfoods
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.runtime.Composable
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -28,16 +27,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.mamfoods.AuthResponse
-import com.example.mamfoods.AuthenticationManager
-import com.example.mamfoods.R
 import com.example.mamfoods.ui.theme.Lato
 import com.example.mamfoods.ui.theme.LightGrayColor
 import com.example.mamfoods.ui.theme.RedPrimary
 import com.example.mamfoods.ui.theme.SubText
 import com.example.mamfoods.ui.theme.TitleText
 import com.example.mamfoods.ui.theme.YeonSung
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 @Composable
@@ -115,7 +110,11 @@ fun SignUpAdmin(
             // Dropdown
             var expanded by remember { mutableStateOf(false) }
             var selectedLocation by remember { mutableStateOf("Cibiru") }
-            val locations = listOf("Cibiru", "Bandung", "Jakarta", "Surabaya")
+            val locations = listOf(
+                "Cibiru", "Bandung Wetan", "Bandung Kulon", "Andir", "Bojonegara", "Kiaracondong",
+                "Ujungberung", "Cidadap", "Batununggal", "Buahbatu", "Lengkong", "Panyileukan",
+                "Cimahi", "Cililin", "Sukajadi", "Rancasari", "Sukapura", "Kebon Kelapa"
+            )
 
             Box(
                 modifier = Modifier
@@ -141,14 +140,21 @@ fun SignUpAdmin(
 
                 DropdownMenu(
                     expanded = expanded,
-                    onDismissRequest = { expanded = false }
+                    onDismissRequest = { expanded = false },
+                    modifier = Modifier.width(screenWidth * 0.88f).height(200.dp)
                 ) {
                     locations.forEach { location ->
-                        DropdownMenuItem(onClick = {
-                            selectedLocation = location
-                            expanded = false
-                        }) {
-                            androidx.compose.material.Text(text = location)
+                        DropdownMenuItem(
+                            onClick = {
+                                selectedLocation = location
+                                expanded = false
+                            }
+                        ) {
+                            androidx.compose.material.Text(
+                                text = location,
+                                color = Color.Black,
+                                fontFamily = Lato
+                            )
                         }
                     }
                 }

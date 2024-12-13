@@ -1,27 +1,19 @@
 package com.example.mamfoods
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Scaffold
-
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Modifier
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.mamfoods.adminscreen.AddItemScreen
 import com.example.mamfoods.adminscreen.LoginAdmin
 import com.example.mamfoods.adminscreen.TampilanAdminActivity
-import com.example.mamfoods.userscreen.ButtonNavComponent
 import com.example.mamfoods.userscreen.CartItem
 import com.example.mamfoods.userscreen.CartScreen
 import com.example.mamfoods.userscreen.ChooseLocationScreen
@@ -39,9 +31,8 @@ import com.example.mamfoods.userscreen.ProfileScreen
 import com.example.mamfoods.userscreen.RestaurantDetailsScreen
 import com.example.mamfoods.userscreen.SignUpScreen
 import com.example.mamfoods.userscreen.SplashScreen
-//import com.example.mamfoods.userscreen.getFoodItemByName
-//import com.example.mamfoods.userscreen.getRestaurantByName
-import kotlinx.coroutines.launch
+import com.example.mamfoods.userscreen.getFoodItemByName
+import com.example.mamfoods.userscreen.getRestaurantByName
 
 
 class MainActivity : ComponentActivity() {
@@ -70,16 +61,12 @@ fun AppNavigation() {
             CartItem(foodItem = foodItem, quantity = mutableStateOf(1))
         }.toMutableList()
     }
-    //val productId = "6nmp3UDoxzW726UaHfwh" // ID dokumen di Firestore
 
 
     NavHost(
         navController = navController,
-        startDestination = "home",
+        startDestination = "splash",
     ) {
-        composable("test") {
-            FetchProductData()
-        }
         composable("splash") {
             SplashScreen(
                 onNavigateToOnboarding = {
@@ -103,7 +90,6 @@ fun AppNavigation() {
                     navController.navigate("home") },
                 onSignUpClick = {
                     navController.navigate("usersignup") },
-                onFacebookLoginClick = { }
             )
         }
         composable("usersignup") {
@@ -125,18 +111,18 @@ fun AppNavigation() {
             )
         }
         composable("fooddetails/{foodName}") { backStackEntry ->
-//            val foodName = backStackEntry.arguments?.getString("foodName") ?: ""
-////            val foodItem = getFoodItemByName(name = foodName)
-//            FoodDetailsScreen(
-//                navController = navController,
-////                foodItem = foodItem,
-//                addToCart = { cartItems.add(it) } // Tambahkan item ke keranjang
-//            )
+            val foodName = backStackEntry.arguments?.getString("foodName") ?: ""
+            val foodItem = getFoodItemByName(name = foodName)
+            FoodDetailsScreen(
+                navController = navController,
+                foodItem = foodItem,
+                addToCart = { cartItems.add(it) } // Tambahkan item ke keranjang
+            )
         }
         composable("restaurantdetails/{storeName}") { backStackEntry ->
             val storeName = backStackEntry.arguments?.getString("storeName") ?: ""
-//            val restaurant = getRestaurantByName(name = storeName) // Ambil restaurant berdasarkan nama
-//            RestaurantDetailsScreen(navController = navController, restaurant = restaurant)
+            val restaurant = getRestaurantByName(name = storeName) // Ambil restaurant berdasarkan nama
+            RestaurantDetailsScreen(navController = navController, restaurant = restaurant)
         }
         composable("cart") {
             // Ensure foodItems is available, whether from a ViewModel, state, or passed from another composable
@@ -189,7 +175,7 @@ fun AppNavigation() {
         composable("adminsignup") {
             SignUpAdmin(
                 onLoginClick = { navController.navigate("adminlogin") },
-                onSignUpSuccess = { navController.navigate("addItem") },
+                onSignUpSuccess = { navController.navigate("adminhome") },
             )
         }
 
@@ -199,7 +185,7 @@ fun AppNavigation() {
                     navController.navigate("adminhome")
                 },
                 onBackClick = {
-                    navController.navigate("addItem")
+                    navController.navigate("adminhome")
                 }
             )
         }

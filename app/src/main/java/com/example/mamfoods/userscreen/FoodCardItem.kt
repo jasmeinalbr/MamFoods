@@ -27,6 +27,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.mamfoods.R
 import com.example.mamfoods.ui.theme.BodyText
 import com.example.mamfoods.ui.theme.DetailText
@@ -55,7 +56,9 @@ fun FoodItemCard(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 8.dp)
-                .clickable { onFoodCardClick(item) } // Pass item to onClick callback
+                .clickable {
+
+                    onFoodCardClick(item) } // Pass item to onClick callback
         ) {
             Row(
                 modifier = Modifier
@@ -71,14 +74,9 @@ fun FoodItemCard(
                         .size(70.dp)
                         .clip(RoundedCornerShape(16.dp))
                 ) {
-//                    val imagePainter = painterResource(id = item.img)
-//                    androidx.compose.foundation.Image(
-//                        painter = imagePainter,
-//                        contentDescription = item.name,
-//                        modifier = Modifier.fillMaxSize()
-//                    )
-                    Image(
-                        painter = rememberAsyncImagePainter(model = item.img),
+                    val imagePainter = painterResource(id = item.img)
+                    androidx.compose.foundation.Image(
+                        painter = imagePainter,
                         contentDescription = item.name,
                         modifier = Modifier.fillMaxSize()
                     )

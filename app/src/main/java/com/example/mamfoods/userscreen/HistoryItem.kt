@@ -43,13 +43,13 @@ fun HistoryItem(
                 .padding(12.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-//            Image(
-//                painter = painterResource(foodItem.img),
-//                contentDescription = foodItem.name,
-//                modifier = Modifier
-//                    .size(70.dp)
-//                    .clip(RoundedCornerShape(16.dp))
-//            )
+            Image(
+                painter = painterResource(foodItem.img),
+                contentDescription = foodItem.name,
+                modifier = Modifier
+                    .size(70.dp)
+                    .clip(RoundedCornerShape(16.dp))
+            )
 
             Spacer(modifier = Modifier.width(16.dp))
 

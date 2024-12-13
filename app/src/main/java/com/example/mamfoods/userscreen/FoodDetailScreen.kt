@@ -1,5 +1,6 @@
 package com.example.mamfoods.userscreen
 
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -63,15 +64,12 @@ fun FoodDetailsScreen(
     // Create CartItem
     val cartItem = CartItem(foodItem = foodItem, quantity = quantity)
 
-    // get User id current user
-    val userId = FirebaseAuth.getInstance().currentUser?.uid
+//    // get User id current user
+//    val userId = FirebaseAuth.getInstance().currentUser?.uid
+//
+//    val cartManager = CartManager(context)
 
-    val cartManager = CartManager(context)
-
-
-
-
-
+    Log.d("detail", "$foodItem")
 
 
     BoxWithConstraints (
@@ -106,16 +104,16 @@ fun FoodDetailsScreen(
             Spacer(modifier = Modifier.height(screenHeight * 0.02f))
 
             // Image
-//            Image(
-//                painter = painterResource(id = foodItem.img),
-//                contentDescription = "Pancake Image",
-//                modifier = Modifier
-//                    .fillMaxWidth()
-//                    .height(screenHeight * 0.2f)
-//                    .clip(RoundedCornerShape(10.dp))
-//                    .align(Alignment.CenterHorizontally),
-//                contentScale = ContentScale.FillWidth
-//            )
+            Image(
+                painter = painterResource(id = foodItem.img),
+                contentDescription = "Pancake Image",
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(screenHeight * 0.2f)
+                    .clip(RoundedCornerShape(10.dp))
+                    .align(Alignment.CenterHorizontally),
+                contentScale = ContentScale.FillWidth
+            )
 
             Spacer(modifier = Modifier.height(screenHeight * 0.02f))
 
@@ -182,15 +180,9 @@ fun FoodDetailsScreen(
             Spacer(modifier = Modifier.weight(3f))
 
             Button(
-
                 onClick = {
-                    if (userId != null) {
-                        cartManager.addCartItem(userId, cartItem)
-                        Toast.makeText(context, "Item added to cart", Toast.LENGTH_SHORT).show()
-                    } else {
-                        Toast.makeText(context, "Please log in to add items to your cart", Toast.LENGTH_SHORT).show()
-                    }
-
+                    Toast.makeText(context, "Item added to cart", Toast.LENGTH_SHORT).show()
+                    navController.navigate("cart")
                 },
                 modifier = Modifier
                     .fillMaxWidth()

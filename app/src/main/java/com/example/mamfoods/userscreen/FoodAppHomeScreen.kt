@@ -65,13 +65,6 @@ fun FoodAppHomeScreen(
     val searchText = remember { mutableStateOf("") }
     var foodItems by remember { mutableStateOf<List<FoodItem>>(emptyList()) }
 
-    LaunchedEffect(Unit){
-        val db = Firebase.firestore
-        val ref = db.collection("products").get().await()
-        foodItems = ref.toObjects(FoodItem::class.java)
-
-    }
-
 
     val bannerImages = listOf(
         painterResource(id = R.drawable.banner1),
@@ -190,21 +183,23 @@ fun FoodAppHomeScreen(
                 Spacer(modifier = Modifier.height(screenHeight * 0.01f))
 
                 // Popular Items - Only show 3 items
-                LazyColumn {
-                    items(foodItems) { item ->
-                        FoodItemCard(
-                            item = item,
-                            onFoodCardClick = { selectedFoodItem ->
-                                // Navigasi ke detail produk
-                                navController.navigate("fooddetails/${selectedFoodItem.name}")
-                            }
-                        )
+                Column {
+                    foodItems.take(3).forEach {
+                        item ->
+                            FoodItemCard(
+                                item = item,
+                                onFoodCardClick = { selectedFoodItem ->
+                                    // Navigasi ke detail produk
+                                    navController.navigate("fooddetails/${selectedFoodItem.name}")
+                                }
+                            )
+                        }
                     }
                 }
             }
         }
     }
-}
+
 
 
 @Preview(showBackground = true, apiLevel = 34)
