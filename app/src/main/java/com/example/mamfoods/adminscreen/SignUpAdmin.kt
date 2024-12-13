@@ -42,11 +42,8 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun SignUpAdmin(
-    onSignUpClick: () -> Unit,
-    onFacebookSignUpClick: () -> Unit,
-    onGoogleSignUpClick: () -> Unit,
     onLoginClick: () -> Unit,
-    // viewModel: AuthViewModel,
+
      onSignUpSuccess: () -> Unit
 ) {
     var email by remember { mutableStateOf("") }
@@ -334,9 +331,7 @@ fun SignUpAdmin(
 @Composable
 fun PreviewSignup() {
     SignUpAdmin(
-        onSignUpClick = {},
-        onFacebookSignUpClick = {},
-        onGoogleSignUpClick = {},
+
         onLoginClick = {},
         onSignUpSuccess = {}
     )

@@ -139,17 +139,17 @@ fun LoginAdmin(
             Button(
                 onClick = {
                isLoading = true
-//                authenticationManager.loginAdmin(email, password)
-//                    .onEach {response->
-//                        if(response is AuthResponse.Success){
-//                            onLoginSuccess()
-//
-//                        }else if(response is AuthResponse.Error){
-//                            errorMessage = response.message
-//                        }
-//                    }
-//                    .launchIn(coroutineScope)
-//
+                authenticationManager.loginAdmin(email, password)
+                    .onEach {response->
+                        if(response is AuthResponse.Success){
+                            onLoginSuccess()
+
+                        }else if(response is AuthResponse.Error){
+                            errorMessage = response.message
+                        }
+                    }
+                    .launchIn(coroutineScope)
+
                 },
                 modifier = Modifier
                     .height(57.dp)

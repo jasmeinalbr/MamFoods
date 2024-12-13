@@ -163,7 +163,7 @@ fun AppNavigation() {
             HistoryScreen(navController)
         }
         composable("adminsplash") {
-            TampilanAdminActivity (
+            TampilanAdminActivity(
                 onNavigateToLoginAdmin = {
                     navController.navigate("adminlogin")
                 }
@@ -180,8 +180,7 @@ fun AppNavigation() {
         }
 
         composable("adminsignup") {
-            SignUpScreen(
-                onGoogleSignUpClick = { /* Implement Google login */ },
+            SignUpAdmin(
                 onLoginClick = { navController.navigate("adminlogin") },
                 onSignUpSuccess = { navController.navigate("addItem") },
             )

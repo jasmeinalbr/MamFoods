@@ -21,7 +21,7 @@ import com.example.mamfoods.ui.theme.SubText
 import com.example.mamfoods.ui.theme.TitleText
 
 @Composable
-fun TampilanAdminActivity(onNavigateToOnboarding: () -> Unit) {
+fun TampilanAdminActivity(onNavigateToLoginAdmin: () -> Unit) {
 
     BoxWithConstraints(
         modifier = Modifier.fillMaxSize()
@@ -57,7 +57,8 @@ fun TampilanAdminActivity(onNavigateToOnboarding: () -> Unit) {
 
         LaunchedEffect(Unit) {
             delay(3000) // Tunggu 3 detik
-            onNavigateToOnboarding()
+            onNavigateToLoginAdmin()
+
         }
     }
 
@@ -66,5 +67,5 @@ fun TampilanAdminActivity(onNavigateToOnboarding: () -> Unit) {
 @Preview(showBackground = true)
 @Composable
 fun AdminActivityPreview() {
-    TampilanAdminActivity(onNavigateToOnboarding = {})
+    TampilanAdminActivity( onNavigateToLoginAdmin = {})
 }
