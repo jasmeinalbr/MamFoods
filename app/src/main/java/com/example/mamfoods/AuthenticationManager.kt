@@ -35,7 +35,7 @@ class AuthenticationManager(val context: Context) {
 
     private val auth = FirebaseAuth.getInstance()
     private val database = Firebase.database
-    private val userRef = database.getReference("users") // Referensi untuk node users
+
 
 
     // Method untuk membuat akun dengan email dan password

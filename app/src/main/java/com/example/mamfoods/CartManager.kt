@@ -1,25 +1,58 @@
 package com.example.mamfoods
 
+import android.content.Context
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.example.mamfoods.userscreen.CartItem
 import com.example.mamfoods.userscreen.FoodItem
 
-class CartManager {
+class CartManager(val context : Context) {
 
     private val database: FirebaseDatabase = FirebaseDatabase.getInstance()
 
     // Menambahkan item ke cart
-    fun addCartItem(userId: String, cartItem: CartItem) {
-        val cartRef = database.reference.child("carts").child(userId).child(cartItem.foodItem.name)
+    // saya ingin menyimpannya cart->userId->foodItem
+    // cart->userId->foodItem->quantity
+    // cart->userId->foodItem->price
+    // cart->userId->foodItem->img
+    // cart->userId->foodItem->name
+    // cart->userId->foodItem->restaurant
+    /*
+    * package com.example.mamfoods.model
 
-        cartRef.setValue(cartItem)
+data class Product(
+    val name: String,
+    val price: Double,
+    var image: String, // Ubah menjadi var
+    val description: String,
+    val ingredients: String,
+    val restaurant: String
+)
+
+    * */
+
+
+    fun addCartItem(userId: String, cartItem: CartItem) {
+      /*  data class Product(
+            val name: String,
+            val price: Double,
+            var image: String, // Ubah menjadi var
+            val description: String,
+            val ingredients: String,
+            val restaurant: String
+        )
+
+        * */
+
+        val cartItemRef = database.reference.child("carts").child(userId).child(cartItem.foodItem.name)
+        cartItemRef.setValue(cartItem)
             .addOnSuccessListener {
                 println("Cart item added successfully!")
             }
             .addOnFailureListener {
                 println("Failed to add cart item: ${it.message}")
             }
+
     }
 
     // Menghapus item dari cart

@@ -5,5 +5,6 @@ data class Product(
     val price: Double,
     var image: String, // Ubah menjadi var
     val description: String,
-    val ingredients: String
+    val ingredients: String,
+    val restaurant: String
 )
