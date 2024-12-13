@@ -4,6 +4,7 @@ import android.graphics.Bitmap
 import android.app.Activity
 import android.content.Intent
 import android.net.Uri
+import android.provider.MediaStore
 import android.widget.Toast
 import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -22,15 +23,14 @@ import androidx.compose.ui.unit.dp
 import com.example.mamfoods.model.Product
 import com.example.mamfoods.ui.theme.TitleText
 import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.StorageReference
 import androidx.compose.ui.platform.LocalContext
+import com.example.mamfoods.ImageUploadHandler
 
 // Define the red gradient color
 val RedGradient1 = Color(0xFFE85353)
 
 @Composable
-fun AddItemScreen(onBackClick: () -> Unit) {
+fun AddItemScreen(onBackClick: () -> Unit, onAddItemClick:()->Unit) {
     // Remember state for the input fields
     val itemName = remember { mutableStateOf("") }
     val itemPrice = remember { mutableStateOf("") }
@@ -69,24 +69,19 @@ fun AddItemScreen(onBackClick: () -> Unit) {
             ingredients = ingredientList.split(",").map { it.trim() }.toString()
         )
 
-        // Upload the image to Firebase Storage if available
-        if (imageUri.value != null) {
-            val storageReference: StorageReference =
-                FirebaseStorage.getInstance().reference.child("images/${imageUri.value!!.lastPathSegment}")
-
-            storageReference.putFile(imageUri.value!!)
-                .addOnSuccessListener {
-                    storageReference.downloadUrl.addOnSuccessListener { uri ->
-                        newProduct.image = uri.toString()
-                        uploadProductToDatabase(database, newProduct, context)
-                    }
-                }
-                .addOnFailureListener { e ->
-                    Toast.makeText(context, "Failed to upload image: ${e.message}", Toast.LENGTH_SHORT).show()
-                }
-        } else {
-            uploadProductToDatabase(database, newProduct, context)
+        try {
+            // Upload image to Cloudinary
+            val imageUploadHandler = ImageUploadHandler()
+            val bitmap = MediaStore.Images.Media.getBitmap(context.contentResolver, imageUri.value)
+            imageUploadHandler.uploadImage(bitmap) { imageUrl ->
+                newProduct.image = imageUrl
+                uploadProductToDatabase(database, newProduct, context)
+            }
+        } catch (e: Exception) {
+            Toast.makeText(context, "Failed to upload image: ${e.message}", Toast.LENGTH_SHORT).show()
+            Log.e("ImageUpload", "Image upload error", e)  // Log image upload error for debugging
         }
+
     }
 
     // Activity result launcher for selecting image from gallery

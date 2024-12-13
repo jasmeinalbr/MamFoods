@@ -1,5 +1,6 @@
 package com.example.mamfoods.adminscreen
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -48,6 +49,9 @@ fun TampilanAdminActivity(onNavigateToLoginAdmin: () -> Unit) {
 
     androidx.compose.runtime.LaunchedEffect(Unit) {
         kotlinx.coroutines.delay(3000) // Tunggu 3 detik
+
+        Log.d("TampilanAdminActivity", "Navigate to LoginAdmin")
+
         onNavigateToLoginAdmin()
     }
 

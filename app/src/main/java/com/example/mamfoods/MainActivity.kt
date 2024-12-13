@@ -1,6 +1,7 @@
 package com.example.mamfoods
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.padding
@@ -16,6 +17,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.mamfoods.adminscreen.AddItemScreen
 import com.example.mamfoods.adminscreen.LoginAdmin
 import com.example.mamfoods.adminscreen.TampilanAdminActivity
 import com.example.mamfoods.userscreen.ButtonNavComponent
@@ -167,6 +169,35 @@ fun AppNavigation() {
                 }
             )
         }
+
+        composable("adminlogin") {
+            LoginAdmin(
+                onLoginSuccess = {
+                    navController.navigate("adminhome") },
+                onSignUpClick = {
+                    navController.navigate("adminsignup") },
+            )
+        }
+
+        composable("adminsignup") {
+            SignUpScreen(
+                onGoogleSignUpClick = { /* Implement Google login */ },
+                onLoginClick = { navController.navigate("adminlogin") },
+                onSignUpSuccess = { navController.navigate("addItem") },
+            )
+        }
+
+        composable("addItem") {
+            AddItemScreen(
+                onAddItemClick = {
+                    navController.navigate("adminhome")
+                },
+                onBackClick = {
+                    navController.navigate("addItem")
+                }
+            )
+        }
+
     }
 }
 

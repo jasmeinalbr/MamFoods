@@ -198,7 +198,26 @@ class AuthenticationManager(val context: Context) {
         auth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    trySend(AuthResponse.Success)
+                    // cek di database admin apakah email ada
+                    val userId = auth.currentUser?.uid
+
+                    if (userId != null) {
+                        val firestore = FirebaseFirestore.getInstance()
+                        firestore.collection("admin").document(userId)
+                            .get()
+                            .addOnSuccessListener { document ->
+                                if (document.exists()) {
+                                    trySend(AuthResponse.Success)
+                                } else {
+                                    trySend(AuthResponse.Error("User not found in admin database"))
+                                }
+                            }
+                            .addOnFailureListener { e ->
+                                trySend(AuthResponse.Error("Error checking user in admin database: ${e.message}"))
+                            }
+                    } else {
+                        trySend(AuthResponse.Error("User ID is null"))
+                    }
                 } else {
                     trySend(AuthResponse.Error(task.exception?.message ?: "Error logging in"))
                 }
@@ -247,5 +266,85 @@ class AuthenticationManager(val context: Context) {
             }
         }
     }
+
+    fun signInWithGoogleasAdmin(): Flow<AuthResponse> = callbackFlow {
+        val googleIdOption = GetGoogleIdOption.Builder()
+            .setFilterByAuthorizedAccounts(false)
+            .setServerClientId(context.getString(R.string.web_client_id))
+            .setNonce(createNonce())
+            .setAutoSelectEnabled(false)
+            .build()
+
+        val request = GetCredentialRequest.Builder()
+            .addCredentialOption(googleIdOption)
+            .build()
+
+        try {
+            val credentialManager = CredentialManager.create(context)
+            val result = credentialManager.getCredential(context = context, request = request)
+            val credential = result.credential
+
+            if (credential is CustomCredential) {
+                if (credential.type == GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL) {
+                    try {
+                        val googleIdTokenCredential = GoogleIdTokenCredential.createFrom(credential.data)
+
+                        val firebaseCredential = GoogleAuthProvider.getCredential(googleIdTokenCredential.idToken, null)
+                        auth.signInWithCredential(firebaseCredential)
+                            .addOnCompleteListener { it ->
+                                if (it.isSuccessful) {
+                                    val user = auth.currentUser
+                                    val userName = user?.displayName ?: "Unknown"
+                                    val userEmail = user?.email ?: "Unknown"
+                                    val userPhotoUrl = user?.photoUrl?.toString() ?: ""
+
+                                    // Menyimpan data pengguna ke Firestore
+                                    val firestore = FirebaseFirestore.getInstance()
+                                    val userId = auth.currentUser?.uid
+                                    val userData = hashMapOf(
+                                        "name" to userName,
+                                        "email" to userEmail,
+                                        "photoUrl" to userPhotoUrl
+                                    )
+                                    userId?.let {
+                                        firestore.collection("admin").document(it)
+                                            .set(userData)
+                                            .addOnSuccessListener {
+                                                Log.d(TAG, "User data saved to Firestore")
+                                                trySend(AuthResponse.Success)
+                                            }
+                                            .addOnFailureListener { e ->
+                                                Log.e(TAG, "Error saving user data to Firestore", e)
+                                                trySend(AuthResponse.Error("Error saving user data: ${e.message}"))
+
+                                            }
+                                    }
+
+
+                                } else {
+                                    trySend(AuthResponse.Error(message = it.exception?.message ?: "Error during Firebase sign-in"))
+                                }
+                            }
+                    } catch (e: Exception) {
+                        Log.e(TAG, "signInWithGoogle: Error processing Google credentials", e)
+                        trySend(AuthResponse.Error("Error processing Google credentials"))
+                    }
+                } else {
+                    trySend(AuthResponse.Error("Invalid credential type"))
+                }
+            } else {
+                trySend(AuthResponse.Error("Invalid credential"))
+            }
+        } catch (e: GetCredentialCancellationException) {
+            Log.e(TAG, "signInWithGoogle: User canceled the login process", e)
+            trySend(AuthResponse.Error("Login dibatalkan"))
+        } catch (e: Exception) {
+            Log.e(TAG, "signInWithGoogle: General error", e)
+            trySend(AuthResponse.Error("Error signing in with Google"))
+        }
+
+        awaitClose()
+    }
+
 
 }

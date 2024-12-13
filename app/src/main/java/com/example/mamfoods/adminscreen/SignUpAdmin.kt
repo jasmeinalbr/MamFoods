@@ -354,6 +354,17 @@ fun SignUpAdmin(
             )
         )
         Spacer(modifier = Modifier.height(8.dp))
+
+        if (errorMessage != null) {
+            Spacer(modifier = Modifier.height(8.dp))
+            androidx.compose.material.Text(
+                text = errorMessage!!,
+                color = Color.Red,
+                fontSize = 14.sp,
+                textAlign = TextAlign.Center
+            )
+        }
+
     }
 }
 

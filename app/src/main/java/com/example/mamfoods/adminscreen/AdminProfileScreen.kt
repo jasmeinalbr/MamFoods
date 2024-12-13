@@ -39,7 +39,7 @@ fun AdminProfileScreen(onBackClick: () -> Unit) {
             return
         }
 
-        val adminRef = database.getReference("admin/profile")
+        val adminRef = database.getReference("restaurants")
 
         val updatedProfile = mapOf(
             "name" to name,

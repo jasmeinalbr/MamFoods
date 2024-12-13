@@ -58,8 +58,12 @@ fun FoodDetailsScreen(
     // Use remember inside a Composable to hold the state
     val quantity = remember { mutableStateOf(1) }
 
+
     // Create CartItem
     val cartItem = CartItem(foodItem = foodItem, quantity = quantity)
+    // get current user id
+
+
 
     BoxWithConstraints (
         modifier = Modifier.fillMaxSize().background(Color.White)
@@ -169,8 +173,9 @@ fun FoodDetailsScreen(
             Spacer(modifier = Modifier.weight(3f))
 
             Button(
+
                 onClick = {
-                    // Create CartItem with MutableState for quantity
+
                     quantity.value += 1
                     addToCart(cartItem) // Add CartItem to cart
                     Toast.makeText(context, "Your order has been added to the cart", Toast.LENGTH_SHORT).show()
@@ -192,6 +197,9 @@ fun FoodDetailsScreen(
         }
     }
 }
+
+
+
 
 @Preview(showBackground = true)
 @Composable

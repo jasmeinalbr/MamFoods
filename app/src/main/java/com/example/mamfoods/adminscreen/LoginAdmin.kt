@@ -15,6 +15,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -22,12 +23,15 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.mamfoods.AuthResponse
+import com.example.mamfoods.AuthenticationManager
 import com.example.mamfoods.R
 import com.example.mamfoods.ui.theme.*
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 
 @Composable
 fun LoginAdmin(
-  //  viewModel: AuthViewModel,
     onLoginSuccess: () -> Unit,
     onSignUpClick: () -> Unit
 ) {
@@ -35,6 +39,13 @@ fun LoginAdmin(
     var password by remember { mutableStateOf("") }
     var isLoading by remember { mutableStateOf(false) }
     var errorMessage by remember { mutableStateOf<String?>(null) }
+
+    val context = LocalContext.current
+    val  authenticationManager = remember {
+        AuthenticationManager(context)
+    }
+    val coroutineScope = rememberCoroutineScope()
+
 
 
     Column(
@@ -108,20 +119,17 @@ fun LoginAdmin(
         Button(
 
             onClick = {
-//                isLoading = true
-//                errorMessage = null
-//                viewModel.login(
-//                    email = email,
-//                    password = password,
-//                    onSuccess = {
-//                        isLoading = false
-//                        onLoginSuccess()
-//                    },
-//                    onError = {
-//                        isLoading = false
-//                        errorMessage = it
-//                    }
-             //   )
+                isLoading = true
+                authenticationManager.loginAdmin(email, password)
+                    .onEach {response->
+                        if(response is AuthResponse.Success){
+                            onLoginSuccess()
+
+                        }else if(response is AuthResponse.Error){
+                            errorMessage = response.message
+                        }
+                    }
+                    .launchIn(coroutineScope)
             },
             modifier = Modifier
                 .height(57.dp)
