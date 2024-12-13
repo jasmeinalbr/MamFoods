@@ -39,6 +39,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.example.mamfoods.CartManager
 import com.example.mamfoods.R
 import com.example.mamfoods.ui.theme.BodyText
 import com.example.mamfoods.ui.theme.DarkRed
@@ -47,6 +48,7 @@ import com.example.mamfoods.ui.theme.RedPrimary
 import com.example.mamfoods.ui.theme.SubText
 import com.example.mamfoods.ui.theme.TitlePage
 import com.example.mamfoods.ui.theme.TitleText
+import com.google.firebase.auth.FirebaseAuth
 
 @Composable
 fun FoodDetailsScreen(
@@ -60,6 +62,17 @@ fun FoodDetailsScreen(
 
     // Create CartItem
     val cartItem = CartItem(foodItem = foodItem, quantity = quantity)
+
+    // get User id current user
+    val userId = FirebaseAuth.getInstance().currentUser?.uid
+
+    val cartManager = CartManager(context)
+
+
+
+
+
+
 
     BoxWithConstraints (
         modifier = Modifier.fillMaxSize().background(Color.White)
@@ -169,12 +182,15 @@ fun FoodDetailsScreen(
             Spacer(modifier = Modifier.weight(3f))
 
             Button(
+
                 onClick = {
-                    // Create CartItem with MutableState for quantity
-                    quantity.value += 1
-                    addToCart(cartItem) // Add CartItem to cart
-                    Toast.makeText(context, "Your order has been added to the cart", Toast.LENGTH_SHORT).show()
-                    navController.navigate("cart")
+                    if (userId != null) {
+                        cartManager.addCartItem(userId, cartItem)
+                        Toast.makeText(context, "Item added to cart", Toast.LENGTH_SHORT).show()
+                    } else {
+                        Toast.makeText(context, "Please log in to add items to your cart", Toast.LENGTH_SHORT).show()
+                    }
+
                 },
                 modifier = Modifier
                     .fillMaxWidth()

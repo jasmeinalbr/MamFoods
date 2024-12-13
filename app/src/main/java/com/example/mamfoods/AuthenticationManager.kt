@@ -35,21 +35,20 @@ class AuthenticationManager(val context: Context) {
 
     private val auth = FirebaseAuth.getInstance()
     private val database = Firebase.database
-    private val userRef = database.getReference("users") // Referensi untuk node users
 
 
-    fun createAccountWithEmail(email: String, password: String,name: String): Flow<AuthResponse> = callbackFlow {
+
+    // Method untuk membuat akun dengan email dan password
+    fun createAccountWithEmail(email: String, password: String, name: String): Flow<AuthResponse> = callbackFlow {
         auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     val user = auth.currentUser // Mendapatkan user yang baru terdaftar
                     val uid = user?.uid // Mendapatkan UID pengguna
 
-
-                    // Membuat data pengguna di Realtime Database
                     if (uid != null) {
-                        // Membuat data pengguna baru di node "users" dengan UID sebagai key
-                        val userData = mapOf(
+                        // Membuat data pengguna untuk disimpan ke Firestore
+                        val userData = hashMapOf(
                             "email" to email,
                             "uid" to uid,
                             "name" to name,
@@ -57,12 +56,16 @@ class AuthenticationManager(val context: Context) {
                             "phone" to null
                         )
 
-                        userRef.child(uid).setValue(userData)
+                        // Menyimpan data pengguna ke Firestore
+                        val firestore = FirebaseFirestore.getInstance()
+                        firestore.collection("users")  // Mengakses koleksi 'users' di Firestore
+                            .document(uid)  // Menyimpan data dengan UID sebagai ID dokumen
+                            .set(userData)  // Menyimpan data pengguna
                             .addOnCompleteListener { dbTask ->
                                 if (dbTask.isSuccessful) {
                                     trySend(AuthResponse.Success)
                                 } else {
-                                    trySend(AuthResponse.Error(dbTask.exception?.message ?: "Error saving user data to database"))
+                                    trySend(AuthResponse.Error(dbTask.exception?.message ?: "Error saving user data to Firestore"))
                                 }
                             }
                     } else {
@@ -74,6 +77,7 @@ class AuthenticationManager(val context: Context) {
             }
         awaitClose()
     }
+
     // Method untuk login dengan email dan password
     fun loginWithEmail(email: String, password: String): Flow<AuthResponse> = callbackFlow {
         auth.signInWithEmailAndPassword(email, password)
@@ -181,6 +185,7 @@ class AuthenticationManager(val context: Context) {
 
 
 
+
     // Method untuk logout
     fun logout() {
         auth.signOut()
@@ -198,7 +203,26 @@ class AuthenticationManager(val context: Context) {
         auth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    trySend(AuthResponse.Success)
+                    // cek di database admin apakah email ada
+                    val userId = auth.currentUser?.uid
+
+                    if (userId != null) {
+                        val firestore = FirebaseFirestore.getInstance()
+                        firestore.collection("admin").document(userId)
+                            .get()
+                            .addOnSuccessListener { document ->
+                                if (document.exists()) {
+                                    trySend(AuthResponse.Success)
+                                } else {
+                                    trySend(AuthResponse.Error("User not found in admin database"))
+                                }
+                            }
+                            .addOnFailureListener { e ->
+                                trySend(AuthResponse.Error("Error checking user in admin database: ${e.message}"))
+                            }
+                    } else {
+                        trySend(AuthResponse.Error("User ID is null"))
+                    }
                 } else {
                     trySend(AuthResponse.Error(task.exception?.message ?: "Error logging in"))
                 }
@@ -216,6 +240,7 @@ class AuthenticationManager(val context: Context) {
                     Log.d(TAG, "createAccountAdmin: Account created successfully")
                     val userId = auth.currentUser?.uid
                     if (userId != null) {
+                        Log.d(TAG, "createAccountAdmin: User ID: $userId")
                         val userData = hashMapOf(
                             "email" to email,
                             "location" to location,
@@ -229,10 +254,21 @@ class AuthenticationManager(val context: Context) {
                                 trySend(AuthResponse.Success).isSuccess
                             }
                             .addOnFailureListener { e ->
+                                // hapus akun yang baru di daftarkan
+                                auth.currentUser?.delete()
+                                    ?.addOnCompleteListener {
+                                        Log.d(TAG, "Account deleted")
+                                    }
+                                    ?.addOnFailureListener {
+                                        Log.e(TAG, "Error deleting account", it)
+                                    }
+
+
                                 Log.e(TAG, "Error saving user data to Firestore", e)
                                 trySend(AuthResponse.Error("Error saving user data: ${e.message}")).isSuccess
                             }
                     } else {
+                        Log.d(TAG, "createAccountAdmin: User ID is null")
                         trySend(AuthResponse.Error("User ID is null")).isSuccess
                     }
                 } else {
@@ -247,5 +283,7 @@ class AuthenticationManager(val context: Context) {
             }
         }
     }
+
+
 
 }
