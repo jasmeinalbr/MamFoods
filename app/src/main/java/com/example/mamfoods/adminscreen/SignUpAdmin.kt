@@ -1,5 +1,6 @@
-package com.example.mamfoods.adminscreen
+package com.example.mamfoods
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.runtime.Composable
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -54,258 +55,229 @@ fun SignUpAdmin(
     var passwordVisible by remember { mutableStateOf(false) }
     var errorMessage by remember { mutableStateOf<String?>(null) }
 
-    val context = LocalContext.current
-    val  authenticationManager = remember {
-        AuthenticationManager(context)
-    }
-    val coroutineScope = rememberCoroutineScope()
-
-
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+    BoxWithConstraints(
+        modifier = Modifier.fillMaxSize()
     ) {
-        Spacer(modifier = Modifier.height(50.dp))
+        val screenWidth = maxWidth
+        val screenHeight = maxHeight
+        val context = LocalContext.current
+        val  authenticationManager = remember {
+            AuthenticationManager(context)
+        }
+        val coroutineScope = rememberCoroutineScope()
 
-        Image(
-            painter = painterResource(id = R.drawable.logo),
-            contentDescription = "Logo Mam Foods",
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-        Text(
-            text = "Mam Foods",
-            textAlign = TextAlign.Center,
-            style = TitleText
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-        Text(
-            text = "Sign Up Here For You",
-            fontSize = 14.sp,
-            textAlign = TextAlign.Center,
-            style = SubText
-        )
-        Text(
-            text = "Admin Dasboard",
-            fontSize = 14.sp,
-            textAlign = TextAlign.Center,
-            style = SubText
-        )
-        Spacer(modifier = Modifier.height(15.dp))
-        androidx.compose.material.Text(
-            text = "Choose Your Location",
-            fontFamily = YeonSung,
-            fontSize = 14.sp,
-            color = RedPrimary,
-            textAlign = TextAlign.Start,
+
+        Column(
             modifier = Modifier
-                .padding(top = 16.dp)
-                .padding(bottom = 16.dp)
-                .align(Alignment.Start)
-        )
-
-        Spacer(modifier = Modifier.height(2.dp))
-
-        // Dropdown
-        var expanded by remember { mutableStateOf(false) }
-        var selectedLocation by remember { mutableStateOf("Cibiru") }
-        val locations = listOf("Cibiru", "Bandung", "Jakarta", "Surabaya")
-
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(Color.White, RoundedCornerShape(8.dp))
-                .border(1.dp, Color.LightGray, RoundedCornerShape(8.dp))
+                .fillMaxSize()
+                .padding(horizontal = screenWidth * 0.05f),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Row(
+            Spacer(modifier = Modifier.height(screenHeight * 0.05f))
+
+            Image(
+                painter = painterResource(id = R.drawable.logo),
+                contentDescription = "Logo Mam Foods",
+                modifier = Modifier.size(screenHeight * 0.25f)
+            )
+            Spacer(modifier = Modifier.height(screenHeight * 0.01f))
+            Text(
+                text = "Mam Foods",
+                textAlign = TextAlign.Center,
+                style = TitleText,
+                fontSize = (screenWidth * 0.08f).value.sp
+            )
+            Spacer(modifier = Modifier.height(screenHeight * 0.01f))
+            Text(
+                text = "Sign Up Here For You",
+                fontSize = (screenWidth * 0.045f).value.sp,
+                textAlign = TextAlign.Center,
+                style = SubText
+            )
+            Text(
+                text = "Admin Dasboard",
+                fontSize = (screenWidth * 0.045f).value.sp,
+                textAlign = TextAlign.Center,
+                style = SubText
+            )
+            Spacer(modifier = Modifier.height(screenHeight * 0.02f))
+            androidx.compose.material.Text(
+                text = "Choose Your Location",
+                fontFamily = YeonSung,
+                fontSize = (screenWidth * 0.045f).value.sp,
+                color = RedPrimary,
+                textAlign = TextAlign.Start,
+                modifier = Modifier
+                    .padding(top = 16.dp)
+                    .padding(bottom = 16.dp)
+                    .align(Alignment.Start)
+            )
+
+            Spacer(modifier = Modifier.height(screenHeight * 0.001f))
+
+            // Dropdown
+            var expanded by remember { mutableStateOf(false) }
+            var selectedLocation by remember { mutableStateOf("Cibiru") }
+            val locations = listOf("Cibiru", "Bandung", "Jakarta", "Surabaya")
+
+            Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 12.dp)
-                    .clickable { expanded = !expanded },
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
+                    .background(Color.White, RoundedCornerShape(8.dp))
+                    .border(1.dp, Color.LightGray, RoundedCornerShape(8.dp))
             ) {
-                androidx.compose.material.Text(
-                    text = selectedLocation,
-                    color = Color.Black,
-                    fontFamily = Lato
-                )
-                Icon(imageVector = Icons.Default.ArrowDropDown, contentDescription = "Dropdown Icon")
-            }
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp, vertical = 12.dp)
+                        .clickable { expanded = !expanded },
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    androidx.compose.material.Text(
+                        text = selectedLocation,
+                        color = Color.Black,
+                        fontFamily = Lato
+                    )
+                    Icon(imageVector = Icons.Default.ArrowDropDown, contentDescription = "Dropdown Icon")
+                }
 
-            DropdownMenu(
-                expanded = expanded,
-                onDismissRequest = { expanded = false }
-            ) {
-                locations.forEach { location ->
-                    DropdownMenuItem(onClick = {
-                        selectedLocation = location
-                        expanded = false
-                    }) {
-                        androidx.compose.material.Text(text = location)
+                DropdownMenu(
+                    expanded = expanded,
+                    onDismissRequest = { expanded = false }
+                ) {
+                    locations.forEach { location ->
+                        DropdownMenuItem(onClick = {
+                            selectedLocation = location
+                            expanded = false
+                        }) {
+                            androidx.compose.material.Text(text = location)
+                        }
                     }
                 }
             }
-        }
-        Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(screenHeight * 0.01f))
 
-        // Name field
-//        OutlinedTextField(
-//            value = name,
-//            onValueChange = { name = it },
-//            label = {
-//                Text(
-//                    text = "Name",
-//                    color = Color.LightGray,
-//                    fontSize = 14.sp,
-//                    fontFamily = Lato,
-//                    letterSpacing = 1.5.sp,
-//                )
-//            },
-//            leadingIcon = {
-//                Icon(
-//                    painter = painterResource(id = R.drawable.user),
-//                    contentDescription = "User Icon",
-//                    tint = Color.Black,
-//                    modifier = Modifier.size(24.dp)
-//                )
-//            },
-//            colors = TextFieldDefaults.outlinedTextFieldColors(
-//                textColor = Color.Black,
-//                focusedBorderColor = LightGrayColor,
-//                unfocusedBorderColor = LightGrayColor,
-//                backgroundColor = Color.White,
-//                cursorColor = Color.Black
-//            ),
-//            shape = RoundedCornerShape(15.dp),
-//            modifier = Modifier
-//                .fillMaxWidth()
-//                .height(57.dp),
-//        )
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        // Name Restaurant field
-        OutlinedTextField(
-            value = name,
-            onValueChange = { name = it },
-            label = {
-                Text(
-                    text = "Name Of Restaurant",
-                    color = Color.LightGray,
-                    fontSize = 14.sp,
-                    fontFamily = Lato,
-                    letterSpacing = 1.5.sp,
-                )
-            },
-            leadingIcon = {
-                Icon(
-                    painter = painterResource(id = R.drawable.home),
-                    contentDescription = "User Icon",
-                    tint = Color.Black,
-                    modifier = Modifier.size(24.dp)
-                )
-            },
-            colors = TextFieldDefaults.outlinedTextFieldColors(
-                textColor = Color.Black,
-                focusedBorderColor = LightGrayColor,
-                unfocusedBorderColor = LightGrayColor,
-                backgroundColor = Color.White,
-                cursorColor = Color.Black
-            ),
-            shape = RoundedCornerShape(15.dp),
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(57.dp),
-        )
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        // Email field
-        OutlinedTextField(
-            value = email,
-            onValueChange = { email = it },
-            label = {
-                Text(
-                    text = "Email or Phone Number",
-                    color = Color.LightGray,
-                    fontSize = 14.sp,
-                    fontFamily = Lato,
-                    letterSpacing = 1.5.sp,
-                )
-            },
-            leadingIcon = {
-                Icon(
-                    painter = painterResource(id = R.drawable.mail),
-                    contentDescription = "Mail Icon",
-                    tint = Color.Black,
-                    modifier = Modifier.size(24.dp)
-                )
-            },
-            colors = TextFieldDefaults.outlinedTextFieldColors(
-                textColor = Color.Black,
-                focusedBorderColor = LightGrayColor,
-                unfocusedBorderColor = LightGrayColor,
-                backgroundColor = Color.White,
-                cursorColor = Color.Black
-            ),
-            shape = RoundedCornerShape(15.dp),
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(57.dp),
-        )
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        // Password field
-        OutlinedTextField(
-            value = password,
-            onValueChange = { password = it },
-            label = {
-                Text(
-                    text = "Password",
-                    color = Color.LightGray,
-                    fontSize = 14.sp,
-                    fontFamily = Lato,
-                    letterSpacing = 1.5.sp
-                )
-            },
-            leadingIcon = {
-                Icon(
-                    painter = painterResource(id = R.drawable.lock),
-                    contentDescription = "Lock Icon",
-                    tint = Color.Black,
-                    modifier = Modifier.size(24.dp)
-                )
-            },
-            trailingIcon = {
-                val icon = if (passwordVisible) R.drawable.eye else R.drawable.eyeoff
-                val description = if (passwordVisible) "Hide password" else "Show password"
-                IconButton(onClick = { passwordVisible = !passwordVisible }) {
-                    Icon(
-                        painter = painterResource(id = icon),
-                        contentDescription = description,
-                        tint = Color.Black,
-                        modifier = Modifier.size(20.dp)
+            // Name Restaurant field
+            OutlinedTextField(
+                value = name,
+                onValueChange = { name = it },
+                label = {
+                    Text(
+                        text = "Name Of Restaurant",
+                        color = Color.LightGray,
+                        fontSize = (screenWidth * 0.035f).value.sp,
+                        fontFamily = Lato,
+                        letterSpacing = 1.5.sp,
                     )
-                }
-            },
-            visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-            colors = TextFieldDefaults.outlinedTextFieldColors(
-                textColor = Color.Black,
-                focusedBorderColor = LightGrayColor,
-                unfocusedBorderColor = LightGrayColor,
-                backgroundColor = Color.White,
-                cursorColor = Color.Black
-            ),
-            shape = RoundedCornerShape(15.dp),
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(57.dp)
-        )
+                },
+                leadingIcon = {
+                    Icon(
+                        painter = painterResource(id = R.drawable.home),
+                        contentDescription = "User Icon",
+                        tint = Color.Black,
+                        modifier = Modifier.size(24.dp)
+                    )
+                },
+                colors = TextFieldDefaults.outlinedTextFieldColors(
+                    textColor = Color.Black,
+                    focusedBorderColor = LightGrayColor,
+                    unfocusedBorderColor = LightGrayColor,
+                    backgroundColor = Color.White,
+                    cursorColor = Color.Black
+                ),
+                shape = RoundedCornerShape(15.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(screenHeight * 0.07f),
+            )
 
-        Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(screenHeight * 0.01f))
+
+            // Email field
+            OutlinedTextField(
+                value = email,
+                onValueChange = { email = it },
+                label = {
+                    Text(
+                        text = "Email or Phone Number",
+                        color = Color.LightGray,
+                        fontSize = (screenWidth * 0.035f).value.sp,
+                        fontFamily = Lato,
+                        letterSpacing = 1.5.sp,
+                    )
+                },
+                leadingIcon = {
+                    Icon(
+                        painter = painterResource(id = R.drawable.mail),
+                        contentDescription = "Mail Icon",
+                        tint = Color.Black,
+                        modifier = Modifier.size(24.dp)
+                    )
+                },
+                colors = TextFieldDefaults.outlinedTextFieldColors(
+                    textColor = Color.Black,
+                    focusedBorderColor = LightGrayColor,
+                    unfocusedBorderColor = LightGrayColor,
+                    backgroundColor = Color.White,
+                    cursorColor = Color.Black
+                ),
+                shape = RoundedCornerShape(15.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(screenHeight * 0.07f),
+            )
+
+            Spacer(modifier = Modifier.height(screenHeight * 0.01f))
+
+            // Password field
+            OutlinedTextField(
+                value = password,
+                onValueChange = { password = it },
+                label = {
+                    Text(
+                        text = "Password",
+                        color = Color.LightGray,
+                        fontSize = (screenWidth * 0.035f).value.sp,
+                        fontFamily = Lato,
+                        letterSpacing = 1.5.sp
+                    )
+                },
+                leadingIcon = {
+                    Icon(
+                        painter = painterResource(id = R.drawable.lock),
+                        contentDescription = "Lock Icon",
+                        tint = Color.Black,
+                        modifier = Modifier.size(24.dp)
+                    )
+                },
+                trailingIcon = {
+                    val icon = if (passwordVisible) R.drawable.eye else R.drawable.eyeoff
+                    val description = if (passwordVisible) "Hide password" else "Show password"
+                    IconButton(onClick = { passwordVisible = !passwordVisible }) {
+                        Icon(
+                            painter = painterResource(id = icon),
+                            contentDescription = description,
+                            tint = Color.Black,
+                            modifier = Modifier.size(20.dp)
+                        )
+                    }
+                },
+                visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                colors = TextFieldDefaults.outlinedTextFieldColors(
+                    textColor = Color.Black,
+                    focusedBorderColor = LightGrayColor,
+                    unfocusedBorderColor = LightGrayColor,
+                    backgroundColor = Color.White,
+                    cursorColor = Color.Black
+                ),
+                shape = RoundedCornerShape(15.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(screenHeight * 0.07f)
+            )
+
+            Spacer(modifier = Modifier.height(screenHeight * 0.01f))
 
         // Sign Up Button
         Button(
@@ -340,31 +312,21 @@ fun SignUpAdmin(
             )
         }
 
-        Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(screenHeight * 0.01f))
 
-        // Text "Already have an account?"
-        ClickableText(
-            text = AnnotatedString("Already Have An Account?"),
-            onClick = { onLoginClick() },
-            style = androidx.compose.ui.text.TextStyle(
-                color = RedPrimary,
-                fontSize = 10.sp,
-                fontFamily = Lato,
-                letterSpacing = 1.5.sp
+            // Text "Already have an account?"
+            ClickableText(
+                text = AnnotatedString("Already Have An Account?"),
+                onClick = { onLoginClick() },
+                style = androidx.compose.ui.text.TextStyle(
+                    color = RedPrimary,
+                    fontSize = (screenWidth * 0.03f).value.sp,
+                    fontFamily = Lato,
+                    letterSpacing = 1.5.sp
+                )
             )
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-
-        if (errorMessage != null) {
-            Spacer(modifier = Modifier.height(8.dp))
-            androidx.compose.material.Text(
-                text = errorMessage!!,
-                color = Color.Red,
-                fontSize = 14.sp,
-                textAlign = TextAlign.Center
-            )
+            Spacer(modifier = Modifier.height(screenHeight * 0.01f))
         }
-
     }
 }
 

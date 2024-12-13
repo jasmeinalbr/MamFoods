@@ -30,6 +30,22 @@ import com.example.mamfoods.ui.theme.*
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
+// Temporary theme values for preview purposes
+val TitleText = androidx.compose.ui.text.TextStyle(
+    fontSize = 24.sp,
+    fontWeight = FontWeight.Bold
+)
+
+val SubText = androidx.compose.ui.text.TextStyle(
+    fontSize = 16.sp,
+    fontWeight = FontWeight.Normal
+)
+
+val RedPrimary = Color(0xFFFF0000)
+val LightGrayColor = Color(0xFFCCCCCC)
+
+val YeonSung = androidx.compose.ui.text.font.FontFamily.Default
+
 @Composable
 fun LoginAdmin(
     onLoginSuccess: () -> Unit,
@@ -47,157 +63,136 @@ fun LoginAdmin(
     val coroutineScope = rememberCoroutineScope()
 
 
-
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+    BoxWithConstraints(
+        modifier = Modifier.fillMaxSize()
     ) {
-        Spacer(modifier = Modifier.height(60.dp))
+        val screenWidth = maxWidth
+        val screenHeight = maxHeight
 
-        Image(
-            painter = painterResource(id = R.drawable.logo),
-            contentDescription = "Logo Mam Foods",
-            modifier = Modifier.size(100.dp)
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-        Text(text = "Mam Foods", style = TitleText)
-        Spacer(modifier = Modifier.height(16.dp))
-        Text(
-            text = "Login To Your",
-            fontSize = 14.sp,
-            style = SubText,
-            letterSpacing = 1.5.sp,
-            fontWeight = FontWeight.ExtraBold
-        )
-        Text(
-            text = "Admin Dasboard",
-            fontSize = 14.sp,
-            style = SubText,
-            letterSpacing = 1.5.sp,
-            fontWeight = FontWeight.Bold
-        )
-        Spacer(modifier = Modifier.height(32.dp))
-
-        OutlinedTextField(
-            value = email,
-            onValueChange = { email = it },
-            label = { Text("Email or Phone Number", style = SubText) },
-            colors = TextFieldDefaults.outlinedTextFieldColors(
-                textColor = Color.Black,
-                focusedBorderColor = LightGrayColor,
-                unfocusedBorderColor = LightGrayColor
-            ),
-            shape = RoundedCornerShape(15.dp),
+        Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .height(57.dp),
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        OutlinedTextField(
-            value = password,
-            onValueChange = { password = it },
-            label = { Text("Password", style = SubText) },
-            colors = TextFieldDefaults.outlinedTextFieldColors(
-                textColor = Color.Black,
-                focusedBorderColor = LightGrayColor,
-                unfocusedBorderColor = LightGrayColor
-            ),
-            shape = RoundedCornerShape(15.dp),
-            modifier = Modifier
-                .fillMaxWidth()
-
-                .height(57.dp),
-        )
-
-
-        Spacer(modifier = Modifier.height(32.dp))
-
-        Button(
-
-            onClick = {
-                isLoading = true
-                authenticationManager.loginAdmin(email, password)
-                    .onEach {response->
-                        if(response is AuthResponse.Success){
-                            onLoginSuccess()
-
-                        }else if(response is AuthResponse.Error){
-                            errorMessage = response.message
-                        }
-                    }
-                    .launchIn(coroutineScope)
-            },
-            modifier = Modifier
-                .height(57.dp)
-                .width(157.dp),
-
-            shape = RoundedCornerShape(15.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = RedPrimary)
+                .fillMaxSize()
+                .padding(horizontal = screenWidth * 0.05f),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            Spacer(modifier = Modifier.height(screenWidth * 0.05f))
+
+            Image(
+                painter = painterResource(id = R.drawable.logo),
+                contentDescription = "Logo Mam Foods",
+                modifier = Modifier.size(screenWidth * 0.3f)
+            )
+            Spacer(modifier = Modifier.height(screenHeight * 0.03f))
+
+            Text(text = "Mam Foods", style = TitleText)
+            Spacer(modifier = Modifier.height(screenHeight * 0.03f))
             Text(
-                text = if (isLoading) "Loading..." else "Login",
-                color = Color.White,
-                fontFamily = YeonSung,
-                fontSize = 20.sp
+                text = "Login To Your",
+                fontSize = (screenWidth * 0.040f).value.sp,
+                style = SubText,
+                letterSpacing = 1.5.sp,
+                fontWeight = FontWeight.ExtraBold
+            )
+            Text(
+                text = "Admin Dasboard",
+                fontSize = (screenWidth * 0.040f).value.sp,
+                style = SubText,
+                letterSpacing = 1.5.sp,
+                fontWeight = FontWeight.Bold
+            )
+            Spacer(modifier = Modifier.height(screenHeight * 0.04f))
+
+            OutlinedTextField(
+                value = email,
+                onValueChange = { email = it },
+                label = { Text("Email or Phone Number", style = SubText) },
+                colors = TextFieldDefaults.outlinedTextFieldColors(
+                    textColor = Color.Black,
+                    focusedBorderColor = LightGrayColor,
+                    unfocusedBorderColor = LightGrayColor
+                ),
+                shape = RoundedCornerShape(15.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(screenHeight * 0.06f),
+            )
+
+            Spacer(modifier = Modifier.height(screenHeight * 0.02f))
+
+            OutlinedTextField(
+                value = password,
+                onValueChange = { password = it },
+                label = { Text("Password", style = SubText) },
+                colors = TextFieldDefaults.outlinedTextFieldColors(
+                    textColor = Color.Black,
+                    focusedBorderColor = LightGrayColor,
+                    unfocusedBorderColor = LightGrayColor
+                ),
+                shape = RoundedCornerShape(15.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(screenHeight * 0.06f),
+            )
+
+            Spacer(modifier = Modifier.height(screenHeight * 0.04f))
+
+            Button(
+                onClick = {
+               isLoading = true
+//                authenticationManager.loginAdmin(email, password)
+//                    .onEach {response->
+//                        if(response is AuthResponse.Success){
+//                            onLoginSuccess()
+//
+//                        }else if(response is AuthResponse.Error){
+//                            errorMessage = response.message
+//                        }
+//                    }
+//                    .launchIn(coroutineScope)
+//
+                },
+                modifier = Modifier
+                    .height(57.dp)
+                    .width(157.dp),
+
+                shape = RoundedCornerShape(15.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = RedPrimary)
+            ) {
+                Text(
+                    text = if (isLoading) "Loading..." else "Login",
+                    color = Color.White,
+                    fontFamily = YeonSung,
+                    fontSize = (screenWidth * 0.05f).value.sp,
+                )
+            }
+
+            if (errorMessage != null) {
+                Spacer(modifier = Modifier.height(screenHeight * 0.03f))
+                Text(
+                    text = errorMessage!!,
+                    color = Color.Red,
+                    fontSize = (screenWidth * 0.03f).value.sp,
+                    textAlign = TextAlign.Center
+                )
+            }
+
+            Spacer(modifier = Modifier.height(screenHeight * 0.02f))
+
+            ClickableText(
+                text = AnnotatedString("Don't Have Account?"),
+                onClick = { onSignUpClick() },  // Navigate to sign up page
+                style = SubText
             )
         }
-
-        if (errorMessage != null) {
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(
-                text = errorMessage!!,
-                color = Color.Red,
-                fontSize = 14.sp,
-                textAlign = TextAlign.Center
-            )
-        }
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        ClickableText(
-            text = AnnotatedString("Don't Have Account?"),
-            onClick = { onSignUpClick() },  // Navigate to sign up page
-            style = SubText
-        )
     }
-
-
 }
-
 
 @Preview(showBackground = true)
 @Composable
-fun LoginAdminPreview() {
-    // Buat dummy ViewModel untuk kebutuhan Preview
-//    val dummyViewModel = object : AuthViewModel() {
-//        override fun login(
-//            email: String,
-//            password: String,
-//            onSuccess: () -> Unit,
-//            onError: (String) -> Unit
-//        ) {
-//            // Simulasi login berhasil atau gagal
-//            if (email == "user@example.com" && password == "password") {
-//                onSuccess()
-//            } else {
-//                onError("Invalid credentials")
-//            }
-//        }
-//    }
-
-    // Preview UI
+fun PreviewLoginAdmin() {
     LoginAdmin(
-      //  viewModel = dummyViewModel,
-        onLoginSuccess = {
-            // Simulasi sukses login
-        },
-        onSignUpClick = {
-            // Simulasi navigasi ke halaman registrasi
-        }
+        onLoginSuccess = {},
+        onSignUpClick = {}
     )
 }
 
